@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ACadSvgStudio": {
+      "commandName": "Project",
+      "commandLineArgs": "\"W:\\SVG\\Leader Research\\MyTest.dwg\""
+    }
+  }
+}
