@@ -398,25 +398,26 @@ namespace ACadSvgStudio {
 
 			XElement svg = EntitySvg.CreateSVG(_conversionContext).GetXml();
 
-
+			StringBuilder csb = new StringBuilder();
 			string css = _scintillaCss.Text;
 			if (addCss && !string.IsNullOrEmpty(css)) {
 				XElement styleXElement = new XElement("style");
 				styleXElement.Add(new XAttribute("type", "text/css"));
-				styleXElement.Add(XElement.Parse(css));
-
-				svg.Add(styleXElement);
+				styleXElement.Value = css;
+				csb.AppendLine(styleXElement.ToString());
 			}
 
 			string scales = _scintillaScales.Text;
 			if (showScales && !string.IsNullOrEmpty(scales)) {
-				svg.Add(XElement.Parse(scales));
+				csb.AppendLine(scales);
 			}
 
 			string editorText = _scintillaSvgGroupEditor.Text;
 			if (!string.IsNullOrEmpty(editorText)) {
-				svg.Add(XElement.Parse(_scintillaSvgGroupEditor.Text));
+				csb.AppendLine(editorText);
 			}
+
+			svg.Value = csb.ToString();
 
 			StringBuilder sb = new StringBuilder();
 			if (addDeclAndType) {
@@ -424,11 +425,14 @@ namespace ACadSvgStudio {
 				var doctype = new XDocumentType("svg", " -//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd", string.Empty).ToString();
 				sb.AppendLine(declaration.ToString());
 				sb.AppendLine(doctype.ToString());
-				sb.AppendLine(svg.ToString().Replace("&gt;", ">").Replace("&lt;", "<"));
+				sb.AppendLine(svg.ToString());
             }
-			sb.AppendLine(svg.ToString());
+			else {
+				sb.AppendLine(svg.ToString());
+            }
 
-			return sb.ToString();
+			string svgText = sb.ToString().Replace("&gt;", ">").Replace("&lt;", "<");
+			return svgText;
 		}
 
 
