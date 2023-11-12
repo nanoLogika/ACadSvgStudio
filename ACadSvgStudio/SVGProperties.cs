@@ -219,7 +219,8 @@ namespace ACadSvgStudio {
 		#region SVG/Main Group Attributes
 
 		[Category("SVG/Main Group Attributes")]
-		[Description("If stroke color is disabled then 'none' is written to the stroke attribute.")]
+        [DisplayName("Stroke Attribute Enabled")]
+		[Description("Indicates that, when true, a stroke=\"{color}\" attribute is to be set at the svg element; otherwise, no stroke attribute is set.")]
 		public bool StrokeEnabled {
 			get {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
@@ -239,7 +240,8 @@ namespace ACadSvgStudio {
 
 
 		[Category("SVG/Main Group Attributes")]
-		[Description("If fill color is disabled then 'none' is written to the fill attribute.")]
+        [DisplayName("Fill Attribute Enabled")]
+		[Description("Indicates that, when true, a fill=\"{color}\" attribute is to be set at the svg element; otherwise, a fill=\"none\" is set.")]
 		public bool FillEnabled {
 			get {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
@@ -259,7 +261,8 @@ namespace ACadSvgStudio {
 
 
 		[Category("SVG/Main Group Attributes")]
-		[Description("stroke=\"{color}\" defines the standard color of all strokes. {color} must be a html-color as #RGB or al color name.")]
+        [DisplayName("Stroke Color Attribute")]
+		[Description("stroke=\"{color}\" defines the standard color of all strokes. {color} must be a html-color as #RGB or al color name. The attribute is set only when the 'Stroke Attribute Enabled' setting is true.")]
 		public Color StrokeColor {
 			get {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
@@ -279,7 +282,8 @@ namespace ACadSvgStudio {
 
 
 		[Category("SVG/Main Group Attributes")]
-		[Description("stroke-width=\"{width}\" defines the standard width of all strokes. {width} must be a number.")]
+		[DisplayName("Stroke Width Attribute")]
+		[Description("stroke-width=\"{width}\" defines the standard width of all strokes. {width} must be a number. The attribute is set only when the 'Stroke Attribute Enabled' setting is true.")]
 		public double StrokeWidth {
 			get {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
@@ -299,7 +303,8 @@ namespace ACadSvgStudio {
 
 
 		[Category("SVG/Main Group Attributes")]
-		[Description("fill=\"{color}\" defines the standard color of all shapes. {color} must be a html-color as #RGB or al color name, none.")]
+        [DisplayName("Fill Color Attrinute")]
+		[Description("fill=\"{color}\" defines the standard color of all shapes. {color} must be a html-color as #RGB or a color name, none.")]
 		public Color FillColor {
 			get {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
@@ -504,7 +509,28 @@ namespace ACadSvgStudio {
 		}
 
 
-        [Category("Conversion Options")]
+		[Category("Conversion Options")]
+		[DisplayName("Create class-Attribute from Object Type.")]
+		[Description("If this option is set class-attributes are created for every converted AutoCAD Entity from the object type. Otherwise, no class attributes are created. Styles for these classes can be defined in the CSS for preview tab.")]
+		public bool ExportObjectTypeAsClass {
+			get {
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+					return Settings.Default.ExportObjectTypeAsClass;
+				}
+				else {
+					return true;
+				}
+			}
+			set {
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+					Settings.Default.ExportObjectTypeAsClass = value;
+					Settings.Default.Save();
+				}
+			}
+		}
+
+
+		[Category("Conversion Options")]
         [DisplayName("Create Comment for Entities")]
         [Description("A comment for every converted entity is created.")]
 		public bool EnableComments {
@@ -530,6 +556,7 @@ namespace ACadSvgStudio {
 				EnableComments = this.EnableComments,
 				ExportHandleAsID = this.ExportHandleAsID,
 				ExportLayerAsClass = this.ExportLayerAsClass,
+				ExportObjectTypeAsClass = this.ExportObjectTypeAsClass,
 				ReverseY = this.ReverseY
 			};
 		}

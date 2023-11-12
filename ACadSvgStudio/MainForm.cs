@@ -396,14 +396,7 @@ namespace ACadSvgStudio {
 				_svgProperties.GetViewbox(),
 				_svgProperties.GetGlobalAttributeData());
 
-			XElement svg = EntitySvg.CreateSVG(
-				_conversionContext,
-				Settings.Default.StrokeEnabled,
-				Settings.Default.StrokeColor.Name,
-				Settings.Default.StrokeWidth,
-				Settings.Default.FillEnabled,
-				Settings.Default.FillColor.Name
-				).GetXml();
+			XElement svg = EntitySvg.CreateSVG(_conversionContext).GetXml();
 
 
 			string css = _scintillaCss.Text;
@@ -435,9 +428,7 @@ namespace ACadSvgStudio {
             }
 			sb.AppendLine(svg.ToString());
 
-			//	Wotkround!
-			string svgText = sb.ToString().Replace("Xmlns", "xmlns");
-			return svgText;
+			return sb.ToString();
 		}
 
 
