@@ -1,7 +1,7 @@
 # ACadSvgStudio
 
 A simple application to load and convert AutoCAD DWG documents to SVG.
-SVG code can be viewed and edited SVG in a text editor. The result is displayed in an integrated browser control.
+SVG code can be viewed and edited in a text editor. The result is displayed in an integrated browser control.
 
 ## Dependencies
 * **ACadSvg** https://github.com/nanoLogika/ACadSvg
