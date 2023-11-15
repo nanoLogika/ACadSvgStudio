@@ -234,6 +234,8 @@ namespace ACadSvgStudio {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
 					Settings.Default.StrokeEnabled = value;
 					Settings.Default.Save();
+
+					_mainForm.UpdateHTML();
 				}
 			}
 		}
@@ -255,6 +257,8 @@ namespace ACadSvgStudio {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
 					Settings.Default.FillEnabled = value;
 					Settings.Default.Save();
+
+					_mainForm.UpdateHTML();
 				}
 			}
 		}
@@ -276,6 +280,8 @@ namespace ACadSvgStudio {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
 					Settings.Default.StrokeColor = value;
 					Settings.Default.Save();
+
+					_mainForm.UpdateHTML();
 				}
 			}
 		}
@@ -297,13 +303,15 @@ namespace ACadSvgStudio {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
 					Settings.Default.StrokeWidth = value;
 					Settings.Default.Save();
+
+					_mainForm.UpdateHTML();
 				}
 			}
 		}
 
 
 		[Category("SVG/Main Group Attributes")]
-        [DisplayName("Fill Color Attrinute")]
+        [DisplayName("Fill Color Attribute")]
 		[Description("fill=\"{color}\" defines the standard color of all shapes. {color} must be a html-color as #RGB or a color name, none.")]
 		public Color FillColor {
 			get {
@@ -318,6 +326,8 @@ namespace ACadSvgStudio {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
 					Settings.Default.FillColor = value;
 					Settings.Default.Save();
+
+					_mainForm.UpdateHTML();
 				}
 			}
 		}
@@ -339,6 +349,8 @@ namespace ACadSvgStudio {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
 					Settings.Default.TransformTranslationX = value;
 					Settings.Default.Save();
+
+					_mainForm.UpdateHTML();
 				}
 			}
 		}
@@ -360,6 +372,8 @@ namespace ACadSvgStudio {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
 					Settings.Default.TransformTranslationY = value;
 					Settings.Default.Save();
+
+					_mainForm.UpdateHTML();
 				}
 			}
 		}
@@ -381,6 +395,8 @@ namespace ACadSvgStudio {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
 					Settings.Default.TransformScaleX = value;
 					Settings.Default.Save();
+
+					_mainForm.UpdateHTML();
 				}
 			}
 		}
@@ -403,6 +419,8 @@ namespace ACadSvgStudio {
 					Settings.Default.TransformScaleY = value;
 					Settings.Default.Save();
 				}
+
+				_mainForm.UpdateHTML();
 			}
 		}
 
@@ -423,6 +441,8 @@ namespace ACadSvgStudio {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
 					Settings.Default.TransformRotation = value;
 					Settings.Default.Save();
+
+					_mainForm.UpdateHTML();
 				}
 			}
 		}

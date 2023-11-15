@@ -20,7 +20,6 @@ namespace ACadSvgStudio {
             _conversionLogScintilla.Text = log;
             _occurringEntitiesListBox.Items.Clear();
             _occurringEntitiesListBox.Items.AddRange(occurringEntities.ToArray<string>());
-            //totalEntitiesLabel.Text = $"Count: {entitiesListBox.Items.Count}";
             this.Show();
         }
     }

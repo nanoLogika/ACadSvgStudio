@@ -60,7 +60,7 @@
             this._conversionLogScintilla.Location = new System.Drawing.Point(0, 15);
             this._conversionLogScintilla.Name = "_conversionLogScintilla";
             this._conversionLogScintilla.Size = new System.Drawing.Size(623, 702);
-            this._conversionLogScintilla.TabIndents = true;
+            //this._conversionLogScintilla.TabIndents = true;
             this._conversionLogScintilla.TabIndex = 1;
             this._conversionLogScintilla.Text = "scintilla1";
             // 

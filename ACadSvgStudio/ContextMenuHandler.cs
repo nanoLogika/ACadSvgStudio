@@ -23,7 +23,11 @@ namespace ACadSvgStudio {
 		protected override void OnBeforeContextMenu(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model) {
 			base.OnBeforeContextMenu(chromiumWebBrowser, browser, frame, parameters, model);
 
-			//	model.Clear();
+			model.RemoveAt(0);
+			model.RemoveAt(0);
+			model.RemoveAt(0);
+			model.RemoveAt(0);
+
 			model.AddSeparator();
 
 			model.AddItem((CefMenuCommand)101, "Center to Fit");
