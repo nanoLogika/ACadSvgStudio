@@ -349,7 +349,7 @@ namespace ACadSvgStudio {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ExportHandleAsID {
             get {
                 return ((bool)(this["ExportHandleAsID"]));
@@ -361,7 +361,7 @@ namespace ACadSvgStudio {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ExportLayerAsClass {
             get {
                 return ((bool)(this["ExportLayerAsClass"]));
@@ -373,13 +373,37 @@ namespace ACadSvgStudio {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool EnableComments {
             get {
                 return ((bool)(this["EnableComments"]));
             }
             set {
                 this["EnableComments"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ExportObjectTypeAsClass {
+            get {
+                return ((bool)(this["ExportObjectTypeAsClass"]));
+            }
+            set {
+                this["ExportObjectTypeAsClass"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Microsoft Sans Serif, 8.25pt")]
+        public global::System.Drawing.Font EditorFont {
+            get {
+                return ((global::System.Drawing.Font)(this["EditorFont"]));
+            }
+            set {
+                this["EditorFont"] = value;
             }
         }
     }

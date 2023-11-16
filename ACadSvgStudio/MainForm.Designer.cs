@@ -27,410 +27,566 @@
 		private void InitializeComponent()
 		{
 			components = new System.ComponentModel.Container();
-			splitContainer1 = new SplitContainer();
-			tabControl = new TabControl();
-			mainGroupTabPage = new TabPage();
-			scalesTabPage = new TabPage();
-			cssTabPage = new TabPage();
-			splitContainer2 = new SplitContainer();
-			propertyGrid = new PropertyGrid();
-			menuStrip = new MenuStrip();
-			fileToolStripMenuItem = new ToolStripMenuItem();
-			openToolStripMenuItem = new ToolStripMenuItem();
-			saveToolStripMenuItem1 = new ToolStripMenuItem();
-			saveAsToolStripMenuItem = new ToolStripMenuItem();
-			toolStripSeparator1 = new ToolStripSeparator();
-			exitToolStripMenuItem = new ToolStripMenuItem();
-			searchToolStripMenuItem = new ToolStripMenuItem();
-			_findToolStripMenuItem = new ToolStripMenuItem();
-			viewToolStripMenuItem = new ToolStripMenuItem();
-			centerToFitToolStripMenuItem = new ToolStripMenuItem();
-			toolStripSeparator3 = new ToolStripSeparator();
-			propertyGridToolStripMenuItem = new ToolStripMenuItem();
-			toolStripSeparator5 = new ToolStripSeparator();
-			collapseAllToolStripMenuItem = new ToolStripMenuItem();
-			expandAllToolStripMenuItem = new ToolStripMenuItem();
-			contentToolStripMenuItem = new ToolStripMenuItem();
-			_restorePreviousToolStripMenuItem = new ToolStripMenuItem();
-			extrasToolStripMenuItem = new ToolStripMenuItem();
-			removeStylesToolStripMenuItem = new ToolStripMenuItem();
+			_splitContainer1 = new SplitContainer();
+			_tabControl = new TabControl();
+			_mainGroupTabPage = new TabPage();
+			_scalesTabPage = new TabPage();
+			_cssTabPage = new TabPage();
+			_splitContainer2 = new SplitContainer();
+			_propertyGrid = new PropertyGrid();
+			_menuStrip = new MenuStrip();
+			_fileToolStripMenuItem = new ToolStripMenuItem();
+			_openMenuItem = new ToolStripMenuItem();
+			_saveMenuItem = new ToolStripMenuItem();
+			_saveAsMenuItem = new ToolStripMenuItem();
+			_toolStripSeparator1 = new ToolStripSeparator();
+			_exitMenuItem = new ToolStripMenuItem();
+			_editMenuItem = new ToolStripMenuItem();
+			_undoMenuItem = new ToolStripMenuItem();
+			_redoMenuItem = new ToolStripMenuItem();
+			_toolStripSeparator11 = new ToolStripSeparator();
+			_cutMenuItem = new ToolStripMenuItem();
+			_copyMenuItem = new ToolStripMenuItem();
+			_pasteMenuItem = new ToolStripMenuItem();
+			_deleteMenuItem = new ToolStripMenuItem();
+			_toolStripSeparator13 = new ToolStripSeparator();
+			_selectAllMenuItem = new ToolStripMenuItem();
+			_searchToolStripMenuItem = new ToolStripMenuItem();
+			_quickFindMenuItem = new ToolStripMenuItem();
+			_findAndReplaceMenuItem = new ToolStripMenuItem();
+			_viewMenuItem = new ToolStripMenuItem();
+			_centerToFitMenuItem = new ToolStripMenuItem();
+			_toolStripSeparator3 = new ToolStripSeparator();
+			_propertyGridToolStripMenuItem = new ToolStripMenuItem();
+			_toolStripSeparator5 = new ToolStripSeparator();
+			_collapseAllMenuItem = new ToolStripMenuItem();
+			_expandAllToolStripMenuItem = new ToolStripMenuItem();
+			_contentMenuItem = new ToolStripMenuItem();
+			_restorePreviousMenuItem = new ToolStripMenuItem();
+			_extrasMenuItem = new ToolStripMenuItem();
+			_removeStylesMenuItem = new ToolStripMenuItem();
 			toolStripSeparator2 = new ToolStripSeparator();
-			showDeveloperToolsToolStripMenuItem = new ToolStripMenuItem();
-			converisonInfoToolStripMenuItem = new ToolStripMenuItem();
-			_showConversionLogToolStripMenuItem = new ToolStripMenuItem();
-			openFileDialog = new OpenFileDialog();
-			saveFileDialog = new SaveFileDialog();
-			webBrowserContextMenuStrip = new ContextMenuStrip(components);
-			centerToFitToolStripMenuItem1 = new ToolStripMenuItem();
-			toolStripSeparator4 = new ToolStripSeparator();
-			showDeveloperToolsToolStripMenuItem1 = new ToolStripMenuItem();
-			((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
-			splitContainer1.Panel1.SuspendLayout();
-			splitContainer1.Panel2.SuspendLayout();
-			splitContainer1.SuspendLayout();
-			tabControl.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
-			splitContainer2.Panel2.SuspendLayout();
-			splitContainer2.SuspendLayout();
-			menuStrip.SuspendLayout();
-			webBrowserContextMenuStrip.SuspendLayout();
+			_showDeveloperToolsMenuItem = new ToolStripMenuItem();
+			_converisonInfoMenuItem = new ToolStripMenuItem();
+			_showConversionLogMenuItem = new ToolStripMenuItem();
+			_aboutACadSVGStudioMenuItem = new ToolStripMenuItem();
+			_openFileDialog = new OpenFileDialog();
+			_saveFileDialog = new SaveFileDialog();
+			_webBrowserContextMenuStrip = new ContextMenuStrip(components);
+			_centerToFitContextMenuItem = new ToolStripMenuItem();
+			_toolStripSeparator4 = new ToolStripSeparator();
+			_showDeveloperToolsContextMenuItem = new ToolStripMenuItem();
+			_statusStrip = new StatusStrip();
+			_statusLabel = new ToolStripStatusLabel();
+			_textChangedTimer = new System.Windows.Forms.Timer(components);
+			_fontDialog = new FontDialog();
+			editorFontToolStripMenuItem = new ToolStripMenuItem();
+			((System.ComponentModel.ISupportInitialize)_splitContainer1).BeginInit();
+			_splitContainer1.Panel1.SuspendLayout();
+			_splitContainer1.Panel2.SuspendLayout();
+			_splitContainer1.SuspendLayout();
+			_tabControl.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)_splitContainer2).BeginInit();
+			_splitContainer2.Panel2.SuspendLayout();
+			_splitContainer2.SuspendLayout();
+			_menuStrip.SuspendLayout();
+			_webBrowserContextMenuStrip.SuspendLayout();
+			_statusStrip.SuspendLayout();
 			SuspendLayout();
 			// 
-			// splitContainer1
+			// _splitContainer1
 			// 
-			splitContainer1.Dock = DockStyle.Fill;
-			splitContainer1.Location = new Point(0, 24);
-			splitContainer1.Name = "splitContainer1";
+			_splitContainer1.Dock = DockStyle.Fill;
+			_splitContainer1.Location = new Point(0, 24);
+			_splitContainer1.Name = "_splitContainer1";
 			// 
-			// splitContainer1.Panel1
+			// _splitContainer1.Panel1
 			// 
-			splitContainer1.Panel1.Controls.Add(tabControl);
+			_splitContainer1.Panel1.Controls.Add(_tabControl);
 			// 
-			// splitContainer1.Panel2
+			// _splitContainer1.Panel2
 			// 
-			splitContainer1.Panel2.Controls.Add(splitContainer2);
-			splitContainer1.Size = new Size(1204, 738);
-			splitContainer1.SplitterDistance = 456;
-			splitContainer1.TabIndex = 1;
+			_splitContainer1.Panel2.Controls.Add(_splitContainer2);
+			_splitContainer1.Size = new Size(1204, 716);
+			_splitContainer1.SplitterDistance = 456;
+			_splitContainer1.TabIndex = 1;
 			// 
-			// tabControl
+			// _tabControl
 			// 
-			tabControl.Controls.Add(mainGroupTabPage);
-			tabControl.Controls.Add(scalesTabPage);
-			tabControl.Controls.Add(cssTabPage);
-			tabControl.Dock = DockStyle.Fill;
-			tabControl.Location = new Point(0, 0);
-			tabControl.Name = "tabControl";
-			tabControl.SelectedIndex = 0;
-			tabControl.Size = new Size(456, 738);
-			tabControl.TabIndex = 0;
+			_tabControl.Controls.Add(_mainGroupTabPage);
+			_tabControl.Controls.Add(_scalesTabPage);
+			_tabControl.Controls.Add(_cssTabPage);
+			_tabControl.Dock = DockStyle.Fill;
+			_tabControl.Location = new Point(0, 0);
+			_tabControl.Name = "_tabControl";
+			_tabControl.SelectedIndex = 0;
+			_tabControl.Size = new Size(456, 716);
+			_tabControl.TabIndex = 0;
 			// 
-			// mainGroupTabPage
+			// _mainGroupTabPage
 			// 
-			mainGroupTabPage.Location = new Point(4, 24);
-			mainGroupTabPage.Name = "mainGroupTabPage";
-			mainGroupTabPage.Padding = new Padding(3);
-			mainGroupTabPage.Size = new Size(448, 710);
-			mainGroupTabPage.TabIndex = 0;
-			mainGroupTabPage.Text = "Main Group";
-			mainGroupTabPage.UseVisualStyleBackColor = true;
+			_mainGroupTabPage.Location = new Point(4, 24);
+			_mainGroupTabPage.Name = "_mainGroupTabPage";
+			_mainGroupTabPage.Padding = new Padding(3);
+			_mainGroupTabPage.Size = new Size(448, 688);
+			_mainGroupTabPage.TabIndex = 0;
+			_mainGroupTabPage.Text = "Main Group";
+			_mainGroupTabPage.UseVisualStyleBackColor = true;
 			// 
-			// scalesTabPage
+			// _scalesTabPage
 			// 
-			scalesTabPage.Location = new Point(4, 24);
-			scalesTabPage.Name = "scalesTabPage";
-			scalesTabPage.Size = new Size(448, 710);
-			scalesTabPage.TabIndex = 2;
-			scalesTabPage.Text = "Scales";
-			scalesTabPage.UseVisualStyleBackColor = true;
+			_scalesTabPage.Location = new Point(4, 24);
+			_scalesTabPage.Name = "_scalesTabPage";
+			_scalesTabPage.Size = new Size(448, 688);
+			_scalesTabPage.TabIndex = 2;
+			_scalesTabPage.Text = "Scales";
+			_scalesTabPage.UseVisualStyleBackColor = true;
 			// 
-			// cssTabPage
+			// _cssTabPage
 			// 
-			cssTabPage.Location = new Point(4, 24);
-			cssTabPage.Name = "cssTabPage";
-			cssTabPage.Padding = new Padding(3);
-			cssTabPage.Size = new Size(448, 710);
-			cssTabPage.TabIndex = 1;
-			cssTabPage.Text = "CSS for Preview";
-			cssTabPage.UseVisualStyleBackColor = true;
+			_cssTabPage.Location = new Point(4, 24);
+			_cssTabPage.Name = "_cssTabPage";
+			_cssTabPage.Padding = new Padding(3);
+			_cssTabPage.Size = new Size(448, 688);
+			_cssTabPage.TabIndex = 1;
+			_cssTabPage.Text = "CSS for Preview";
+			_cssTabPage.UseVisualStyleBackColor = true;
 			// 
-			// splitContainer2
+			// _splitContainer2
 			// 
-			splitContainer2.Dock = DockStyle.Fill;
-			splitContainer2.Location = new Point(0, 0);
-			splitContainer2.Name = "splitContainer2";
+			_splitContainer2.Dock = DockStyle.Fill;
+			_splitContainer2.Location = new Point(0, 0);
+			_splitContainer2.Name = "_splitContainer2";
 			// 
-			// splitContainer2.Panel2
+			// _splitContainer2.Panel2
 			// 
-			splitContainer2.Panel2.Controls.Add(propertyGrid);
-			splitContainer2.Size = new Size(744, 738);
-			splitContainer2.SplitterDistance = 455;
-			splitContainer2.TabIndex = 0;
+			_splitContainer2.Panel2.Controls.Add(_propertyGrid);
+			_splitContainer2.Size = new Size(744, 716);
+			_splitContainer2.SplitterDistance = 455;
+			_splitContainer2.TabIndex = 0;
 			// 
-			// propertyGrid
+			// _propertyGrid
 			// 
-			propertyGrid.Dock = DockStyle.Fill;
-			propertyGrid.Location = new Point(0, 0);
-			propertyGrid.Name = "propertyGrid";
-			propertyGrid.Size = new Size(285, 738);
-			propertyGrid.TabIndex = 0;
+			_propertyGrid.Dock = DockStyle.Fill;
+			_propertyGrid.Location = new Point(0, 0);
+			_propertyGrid.Name = "_propertyGrid";
+			_propertyGrid.Size = new Size(285, 716);
+			_propertyGrid.TabIndex = 0;
 			// 
-			// menuStrip
+			// _menuStrip
 			// 
-			menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, searchToolStripMenuItem, viewToolStripMenuItem, contentToolStripMenuItem, extrasToolStripMenuItem, converisonInfoToolStripMenuItem });
-			menuStrip.Location = new Point(0, 0);
-			menuStrip.Name = "menuStrip";
-			menuStrip.Size = new Size(1204, 24);
-			menuStrip.TabIndex = 2;
-			menuStrip.Text = "menuStrip1";
+			_menuStrip.Items.AddRange(new ToolStripItem[] { _fileToolStripMenuItem, _editMenuItem, _searchToolStripMenuItem, _viewMenuItem, _contentMenuItem, _extrasMenuItem, _converisonInfoMenuItem, _aboutACadSVGStudioMenuItem });
+			_menuStrip.Location = new Point(0, 0);
+			_menuStrip.Name = "_menuStrip";
+			_menuStrip.Size = new Size(1204, 24);
+			_menuStrip.TabIndex = 2;
+			_menuStrip.Text = "menuStrip1";
 			// 
-			// fileToolStripMenuItem
+			// _fileToolStripMenuItem
 			// 
-			fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, saveToolStripMenuItem1, saveAsToolStripMenuItem, toolStripSeparator1, exitToolStripMenuItem });
-			fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-			fileToolStripMenuItem.Size = new Size(37, 20);
-			fileToolStripMenuItem.Text = "File";
+			_fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _openMenuItem, _saveMenuItem, _saveAsMenuItem, _toolStripSeparator1, _exitMenuItem });
+			_fileToolStripMenuItem.Name = "_fileToolStripMenuItem";
+			_fileToolStripMenuItem.Size = new Size(37, 20);
+			_fileToolStripMenuItem.Text = "File";
 			// 
-			// openToolStripMenuItem
+			// _openMenuItem
 			// 
-			openToolStripMenuItem.Name = "openToolStripMenuItem";
-			openToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.O;
-			openToolStripMenuItem.Size = new Size(249, 22);
-			openToolStripMenuItem.Text = "Open";
-			openToolStripMenuItem.Click += eventOpenClick;
+			_openMenuItem.Name = "_openMenuItem";
+			_openMenuItem.ShortcutKeys = Keys.Control | Keys.O;
+			_openMenuItem.Size = new Size(249, 22);
+			_openMenuItem.Text = "Open";
+			_openMenuItem.Click += eventOpenClick;
 			// 
-			// saveToolStripMenuItem1
+			// _saveMenuItem
 			// 
-			saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
-			saveToolStripMenuItem1.ShortcutKeys = Keys.Control | Keys.S;
-			saveToolStripMenuItem1.Size = new Size(249, 22);
-			saveToolStripMenuItem1.Text = "Save";
-			saveToolStripMenuItem1.Click += eventSaveSvgGroupClick;
+			_saveMenuItem.Name = "_saveMenuItem";
+			_saveMenuItem.ShortcutKeys = Keys.Control | Keys.S;
+			_saveMenuItem.Size = new Size(249, 22);
+			_saveMenuItem.Text = "Save";
+			_saveMenuItem.Click += eventSaveSvgGroupClick;
 			// 
-			// saveAsToolStripMenuItem
+			// _saveAsMenuItem
 			// 
-			saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-			saveAsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
-			saveAsToolStripMenuItem.Size = new Size(249, 22);
-			saveAsToolStripMenuItem.Text = "Save as ...";
-			saveAsToolStripMenuItem.Click += eventSaveSvgGroupAsClick;
+			_saveAsMenuItem.Name = "_saveAsMenuItem";
+			_saveAsMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
+			_saveAsMenuItem.Size = new Size(249, 22);
+			_saveAsMenuItem.Text = "Save as ...";
+			_saveAsMenuItem.Click += eventSaveSvgGroupAsClick;
 			// 
-			// toolStripSeparator1
+			// _toolStripSeparator1
 			// 
-			toolStripSeparator1.Name = "toolStripSeparator1";
-			toolStripSeparator1.Size = new Size(246, 6);
+			_toolStripSeparator1.Name = "_toolStripSeparator1";
+			_toolStripSeparator1.Size = new Size(246, 6);
 			// 
-			// exitToolStripMenuItem
+			// _exitMenuItem
 			// 
-			exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			exitToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.F4;
-			exitToolStripMenuItem.Size = new Size(249, 22);
-			exitToolStripMenuItem.Text = "Exit";
-			exitToolStripMenuItem.Click += eventExit_Click;
+			_exitMenuItem.Name = "_exitMenuItem";
+			_exitMenuItem.ShortcutKeys = Keys.Alt | Keys.F4;
+			_exitMenuItem.Size = new Size(249, 22);
+			_exitMenuItem.Text = "Exit";
+			_exitMenuItem.Click += eventExit_Click;
 			// 
-			// searchToolStripMenuItem
+			// _editMenuItem
 			// 
-			searchToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _findToolStripMenuItem });
-			searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-			searchToolStripMenuItem.Size = new Size(54, 20);
-			searchToolStripMenuItem.Text = "Search";
+			_editMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _undoMenuItem, _redoMenuItem, _toolStripSeparator11, _cutMenuItem, _copyMenuItem, _pasteMenuItem, _deleteMenuItem, _toolStripSeparator13, _selectAllMenuItem });
+			_editMenuItem.Name = "_editMenuItem";
+			_editMenuItem.Size = new Size(39, 20);
+			_editMenuItem.Text = "Edit";
+			_editMenuItem.DropDownOpening += eventEdit_DropDownOpening;
 			// 
-			// _findToolStripMenuItem
+			// _undoMenuItem
 			// 
-			_findToolStripMenuItem.Name = "_findToolStripMenuItem";
-			_findToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F;
-			_findToolStripMenuItem.Size = new Size(139, 22);
-			_findToolStripMenuItem.Text = "Find";
-			_findToolStripMenuItem.Click += eventSearch_Click;
+			_undoMenuItem.Name = "_undoMenuItem";
+			_undoMenuItem.Size = new Size(122, 22);
+			_undoMenuItem.Text = "Undo";
+			_undoMenuItem.Click += eventUndo_Click;
 			// 
-			// viewToolStripMenuItem
+			// _redoMenuItem
 			// 
-			viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { centerToFitToolStripMenuItem, toolStripSeparator3, propertyGridToolStripMenuItem, toolStripSeparator5, collapseAllToolStripMenuItem, expandAllToolStripMenuItem });
-			viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-			viewToolStripMenuItem.Size = new Size(44, 20);
-			viewToolStripMenuItem.Text = "View";
+			_redoMenuItem.Name = "_redoMenuItem";
+			_redoMenuItem.Size = new Size(122, 22);
+			_redoMenuItem.Text = "Redo";
+			_redoMenuItem.Click += eventRedo_Click;
 			// 
-			// centerToFitToolStripMenuItem
+			// _toolStripSeparator11
 			// 
-			centerToFitToolStripMenuItem.Name = "centerToFitToolStripMenuItem";
-			centerToFitToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.E;
-			centerToFitToolStripMenuItem.Size = new Size(181, 22);
-			centerToFitToolStripMenuItem.Text = "Center to Fit";
-			centerToFitToolStripMenuItem.Click += centerToFitToolStripMenuItem_Click;
+			_toolStripSeparator11.Name = "_toolStripSeparator11";
+			_toolStripSeparator11.Size = new Size(119, 6);
 			// 
-			// toolStripSeparator3
+			// _cutMenuItem
 			// 
-			toolStripSeparator3.Name = "toolStripSeparator3";
-			toolStripSeparator3.Size = new Size(178, 6);
+			_cutMenuItem.Name = "_cutMenuItem";
+			_cutMenuItem.Size = new Size(122, 22);
+			_cutMenuItem.Text = "Cut";
+			_cutMenuItem.Click += eventCut_Click;
 			// 
-			// propertyGridToolStripMenuItem
+			// _copyMenuItem
 			// 
-			propertyGridToolStripMenuItem.Checked = true;
-			propertyGridToolStripMenuItem.CheckOnClick = true;
-			propertyGridToolStripMenuItem.CheckState = CheckState.Checked;
-			propertyGridToolStripMenuItem.Name = "propertyGridToolStripMenuItem";
-			propertyGridToolStripMenuItem.Size = new Size(181, 22);
-			propertyGridToolStripMenuItem.Text = "Property Grid";
-			propertyGridToolStripMenuItem.CheckedChanged += propertyGridToolStripMenuItem_CheckedChanged;
+			_copyMenuItem.Name = "_copyMenuItem";
+			_copyMenuItem.Size = new Size(122, 22);
+			_copyMenuItem.Text = "Copy";
+			_copyMenuItem.Click += eventCopy_Click;
 			// 
-			// toolStripSeparator5
+			// _pasteMenuItem
 			// 
-			toolStripSeparator5.Name = "toolStripSeparator5";
-			toolStripSeparator5.Size = new Size(178, 6);
+			_pasteMenuItem.Name = "_pasteMenuItem";
+			_pasteMenuItem.Size = new Size(122, 22);
+			_pasteMenuItem.Text = "Paste";
+			_pasteMenuItem.Click += eventPaste_Click;
 			// 
-			// collapseAllToolStripMenuItem
+			// _deleteMenuItem
 			// 
-			collapseAllToolStripMenuItem.Name = "collapseAllToolStripMenuItem";
-			collapseAllToolStripMenuItem.Size = new Size(181, 22);
-			collapseAllToolStripMenuItem.Text = "Collapse All";
-			collapseAllToolStripMenuItem.Click += collapseAllToolStripMenuItem_Click;
+			_deleteMenuItem.Name = "_deleteMenuItem";
+			_deleteMenuItem.Size = new Size(122, 22);
+			_deleteMenuItem.Text = "Delete";
+			_deleteMenuItem.Click += eventDelete_Click;
 			// 
-			// expandAllToolStripMenuItem
+			// _toolStripSeparator13
 			// 
-			expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
-			expandAllToolStripMenuItem.Size = new Size(181, 22);
-			expandAllToolStripMenuItem.Text = "Expand All";
-			expandAllToolStripMenuItem.Click += expandAllToolStripMenuItem_Click;
+			_toolStripSeparator13.Name = "_toolStripSeparator13";
+			_toolStripSeparator13.Size = new Size(119, 6);
 			// 
-			// contentToolStripMenuItem
+			// _selectAllMenuItem
 			// 
-			contentToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _restorePreviousToolStripMenuItem });
-			contentToolStripMenuItem.Name = "contentToolStripMenuItem";
-			contentToolStripMenuItem.Size = new Size(62, 20);
-			contentToolStripMenuItem.Text = "Content";
+			_selectAllMenuItem.Name = "_selectAllMenuItem";
+			_selectAllMenuItem.Size = new Size(122, 22);
+			_selectAllMenuItem.Text = "Select All";
+			_selectAllMenuItem.Click += eventSelectAll_Click;
 			// 
-			// _restorePreviousToolStripMenuItem
+			// _searchToolStripMenuItem
 			// 
-			_restorePreviousToolStripMenuItem.Name = "_restorePreviousToolStripMenuItem";
-			_restorePreviousToolStripMenuItem.Size = new Size(161, 22);
-			_restorePreviousToolStripMenuItem.Text = "Restore Previous";
-			_restorePreviousToolStripMenuItem.Click += flipContent_Click;
+			_searchToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _quickFindMenuItem, _findAndReplaceMenuItem });
+			_searchToolStripMenuItem.Name = "_searchToolStripMenuItem";
+			_searchToolStripMenuItem.Size = new Size(54, 20);
+			_searchToolStripMenuItem.Text = "Search";
 			// 
-			// extrasToolStripMenuItem
+			// _quickFindMenuItem
 			// 
-			extrasToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { removeStylesToolStripMenuItem, toolStripSeparator2, showDeveloperToolsToolStripMenuItem });
-			extrasToolStripMenuItem.Name = "extrasToolStripMenuItem";
-			extrasToolStripMenuItem.Size = new Size(50, 20);
-			extrasToolStripMenuItem.Text = "Extras";
+			_quickFindMenuItem.Name = "_quickFindMenuItem";
+			_quickFindMenuItem.ShortcutKeys = Keys.Control | Keys.F;
+			_quickFindMenuItem.Size = new Size(289, 22);
+			_quickFindMenuItem.Text = "Quick Find";
+			_quickFindMenuItem.Click += eventQuickFind_Click;
 			// 
-			// removeStylesToolStripMenuItem
+			// _findAndReplaceMenuItem
 			// 
-			removeStylesToolStripMenuItem.Name = "removeStylesToolStripMenuItem";
-			removeStylesToolStripMenuItem.Size = new Size(214, 22);
-			removeStylesToolStripMenuItem.Text = "Remove Styles";
-			removeStylesToolStripMenuItem.Click += eventRemoveStyles_Click;
+			_findAndReplaceMenuItem.Name = "_findAndReplaceMenuItem";
+			_findAndReplaceMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F;
+			_findAndReplaceMenuItem.Size = new Size(289, 22);
+			_findAndReplaceMenuItem.Text = "Find and Replace";
+			_findAndReplaceMenuItem.Click += eventFindAndReplace_Click;
+			// 
+			// _viewMenuItem
+			// 
+			_viewMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _centerToFitMenuItem, _toolStripSeparator3, _propertyGridToolStripMenuItem, _toolStripSeparator5, _collapseAllMenuItem, _expandAllToolStripMenuItem });
+			_viewMenuItem.Name = "_viewMenuItem";
+			_viewMenuItem.Size = new Size(44, 20);
+			_viewMenuItem.Text = "View";
+			// 
+			// _centerToFitMenuItem
+			// 
+			_centerToFitMenuItem.Name = "_centerToFitMenuItem";
+			_centerToFitMenuItem.ShortcutKeys = Keys.Control | Keys.E;
+			_centerToFitMenuItem.Size = new Size(181, 22);
+			_centerToFitMenuItem.Text = "Center to Fit";
+			_centerToFitMenuItem.Click += eventCenterToFitMenuItem_Click;
+			// 
+			// _toolStripSeparator3
+			// 
+			_toolStripSeparator3.Name = "_toolStripSeparator3";
+			_toolStripSeparator3.Size = new Size(178, 6);
+			// 
+			// _propertyGridToolStripMenuItem
+			// 
+			_propertyGridToolStripMenuItem.Checked = true;
+			_propertyGridToolStripMenuItem.CheckOnClick = true;
+			_propertyGridToolStripMenuItem.CheckState = CheckState.Checked;
+			_propertyGridToolStripMenuItem.Name = "_propertyGridToolStripMenuItem";
+			_propertyGridToolStripMenuItem.Size = new Size(181, 22);
+			_propertyGridToolStripMenuItem.Text = "Property Grid";
+			// 
+			// _toolStripSeparator5
+			// 
+			_toolStripSeparator5.Name = "_toolStripSeparator5";
+			_toolStripSeparator5.Size = new Size(178, 6);
+			// 
+			// _collapseAllMenuItem
+			// 
+			_collapseAllMenuItem.Name = "_collapseAllMenuItem";
+			_collapseAllMenuItem.Size = new Size(181, 22);
+			_collapseAllMenuItem.Text = "Collapse All";
+			_collapseAllMenuItem.Click += eventCollapseAllMenuItem_Click;
+			// 
+			// _expandAllToolStripMenuItem
+			// 
+			_expandAllToolStripMenuItem.Name = "_expandAllToolStripMenuItem";
+			_expandAllToolStripMenuItem.Size = new Size(181, 22);
+			_expandAllToolStripMenuItem.Text = "Expand All";
+			_expandAllToolStripMenuItem.Click += eventExpandAllMenuItem_Click;
+			// 
+			// _contentMenuItem
+			// 
+			_contentMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _restorePreviousMenuItem });
+			_contentMenuItem.Name = "_contentMenuItem";
+			_contentMenuItem.Size = new Size(62, 20);
+			_contentMenuItem.Text = "Content";
+			// 
+			// _restorePreviousMenuItem
+			// 
+			_restorePreviousMenuItem.Name = "_restorePreviousMenuItem";
+			_restorePreviousMenuItem.Size = new Size(161, 22);
+			_restorePreviousMenuItem.Text = "Restore Previous";
+			_restorePreviousMenuItem.Click += eventFlipContent_Click;
+			// 
+			// _extrasMenuItem
+			// 
+			_extrasMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _removeStylesMenuItem, toolStripSeparator2, _showDeveloperToolsMenuItem, editorFontToolStripMenuItem });
+			_extrasMenuItem.Name = "_extrasMenuItem";
+			_extrasMenuItem.Size = new Size(50, 20);
+			_extrasMenuItem.Text = "Extras";
+			// 
+			// _removeStylesMenuItem
+			// 
+			_removeStylesMenuItem.Name = "_removeStylesMenuItem";
+			_removeStylesMenuItem.Size = new Size(214, 22);
+			_removeStylesMenuItem.Text = "Remove Styles";
+			_removeStylesMenuItem.Click += eventRemoveStyles_Click;
 			// 
 			// toolStripSeparator2
 			// 
 			toolStripSeparator2.Name = "toolStripSeparator2";
 			toolStripSeparator2.Size = new Size(211, 6);
 			// 
-			// showDeveloperToolsToolStripMenuItem
+			// _showDeveloperToolsMenuItem
 			// 
-			showDeveloperToolsToolStripMenuItem.Name = "showDeveloperToolsToolStripMenuItem";
-			showDeveloperToolsToolStripMenuItem.ShortcutKeys = Keys.F12;
-			showDeveloperToolsToolStripMenuItem.Size = new Size(214, 22);
-			showDeveloperToolsToolStripMenuItem.Text = "Show Developer Tools";
-			showDeveloperToolsToolStripMenuItem.Click += showDeveloperToolsToolStripMenuItem_Click;
+			_showDeveloperToolsMenuItem.Name = "_showDeveloperToolsMenuItem";
+			_showDeveloperToolsMenuItem.ShortcutKeys = Keys.F12;
+			_showDeveloperToolsMenuItem.Size = new Size(214, 22);
+			_showDeveloperToolsMenuItem.Text = "Show Developer Tools";
+			_showDeveloperToolsMenuItem.Click += eventShowDeveloperToolsMenuItem_Click;
 			// 
-			// converisonInfoToolStripMenuItem
+			// _converisonInfoMenuItem
 			// 
-			converisonInfoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _showConversionLogToolStripMenuItem });
-			converisonInfoToolStripMenuItem.Name = "converisonInfoToolStripMenuItem";
-			converisonInfoToolStripMenuItem.Size = new Size(103, 20);
-			converisonInfoToolStripMenuItem.Text = "Converison Info";
+			_converisonInfoMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _showConversionLogMenuItem });
+			_converisonInfoMenuItem.Name = "_converisonInfoMenuItem";
+			_converisonInfoMenuItem.Size = new Size(103, 20);
+			_converisonInfoMenuItem.Text = "Converison Info";
 			// 
-			// _showConversionLogToolStripMenuItem
+			// _showConversionLogMenuItem
 			// 
-			_showConversionLogToolStripMenuItem.Name = "_showConversionLogToolStripMenuItem";
-			_showConversionLogToolStripMenuItem.ShortcutKeys = Keys.F2;
-			_showConversionLogToolStripMenuItem.Size = new Size(208, 22);
-			_showConversionLogToolStripMenuItem.Text = "Show Conversion Log";
-			_showConversionLogToolStripMenuItem.Click += showConversionLog_Click;
+			_showConversionLogMenuItem.Name = "_showConversionLogMenuItem";
+			_showConversionLogMenuItem.ShortcutKeys = Keys.F2;
+			_showConversionLogMenuItem.Size = new Size(208, 22);
+			_showConversionLogMenuItem.Text = "Show Conversion Log";
+			_showConversionLogMenuItem.Click += showConversionLog_Click;
 			// 
-			// openFileDialog
+			// _aboutACadSVGStudioMenuItem
 			// 
-			openFileDialog.Filter = "DWG files|*.dwg|Files with SVG group|*.svg";
-			openFileDialog.FileOk += openFileDialog_FileOk;
+			_aboutACadSVGStudioMenuItem.Name = "_aboutACadSVGStudioMenuItem";
+			_aboutACadSVGStudioMenuItem.Size = new Size(145, 20);
+			_aboutACadSVGStudioMenuItem.Text = "About ACad SVG Studio";
+			_aboutACadSVGStudioMenuItem.Click += eventAbout_Click;
 			// 
-			// saveFileDialog
+			// _openFileDialog
 			// 
-			saveFileDialog.Filter = "Normal SVG file|*.svg|Files with SVG group|*.svg";
-			saveFileDialog.FileOk += saveFileDialog_FileOk;
+			_openFileDialog.Filter = "DWG files|*.dwg|Files with SVG group|*.svg";
+			_openFileDialog.FileOk += eventOpenFileDialog_FileOk;
 			// 
-			// webBrowserContextMenuStrip
+			// _saveFileDialog
 			// 
-			webBrowserContextMenuStrip.Items.AddRange(new ToolStripItem[] { centerToFitToolStripMenuItem1, toolStripSeparator4, showDeveloperToolsToolStripMenuItem1 });
-			webBrowserContextMenuStrip.Name = "webBrowserContextMenuStrip";
-			webBrowserContextMenuStrip.Size = new Size(190, 54);
+			_saveFileDialog.Filter = "Normal SVG file|*.svg|Files with SVG group|*.svg";
+			_saveFileDialog.FileOk += eventSaveFileDialog_FileOk;
 			// 
-			// centerToFitToolStripMenuItem1
+			// _webBrowserContextMenuStrip
 			// 
-			centerToFitToolStripMenuItem1.Name = "centerToFitToolStripMenuItem1";
-			centerToFitToolStripMenuItem1.ShortcutKeys = Keys.Control | Keys.E;
-			centerToFitToolStripMenuItem1.Size = new Size(189, 22);
-			centerToFitToolStripMenuItem1.Text = "Center to Fit";
-			centerToFitToolStripMenuItem1.Click += centerToFitToolStripMenuItem1_Click;
+			_webBrowserContextMenuStrip.Items.AddRange(new ToolStripItem[] { _centerToFitContextMenuItem, _toolStripSeparator4, _showDeveloperToolsContextMenuItem });
+			_webBrowserContextMenuStrip.Name = "_webBrowserContextMenuStrip";
+			_webBrowserContextMenuStrip.Size = new Size(190, 54);
 			// 
-			// toolStripSeparator4
+			// _centerToFitContextMenuItem
 			// 
-			toolStripSeparator4.Name = "toolStripSeparator4";
-			toolStripSeparator4.Size = new Size(186, 6);
+			_centerToFitContextMenuItem.Name = "_centerToFitContextMenuItem";
+			_centerToFitContextMenuItem.ShortcutKeys = Keys.Control | Keys.E;
+			_centerToFitContextMenuItem.Size = new Size(189, 22);
+			_centerToFitContextMenuItem.Text = "Center to Fit";
+			_centerToFitContextMenuItem.Click += eventCenterToFitMenuItem_Click;
 			// 
-			// showDeveloperToolsToolStripMenuItem1
+			// _toolStripSeparator4
 			// 
-			showDeveloperToolsToolStripMenuItem1.Name = "showDeveloperToolsToolStripMenuItem1";
-			showDeveloperToolsToolStripMenuItem1.Size = new Size(189, 22);
-			showDeveloperToolsToolStripMenuItem1.Text = "Show Developer Tools";
-			showDeveloperToolsToolStripMenuItem1.Click += showDeveloperToolsToolStripMenuItem1_Click;
+			_toolStripSeparator4.Name = "_toolStripSeparator4";
+			_toolStripSeparator4.Size = new Size(186, 6);
+			// 
+			// _showDeveloperToolsContextMenuItem
+			// 
+			_showDeveloperToolsContextMenuItem.Name = "_showDeveloperToolsContextMenuItem";
+			_showDeveloperToolsContextMenuItem.Size = new Size(189, 22);
+			_showDeveloperToolsContextMenuItem.Text = "Show Developer Tools";
+			_showDeveloperToolsContextMenuItem.Click += eventShowDeveloperToolsMenuItem_Click;
+			// 
+			// _statusStrip
+			// 
+			_statusStrip.Items.AddRange(new ToolStripItem[] { _statusLabel });
+			_statusStrip.Location = new Point(0, 740);
+			_statusStrip.Name = "_statusStrip";
+			_statusStrip.Size = new Size(1204, 22);
+			_statusStrip.TabIndex = 3;
+			// 
+			// _statusLabel
+			// 
+			_statusLabel.Name = "_statusLabel";
+			_statusLabel.Size = new Size(1189, 17);
+			_statusLabel.Spring = true;
+			// 
+			// _textChangedTimer
+			// 
+			_textChangedTimer.Interval = 500;
+			_textChangedTimer.Tick += eventTextChangedTimer_Tick;
+			// 
+			// editorFontToolStripMenuItem
+			// 
+			editorFontToolStripMenuItem.Name = "editorFontToolStripMenuItem";
+			editorFontToolStripMenuItem.Size = new Size(214, 22);
+			editorFontToolStripMenuItem.Text = "Editor Font";
+			editorFontToolStripMenuItem.Click += eventEditorFontToolStripMenuItem_Click;
 			// 
 			// MainForm
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1204, 762);
-			Controls.Add(splitContainer1);
-			Controls.Add(menuStrip);
-			MainMenuStrip = menuStrip;
+			Controls.Add(_splitContainer1);
+			Controls.Add(_menuStrip);
+			Controls.Add(_statusStrip);
+			MainMenuStrip = _menuStrip;
 			Name = "MainForm";
 			StartPosition = FormStartPosition.CenterScreen;
 			Text = "ACadSvgStudio";
-			FormClosing += MainForm_FormClosing;
-			FormClosed += MainForm_FormClosed;
-			Load += MainForm_Load;
-			splitContainer1.Panel1.ResumeLayout(false);
-			splitContainer1.Panel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
-			splitContainer1.ResumeLayout(false);
-			tabControl.ResumeLayout(false);
-			splitContainer2.Panel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
-			splitContainer2.ResumeLayout(false);
-			menuStrip.ResumeLayout(false);
-			menuStrip.PerformLayout();
-			webBrowserContextMenuStrip.ResumeLayout(false);
+			_splitContainer1.Panel1.ResumeLayout(false);
+			_splitContainer1.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)_splitContainer1).EndInit();
+			_splitContainer1.ResumeLayout(false);
+			_tabControl.ResumeLayout(false);
+			_splitContainer2.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)_splitContainer2).EndInit();
+			_splitContainer2.ResumeLayout(false);
+			_menuStrip.ResumeLayout(false);
+			_menuStrip.PerformLayout();
+			_webBrowserContextMenuStrip.ResumeLayout(false);
+			_statusStrip.ResumeLayout(false);
+			_statusStrip.PerformLayout();
 			ResumeLayout(false);
 			PerformLayout();
 		}
 
 		#endregion
 
-		private SplitContainer splitContainer1;
-		private MenuStrip menuStrip;
-		private ToolStripMenuItem fileToolStripMenuItem;
-		private ToolStripMenuItem exitToolStripMenuItem;
-		private SplitContainer splitContainer2;
-		private PropertyGrid propertyGrid;
-		private ToolStripSeparator toolStripSeparator1;
-		private TabControl tabControl;
-		private TabPage mainGroupTabPage;
-		private TabPage cssTabPage;
-		private TabPage scalesTabPage;
-		private ToolStripMenuItem openToolStripMenuItem;
-		private ToolStripMenuItem saveToolStripMenuItem1;
-		private ToolStripMenuItem saveAsToolStripMenuItem;
-		private ToolStripMenuItem contentToolStripMenuItem;
+		private SplitContainer _splitContainer1;
+		private MenuStrip _menuStrip;
+		private ToolStripMenuItem _fileToolStripMenuItem;
+		private ToolStripMenuItem _exitToolStripMenuItem;
+		private SplitContainer _splitContainer2;
+		private PropertyGrid _propertyGrid;
+		private ToolStripSeparator _toolStripSeparator1;
+		private TabControl _tabControl;
+		private TabPage _mainGroupTabPage;
+		private TabPage _cssTabPage;
+		private TabPage _scalesTabPage;
+		private ToolStripMenuItem _openToolStripMenuItem;
+		private ToolStripMenuItem _saveToolStripMenuItem1;
+		private ToolStripMenuItem _saveAsToolStripMenuItem;
+		private ToolStripMenuItem _contentToolStripMenuItem;
 		private ToolStripMenuItem _restorePreviousToolStripMenuItem;
-		private ToolStripMenuItem converisonInfoToolStripMenuItem;
+		private ToolStripMenuItem _converisonInfoToolStripMenuItem;
 		private ToolStripMenuItem _showConversionLogToolStripMenuItem;
-		private ToolStripMenuItem viewToolStripMenuItem;
-		private ToolStripMenuItem centerToFitToolStripMenuItem;
-		private ToolStripMenuItem extrasToolStripMenuItem;
-		private ToolStripMenuItem removeStylesToolStripMenuItem;
-		private ToolStripMenuItem searchToolStripMenuItem;
+		private ToolStripMenuItem _viewToolStripMenuItem;
+		private ToolStripMenuItem _centerToFitToolStripMenuItem;
+		private ToolStripMenuItem _extrasToolStripMenuItem;
+		private ToolStripMenuItem _removeStylesToolStripMenuItem;
+		private ToolStripMenuItem _searchToolStripMenuItem;
 		private ToolStripMenuItem _findToolStripMenuItem;
 		private ToolStripSeparator toolStripSeparator2;
-		private ToolStripMenuItem showDeveloperToolsToolStripMenuItem;
-		private OpenFileDialog openFileDialog;
-		private SaveFileDialog saveFileDialog;
-		private ToolStripMenuItem propertyGridToolStripMenuItem;
-		private ToolStripSeparator toolStripSeparator3;
-		private ContextMenuStrip webBrowserContextMenuStrip;
-		private ToolStripMenuItem centerToFitToolStripMenuItem1;
-		private ToolStripSeparator toolStripSeparator4;
-		private ToolStripMenuItem showDeveloperToolsToolStripMenuItem1;
-		private ToolStripMenuItem collapseAllToolStripMenuItem;
-		private ToolStripSeparator toolStripSeparator5;
-		private ToolStripMenuItem expandAllToolStripMenuItem;
+		private ToolStripMenuItem _showDeveloperToolsMenuItem;
+		private OpenFileDialog _openFileDialog;
+		private SaveFileDialog _saveFileDialog;
+		private ToolStripMenuItem _propertyGridToolStripMenuItem;
+		private ToolStripSeparator _toolStripSeparator3;
+		private ContextMenuStrip _webBrowserContextMenuStrip;
+		private ToolStripMenuItem _centerToFitContextMenuItem;
+		private ToolStripSeparator _toolStripSeparator4;
+		private ToolStripMenuItem _showDeveloperToolsContextMenuItem;
+		private ToolStripMenuItem _collapseAllMenuItem;
+		private ToolStripSeparator _toolStripSeparator5;
+		private ToolStripMenuItem _expandAllToolStripMenuItem;
+		private ToolStripMenuItem _aboutACadSVGStudioMenuItem;
+		private ToolStripMenuItem _findAndReplaceToolStripMenuItem;
+		private ToolStripMenuItem _findAndReplaceMenuItem;
+		private ToolStripMenuItem _quickFindMenuItem;
+		private ToolStripMenuItem _openMenuItem;
+		private ToolStripMenuItem _saveMenuItem;
+		private ToolStripMenuItem _saveAsMenuItem;
+		private ToolStripMenuItem _exitMenuItem;
+		private ToolStripMenuItem _viewMenuItem;
+		private ToolStripMenuItem _centerToFitMenuItem;
+		private ToolStripMenuItem _contentMenuItem;
+		private ToolStripMenuItem _restorePreviousMenuItem;
+		private ToolStripMenuItem _extrasMenuItem;
+		private ToolStripMenuItem _removeStylesMenuItem;
+		private ToolStripMenuItem _converisonInfoMenuItem;
+		private ToolStripMenuItem _showConversionLogMenuItem;
+		private ToolStripMenuItem _editMenuItem;
+		private ToolStripMenuItem _undoMenuItem;
+		private ToolStripSeparator _toolStripSeparator11;
+		private ToolStripMenuItem _cutMenuItem;
+		private ToolStripMenuItem _copyMenuItem;
+		private ToolStripMenuItem _pasteMenuItem;
+		private ToolStripSeparator _toolStripSeparator13;
+		private ToolStripMenuItem _selectAllMenuItem;
+		private ToolStripMenuItem _redoMenuItem;
+		private ToolStripMenuItem _deleteMenuItem;
+		private StatusStrip _statusStrip;
+		private ToolStripStatusLabel _statusLabel;
+		private System.Windows.Forms.Timer _textChangedTimer;
+		private FontDialog _fontDialog;
+		private ToolStripMenuItem editorFontToolStripMenuItem;
 	}
 }
