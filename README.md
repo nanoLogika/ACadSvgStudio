@@ -1,6 +1,6 @@
 # ACad SVG Studio
 
-A simple application to load and convert AutoCAD DWG documents to SVG using [ACadSVG](https://github.com/nanoLogika/ACadSvg) and [ACadSharp](https://github.com/DomCR/ACadSharp).
+A simple application to load and convert AutoCAD DWG documents to SVG using [ACadSVG](https://github.com/nanoLogika/ACadSvg) and [ACadSharp](https://github.com/DomCR/ACadSharp). 
 SVG code can be viewed and edited SVG in a Scintilla text editor. The result is displayed in an integrated browser control.
 
 *ACad SVG Studio* was designed to support projects with a produktLogika product configurator
