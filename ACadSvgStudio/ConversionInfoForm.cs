@@ -8,19 +8,25 @@
 
 namespace ACadSvgStudio {
 
-    public partial class ConversionInfoForm : Form {
+	public partial class ConversionInfoForm : Form {
 
-        public ConversionInfoForm() {
-            InitializeComponent();
-        }
+		public ConversionInfoForm()
+		{
+			InitializeComponent();
+		}
 
 
-        public void Open(string filename, string log, ISet<string> occurringEntities) {
-            this.Text = "DWG Conversion Info: " + filename;
-            _conversionLogScintilla.Text = log;
-            _occurringEntitiesListBox.Items.Clear();
-            _occurringEntitiesListBox.Items.AddRange(occurringEntities.ToArray<string>());
-            this.Show();
-        }
-    }
+		public void Open(string filename, string log, ISet<string> occurringEntities)
+		{
+			this.Text = "DWG Conversion Info: " + filename;
+
+			_conversionLogScintilla.ReadOnly = false;
+			_conversionLogScintilla.Text = log;
+			_conversionLogScintilla.ReadOnly = true;
+
+			_occurringEntitiesListBox.Items.Clear();
+			_occurringEntitiesListBox.Items.AddRange(occurringEntities.ToArray<string>());
+			this.Show();
+		}
+	}
 }

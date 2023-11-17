@@ -118,7 +118,7 @@ namespace ACadSvgStudio {
 
 		[Category("SVG Viewbox")]
 		[DisplayName("Viewbox MinY")]
-		[Description("ViewBox minimum y parameter.")]
+		[Description("ViewBox minimum y parameter.\r\nNote: Viewbox MinY and SizeY will be transformed accordingly when'Reverse Y-Direction' is set.")]
 		public double ViewBoxMinY {
 			get {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
@@ -162,7 +162,7 @@ namespace ACadSvgStudio {
 
 		[Category("SVG Viewbox")]
 		[DisplayName("Viewbox SizeY")]
-		[Description("ViewBox height parameter.")]
+		[Description("ViewBox height parameter.\r\nNote: Viewbox MinY and SizeY will be transformed accordingly when'Reverse Y-Direction' is set.")]
 		public double ViewBoxHeight {
 			get {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
