@@ -13,8 +13,8 @@ Thus the converter focuses on converting the block structure, especially dynamic
 * **ACadSvg** https://github.com/nanoLogika/ACadSvg
 * **SvgElements** https://github.com/nanoLogika/SvgElements
 * **ACadSharp** https://github.com/DomCR/ACadSharp, see also forked repo: https://github.com/mme1950/ACadSharp
-* **scintilla**
-* **CefSharp**
+* **scintilla.NET** https://github.com/VPKSoft/Scintilla.NET, https://github.com/VPKSoft/ScintillaNET-FindReplaceDialog
+* **CefSharp** https://github.com/cefsharp/cefsharp, https://github.com/cefsharp/CefSharp.Dom
 * **net6.0**
 
 ## Authors
