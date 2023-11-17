@@ -4,7 +4,7 @@ A simple application to load and convert AutoCAD DWG documents to SVG using [ACa
 SVG code can be viewed and edited SVG in a Scintilla text editor. The result is displayed in an integrated browser control.
 
 *ACad SVG Studio* was designed to support projects with a produktLogika product configurator
-that combines parts of 2D drawings created in AutoCAD. produktLogika is nanoLogika's catalog-based product configuration system.
+that combines parts of 2D drawings created in AutoCAD. [produktLogika](https://www.nanologika.de/produktkonfigurator/) is nanoLogika's catalog-based product configuration system.
 
 Thus the converter focuses on converting the block structure, especially dynamic blocks, rather than just converting a drawing.
 
