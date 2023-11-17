@@ -16,7 +16,7 @@ using CefSharp.WinForms;
 using CefSharp.Dom;
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
-
+using SvgElements;
 
 namespace ACadSvgStudio {
 
@@ -1035,7 +1035,7 @@ namespace ACadSvgStudio {
 
         #region -  SVG nd HTML
 
-        private string buildSVG(bool showScales, bool addCss, bool addDeclAndType = false) {
+        private string buildSVG(bool showScales, bool addCss, bool createFile = false) {
             if (_conversionContext == null) {
                 _conversionContext = new ConversionContext();
             }
@@ -1045,7 +1045,16 @@ namespace ACadSvgStudio {
                 _svgProperties.GetViewbox(),
                 _svgProperties.GetGlobalAttributeData());
 
-            XElement svg = EntitySvg.CreateSVG(_conversionContext).GetXml();
+            SvgElement svgElement = EntitySvg.CreateSVG(_conversionContext);
+
+			if (createFile) {
+                svgElement.Style = "background-color:black;";
+                svgElement.Width = _svgProperties.GetViewbox().Width.ToString();
+                svgElement.Height = _svgProperties.GetViewbox().Height.ToString();
+                svgElement.WithViewbox(null, null, null, null);
+            }
+
+            XElement svg = svgElement.GetXml();
 
             StringBuilder csb = new StringBuilder();
             string css = _scintillaCss.Text;
@@ -1063,13 +1072,20 @@ namespace ACadSvgStudio {
 
             string editorText = _scintillaSvgGroupEditor.Text;
             if (!string.IsNullOrEmpty(editorText)) {
-                csb.AppendLine(editorText);
+                if (createFile) {
+                    XElement xElement = XElement.Parse(editorText);
+                    xElement.SetAttributeValue("transform", $"scale(1, -1) translate(0, {-_svgProperties.GetViewbox().Height})");
+                    csb.AppendLine(xElement.ToString());
+				}
+                else {
+					csb.AppendLine(editorText);
+				}
             }
 
             svg.Value = csb.ToString();
 
             StringBuilder sb = new StringBuilder();
-            if (addDeclAndType) {
+            if (createFile) {
                 var declaration = new XDeclaration("1.0", null, null);
                 var doctype = new XDocumentType("svg", " -//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd", string.Empty).ToString();
                 sb.AppendLine(declaration.ToString());
@@ -1087,7 +1103,7 @@ namespace ACadSvgStudio {
 
         public void CreateHTML() {
             string backgroundColor = ColorTranslator.ToHtml(Settings.Default.BackgroundColor);
-            var svg = buildSVG(Settings.Default.ScalesEnabled, Settings.Default.CSSPreviewEnabled);
+            var svg = buildSVG(Settings.Default.ScalesEnabled, Settings.Default.CSSPreviewEnabled, false);
             string html = HTMLBuilder.Build(svg, backgroundColor);
             CefSharp.WebBrowserExtensions.LoadHtml(_webBrowser, html);
             Task.Delay(300).Wait();
@@ -1104,7 +1120,7 @@ namespace ACadSvgStudio {
             }
 
             string backgroundColor = ColorTranslator.ToHtml(Settings.Default.BackgroundColor);
-            var svg = buildSVG(Settings.Default.ScalesEnabled, Settings.Default.CSSPreviewEnabled);
+            var svg = buildSVG(Settings.Default.ScalesEnabled, Settings.Default.CSSPreviewEnabled, false);
 
             if (_devToolsContext == null) {
                 Task<DevToolsContext> t = _webBrowser.CreateDevToolsContextAsync();
