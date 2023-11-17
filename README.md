@@ -8,6 +8,8 @@ that combines parts of 2D drawings created in AutoCAD. [produktLogika](https://w
 
 Thus the converter focuses on converting the block structure, especially dynamic blocks, rather than just converting a drawing.
 
+A simple application to load and convert AutoCAD DWG documents to SVG.
+SVG code can be viewed and edited in a text editor. The result is displayed in an integrated browser control.
 
 ## Dependencies
 * **ACadSvg** https://github.com/nanoLogika/ACadSvg
