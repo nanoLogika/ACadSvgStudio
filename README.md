@@ -120,4 +120,6 @@ When an SVG document is saved no *viewbox* attribute is assigned to the *svg* el
 * **CefSharp** https://github.com/cefsharp/cefsharp, https://github.com/cefsharp/CefSharp.Dom
 * **net6.0**
 
+<!--
 ## Known issues
+-->
