@@ -115,6 +115,8 @@ When an SVG document is saved, no *viewbox* attribute is assigned to the SVG ele
 * **CefSharp** https://github.com/cefsharp/cefsharp, https://github.com/cefsharp/CefSharp.Dom
 * **net6.0**
 
+**NOTE:** Currently not all ACadSharp features required by ACadSvg are pushed to [ACadSharp](https://github.com/DomCR/ACadSharp).
+If you clone this repository you will get the ACadSharp.dll built from https://github.com/mme1950/ACadSharp.
 <!--
 ## Known issues
 -->
