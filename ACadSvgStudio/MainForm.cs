@@ -179,10 +179,9 @@ namespace ACadSvgStudio {
             };
 
             string svgText;
-            ACadLoader loader = new ACadLoader();
             switch (fileFormat) {
             case "DWG":
-                DocumentSvg docSvg = loader.LoadDwg(filename, _conversionContext);
+                DocumentSvg docSvg = ACadLoader.LoadDwg(filename, _conversionContext);
                 svgText = docSvg.ToSvg();
                 break;
             case "DXF":
@@ -1045,7 +1044,7 @@ namespace ACadSvgStudio {
                 _svgProperties.GetViewbox(),
                 _svgProperties.GetGlobalAttributeData());
 
-            SvgElement svgElement = EntitySvg.CreateSVG(_conversionContext);
+            SvgElement svgElement = DocumentSvg.CreateSVG(_conversionContext);
 
 			if (createFile) {
                 svgElement.Style = "background-color:black;";

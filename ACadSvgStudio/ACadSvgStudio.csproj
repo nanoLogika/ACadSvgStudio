@@ -55,11 +55,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Imports\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ACadSvg\ACadSvg.csproj" />
+    <Reference Include="ACadSharp">
+      <HintPath>..\..\ACadSvg\ACadSvg\bin\Release\net6.0\publish\ACadSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="ACadSvg">
+      <HintPath>..\..\ACadSvg\ACadSvg\bin\Release\net6.0\publish\ACadSvg.dll</HintPath>
+    </Reference>
+    <Reference Include="SvgElements">
+      <HintPath>..\..\ACadSvg\ACadSvg\bin\Release\net6.0\publish\SvgElements.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

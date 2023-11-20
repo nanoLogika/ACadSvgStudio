@@ -449,18 +449,7 @@ namespace ACadSvgStudio {
 
 
 		public GlobalAttributeData GetGlobalAttributeData() {
-			return new GlobalAttributeData(
-				StrokeEnabled,
-				StrokeColor,
-				StrokeWidth,
-				FillEnabled,
-				FillColor,
-				TransformTranslationX,
-				TransformTranslationY,
-				TransformScaleX,
-				TransformScaleY,
-				TransformRotation
-				);
+			return new GlobalAttributeData();
         }
 
         #endregion
