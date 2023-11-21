@@ -23,7 +23,7 @@ namespace ACadSvgStudio {
     public partial class MainForm : Form {
 
         public const string AppName = "ACad SVG Studio";
-        private const string SvgKeywords = "circle defs ellipse g path pattern rect text";
+        private const string SvgKeywords = "circle defs ellipse g path pattern rect text tspan";
 
         private SvgProperties _svgProperties;
 
@@ -39,7 +39,7 @@ namespace ACadSvgStudio {
         private int _maxLineNumberCharLength;
 
         private bool _centerToFitOnLoad = false;
-
+        private bool _executingPanScriptFailed;
         private bool _updatingHTMLEnabled = true;
 
         private string? _loadedFilename;
@@ -56,6 +56,7 @@ namespace ACadSvgStudio {
         private ISet<string> _flippedOccurringEntities;
         private string _flippedConversionLog;
         private bool _flippedContentChanged;
+
 
         public MainForm() {
 
@@ -226,8 +227,8 @@ namespace ACadSvgStudio {
 
             // Drag and Drop
             _scintillaSvgGroupEditor.AllowDrop = true;
-            _scintillaSvgGroupEditor.DragEnter += (s, e) => editorDragEnter(s, e);
-            _scintillaSvgGroupEditor.DragDrop += (s, e) => editorDragDrop(s, e);
+            _scintillaSvgGroupEditor.DragEnter += (s, e) => eventEditorDragEnter(s, e);
+            _scintillaSvgGroupEditor.DragDrop += (s, e) => eventEditorDragDrop(s, e);
 
 
             // Recipe for XML
@@ -492,6 +493,7 @@ namespace ACadSvgStudio {
 
         private void eventScintilla_TextChanged(object? sender, EventArgs e) {
             try {
+                clearStatusLabel();
                 updateLineMargin(sender);
                 _contentChanged = true;
 
@@ -505,6 +507,7 @@ namespace ACadSvgStudio {
 
         private void eventScintillaScales_TextChanged(object? sender, EventArgs e) {
             try {
+                clearStatusLabel();
                 Settings.Default.ScalesSvg = _scintillaScales.Text;
                 Settings.Default.Save();
 
@@ -520,6 +523,7 @@ namespace ACadSvgStudio {
 
         private void eventScintillaCss_TextChanged(object? sender, EventArgs e) {
             try {
+                clearStatusLabel();
                 Settings.Default.CSSPreview = _scintillaCss.Text;
                 Settings.Default.Save();
 
@@ -533,7 +537,7 @@ namespace ACadSvgStudio {
         }
 
 
-        private void editorDragEnter(object sender, DragEventArgs e) {
+        private void eventEditorDragEnter(object sender, DragEventArgs e) {
             try {
                 if (e.Data == null) {
                     return;
@@ -563,7 +567,7 @@ namespace ACadSvgStudio {
         }
 
 
-        private void editorDragDrop(object sender, DragEventArgs e) {
+        private void eventEditorDragDrop(object sender, DragEventArgs e) {
             try {
                 if (e.Data == null) {
                     return;
@@ -587,6 +591,11 @@ namespace ACadSvgStudio {
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
             }
+        }
+
+
+        private void clearStatusLabel() {
+            _statusLabel.Text = string.Empty;
         }
 
         #endregion
@@ -986,16 +995,22 @@ namespace ACadSvgStudio {
 
 
         private void eventEditorFontToolStripMenuItem_Click(object sender, EventArgs e) {
-            _fontDialog.Font = Settings.Default.EditorFont;
+            try {
+                _fontDialog.Font = Settings.Default.EditorFont;
 
-            if (_fontDialog.ShowDialog() == DialogResult.OK) {
-                Font font = _fontDialog.Font;
-                setEditorFont(font);
+                if (_fontDialog.ShowDialog() == DialogResult.OK) {
+                    Font font = _fontDialog.Font;
+                    setEditorFont(font);
 
-                Settings.Default.EditorFont = font;
-                Settings.Default.Save();
+                    Settings.Default.EditorFont = font;
+                    Settings.Default.Save();
+                }
+            }
+            catch (Exception ex) {
+                _statusLabel.Text = ex.Message;
             }
         }
+
 
         private void setEditorFont(Font font) {
             _scintillaSvgGroupEditor.Font = font;
@@ -1032,7 +1047,7 @@ namespace ACadSvgStudio {
 
         #endregion
 
-        #region -  SVG nd HTML
+        #region -  SVG and HTML
 
         private string buildSVG(bool showScales, bool addCss, bool createFile = false) {
             if (_conversionContext == null) {
@@ -1046,42 +1061,32 @@ namespace ACadSvgStudio {
 
             SvgElement svgElement = DocumentSvg.CreateSVG(_conversionContext);
 
-			if (createFile) {
+            if (createFile) {
                 svgElement.Style = "background-color:black;";
-                svgElement.Width = _svgProperties.GetViewbox().Width.ToString();
-                svgElement.Height = _svgProperties.GetViewbox().Height.ToString();
-                svgElement.WithViewbox(null, null, null, null);
+				svgElement.Width = _svgProperties.ViewBoxWidth.ToString();
+				svgElement.Height = _svgProperties.ViewBoxHeight.ToString();
+				svgElement.WithViewbox(null, null, null, null);
             }
 
-            XElement svg = svgElement.GetXml();
-
-            StringBuilder csb = new StringBuilder();
-            string css = _scintillaCss.Text;
-            if (addCss && !string.IsNullOrEmpty(css)) {
-                XElement styleXElement = new XElement("style");
-                styleXElement.Add(new XAttribute("type", "text/css"));
-                styleXElement.Value = css;
-                csb.AppendLine(styleXElement.ToString());
-            }
-
-            string scales = _scintillaScales.Text;
-            if (showScales && !string.IsNullOrEmpty(scales)) {
-                csb.AppendLine(scales);
-            }
+            svgElement.AddCss(_scintillaCss.Text, addCss);
+            svgElement.AddValue(_scintillaScales.Text, showScales);
 
             string editorText = _scintillaSvgGroupEditor.Text;
             if (!string.IsNullOrEmpty(editorText)) {
                 if (createFile) {
-                    XElement xElement = XElement.Parse(editorText);
-                    xElement.SetAttributeValue("transform", $"scale(1, -1) translate(0, {-_svgProperties.GetViewbox().Height})");
-                    csb.AppendLine(xElement.ToString());
-				}
-                else {
-					csb.AppendLine(editorText);
-				}
+                    try {
+                        XElement xElement = XElement.Parse(editorText);
+                        int factor = _svgProperties.ReverseY ? -1 : 1;
+                        xElement.SetAttributeValue("transform", $"scale(1, {factor}) translate({_svgProperties.ViewBoxMinX}, {factor * _svgProperties.ViewBoxMinY})");
+						editorText = xElement.ToString();
+                    }
+                    catch (Exception e) {
+                        _statusLabel.Text = e.Message;
+                        throw;
+                    }
+                }
+                svgElement.AddValue(editorText);
             }
-
-            svg.Value = csb.ToString();
 
             StringBuilder sb = new StringBuilder();
             if (createFile) {
@@ -1089,13 +1094,12 @@ namespace ACadSvgStudio {
                 var doctype = new XDocumentType("svg", " -//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd", string.Empty).ToString();
                 sb.AppendLine(declaration.ToString());
                 sb.AppendLine(doctype.ToString());
-                sb.AppendLine(svg.ToString());
-            }
-            else {
-                sb.AppendLine(svg.ToString());
             }
 
-            string svgText = sb.ToString().Replace("&gt;", ">").Replace("&lt;", "<");
+            XElement svg = svgElement.GetXml();
+            sb.AppendLine(svgElement.ToString().Replace("&gt;", ">").Replace("&lt;", "<"));
+
+            string svgText = sb.ToString();
             return svgText;
         }
 
@@ -1112,8 +1116,9 @@ namespace ACadSvgStudio {
 
 
         public void UpdateHTML() {
-            if (_centerToFitOnLoad) {
+            if (_centerToFitOnLoad || _executingPanScriptFailed) {
                 CreateHTML();
+                _executingPanScriptFailed = false;
                 _centerToFitOnLoad = false;
                 return;
             }
@@ -1156,6 +1161,7 @@ namespace ACadSvgStudio {
 
             if (!tScript.Result.Success) {
                 _statusLabel.Text = "Executing Pan Zoom script failed.";
+                _executingPanScriptFailed = true;
             }
         }
 

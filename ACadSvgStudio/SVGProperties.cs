@@ -449,7 +449,18 @@ namespace ACadSvgStudio {
 
 
 		public GlobalAttributeData GetGlobalAttributeData() {
-			return new GlobalAttributeData();
+			return new GlobalAttributeData() {
+				StrokeEnabled = StrokeEnabled,
+				Stroke = StrokeColor.Name,
+				StrokeWidth = StrokeWidth,
+				FillEnabled = FillEnabled,
+				Fill = FillColor.Name,
+                TransX = TransformTranslationX,
+				TransY = TransformTranslationY,
+				ScaleX = TransformScaleX,
+				ScaleY = TransformScaleY,
+				Rotation = TransformRotation
+			};
         }
 
         #endregion
@@ -457,7 +468,7 @@ namespace ACadSvgStudio {
 
         [Category("Conversion Options")]
 		[DisplayName("Reverse Y-Direction")]
-		[Description("In SVG coordinate system y grows from top to bottom. This option allows to reverse the y-coodinates so that y grows from bottom to top and AutoCAD coordinates can be used as they are delivered.")]
+		[Description("In the SVG coordinate system y grows from top to bottom. This option allows to reverse the y-coodinates so that y grows from bottom to top and AutoCAD coordinates can be used as they are delivered.")]
 		public bool ReverseY {
 			get {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
