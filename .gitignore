@@ -3,5 +3,6 @@
 ################################################################################
 
 /.vs/ACadSvgStudio
+/ACadSvgStudio/bin
 /ACadSvgStudio/obj
 /.vs
