@@ -155,6 +155,7 @@
 			// _splitContainer2
 			// 
 			_splitContainer2.Dock = DockStyle.Fill;
+            _splitContainer2.FixedPanel = FixedPanel.Panel2;
 			_splitContainer2.Location = new Point(0, 0);
 			_splitContainer2.Name = "_splitContainer2";
 			// 
@@ -473,6 +474,7 @@
 			// 
 			// _statusLabel
 			// 
+            _statusLabel.ForeColor = Color.Red;
 			_statusLabel.Name = "_statusLabel";
 			_statusLabel.Size = new Size(1189, 17);
 			_statusLabel.Spring = true;
