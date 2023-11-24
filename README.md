@@ -8,7 +8,7 @@ that combines parts of 2D drawings created in AutoCAD. [produktLogika&#174;](htt
 
 Thus the converter focuses on converting the block structure, especially dynamic blocks, rather than just converting a drawing.
 
-[Download Demo](https://github.com/nanoLogika/ACadSvgStudio/releases/tag/v0.1.0_Demo).
+[Download Demo](https://github.com/nanoLogika/ACadSvgStudio/releases/tag/v0.2.0_Demo).
 
 ## Short Description
 * DWG or SVG documents can be loaded using the *File* menu or by drag-and-drop.
