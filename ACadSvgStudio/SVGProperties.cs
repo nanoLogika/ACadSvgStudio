@@ -14,7 +14,35 @@ namespace ACadSvgStudio {
 
 	internal class SvgProperties {
 
-		private MainForm _mainForm;
+		public enum DefaultLineweightType {
+			W0 = ACadSharp.LineweightType.W0,
+            W5 = ACadSharp.LineweightType.W5,
+            W9 = ACadSharp.LineweightType.W9,
+            W13 = ACadSharp.LineweightType.W13,
+            W15 = ACadSharp.LineweightType.W15,
+            W18 = ACadSharp.LineweightType.W18,
+            W20 = ACadSharp.LineweightType.W20,
+            W25 = ACadSharp.LineweightType.W25,
+            W30 = ACadSharp.LineweightType.W30,
+            W35 = ACadSharp.LineweightType.W35,
+            W40 = ACadSharp.LineweightType.W40,
+            W50 = ACadSharp.LineweightType.W50,
+            W53 = ACadSharp.LineweightType.W53,
+            W60 = ACadSharp.LineweightType.W60,
+            W70 = ACadSharp.LineweightType.W70,
+            W80 = ACadSharp.LineweightType.W80,
+            W90 = ACadSharp.LineweightType.W90,
+            W100 = ACadSharp.LineweightType.W100,
+            W106 = ACadSharp.LineweightType.W106,
+            W120 = ACadSharp.LineweightType.W120,
+            W140 = ACadSharp.LineweightType.W140,
+            W158 = ACadSharp.LineweightType.W158,
+            W200 = ACadSharp.LineweightType.W200,
+            W211 = ACadSharp.LineweightType.W211
+        }
+
+
+        private MainForm _mainForm;
 
 		public SvgProperties(MainForm mainForm) {
 			_mainForm = mainForm;
@@ -219,12 +247,12 @@ namespace ACadSvgStudio {
 		#region SVG/Main Group Attributes
 
 		[Category("SVG/Main Group Attributes")]
-        [DisplayName("Stroke Attribute Enabled")]
+        [DisplayName("Stroke-Color Attribute Enabled")]
 		[Description("Indicates that, when true, a stroke=\"{color}\" attribute is to be set at the svg element; otherwise, no stroke attribute is set.")]
-		public bool StrokeEnabled {
+		public bool StrokeColorEnabled {
 			get {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					return Settings.Default.StrokeEnabled;
+					return Settings.Default.StrokeColorEnabled;
 				}
 				else {
 					return true;
@@ -232,7 +260,7 @@ namespace ACadSvgStudio {
 			}
 			set {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					Settings.Default.StrokeEnabled = value;
+					Settings.Default.StrokeColorEnabled = value;
 					Settings.Default.Save();
 
 					_mainForm.UpdateHTML();
@@ -241,13 +269,36 @@ namespace ACadSvgStudio {
 		}
 
 
-		[Category("SVG/Main Group Attributes")]
-        [DisplayName("Fill Attribute Enabled")]
+        [Category("SVG/Main Group Attributes")]
+        [DisplayName("Stroke-Width Attribute Enabled")]
+        [Description("Indicates that, when true, a stroke-width=\"{width}\" attribute is to be set at the svg element; otherwise, no stroke-width attribute is set.")]
+        public bool StrokeWidthEnabled {
+            get {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    return Settings.Default.StrokeWidthEnabled;
+                }
+                else {
+                    return true;
+                }
+            }
+            set {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    Settings.Default.StrokeWidthEnabled = value;
+                    Settings.Default.Save();
+
+                    _mainForm.UpdateHTML();
+                }
+            }
+        }
+
+
+        [Category("SVG/Main Group Attributes")]
+        [DisplayName("Fill-Color Attribute Enabled")]
 		[Description("Indicates that, when true, a fill=\"{color}\" attribute is to be set at the svg element; otherwise, a fill=\"none\" is set.")]
-		public bool FillEnabled {
+		public bool FillColorEnabled {
 			get {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					return Settings.Default.FillEnabled;
+					return Settings.Default.FillColorEnabled;
 				}
 				else {
 					return true;
@@ -255,7 +306,7 @@ namespace ACadSvgStudio {
 			}
 			set {
 				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					Settings.Default.FillEnabled = value;
+					Settings.Default.FillColorEnabled = value;
 					Settings.Default.Save();
 
 					_mainForm.UpdateHTML();
@@ -265,7 +316,7 @@ namespace ACadSvgStudio {
 
 
 		[Category("SVG/Main Group Attributes")]
-        [DisplayName("Stroke Color Attribute")]
+        [DisplayName("Stroke-Color Attribute")]
 		[Description("stroke=\"{color}\" defines the standard color of all strokes. {color} must be a html-color as #RGB or al color name. The attribute is set only when the 'Stroke Attribute Enabled' setting is true.")]
 		public Color StrokeColor {
 			get {
@@ -288,7 +339,7 @@ namespace ACadSvgStudio {
 
 
 		[Category("SVG/Main Group Attributes")]
-		[DisplayName("Stroke Width Attribute")]
+		[DisplayName("Stroke-Width Attribute")]
 		[Description("stroke-width=\"{width}\" defines the standard width of all strokes. {width} must be a number. The attribute is set only when the 'Stroke Attribute Enabled' setting is true.")]
 		public double StrokeWidth {
 			get {
@@ -311,7 +362,7 @@ namespace ACadSvgStudio {
 
 
 		[Category("SVG/Main Group Attributes")]
-        [DisplayName("Fill Color Attribute")]
+        [DisplayName("Fill-Color Attribute")]
 		[Description("fill=\"{color}\" defines the standard color of all shapes. {color} must be a html-color as #RGB or a color name, none.")]
 		public Color FillColor {
 			get {
@@ -450,10 +501,11 @@ namespace ACadSvgStudio {
 
 		public GlobalAttributeData GetGlobalAttributeData() {
 			return new GlobalAttributeData() {
-				StrokeEnabled = StrokeEnabled,
+				StrokeEnabled = StrokeColorEnabled,
 				Stroke = StrokeColor.Name,
+				StrokeWidthEnabled = StrokeWidthEnabled,
 				StrokeWidth = StrokeWidth,
-				FillEnabled = FillEnabled,
+				FillEnabled = FillColorEnabled,
 				Fill = FillColor.Name,
                 TransX = TransformTranslationX,
 				TransY = TransformTranslationY,
@@ -529,55 +581,55 @@ namespace ACadSvgStudio {
 		}
 
 
-		[Category("Conversion Options")]
-		[DisplayName("Create class-Attribute from Object Type.")]
-		[Description("If this option is set class-attributes are created for every converted AutoCAD Entity from the object type. Otherwise, no class attributes are created. Styles for these classes can be defined in the CSS for preview tab.")]
-		public bool ExportObjectTypeAsClass {
-			get {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					return Settings.Default.ExportObjectTypeAsClass;
-				}
-				else {
-					return true;
-				}
-			}
-			set {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					Settings.Default.ExportObjectTypeAsClass = value;
-					Settings.Default.Save();
-				}
-			}
-		}
+        [Category("Conversion Options")]
+        [DisplayName("Create class-Attribute from Object Type.")]
+        [Description("If this option is set class-attributes are created for every converted AutoCAD Entity from the object type. Otherwise, no class attributes are created. Styles for these classes can be defined in the CSS for preview tab.")]
+        public bool ExportObjectTypeAsClass {
+            get {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    return Settings.Default.ExportObjectTypeAsClass;
+                }
+                else {
+                    return true;
+                }
+            }
+            set {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    Settings.Default.ExportObjectTypeAsClass = value;
+                    Settings.Default.Save();
+                }
+            }
+        }
 
 
-		[Category("Conversion Options")]
-        [DisplayName("Create Comment for Entities")]
-        [Description("A comment for every converted entity is created.")]
-		public bool EnableComments {
-			get {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					return Settings.Default.EnableComments;
-				}
-				else {
-					return true;
-				}
-			}
-			set {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					Settings.Default.EnableComments = value;
-					Settings.Default.Save();
-				}
-			}
-		}
+        [Category("Conversion Options")]
+        [DisplayName("Default Line Weight.")]
+        [Description("AutoCAD uses a default line weight of 25 in hundeth of mm or another value stored in an environment variable. Conversion will use the value set here.")]
+        public DefaultLineweightType DefaultLineWeight {
+            get {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    return (DefaultLineweightType)Settings.Default.DefaultLineWeight;
+                }
+                else {
+                    return DefaultLineweightType.W25;
+                }
+            }
+            set {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    Settings.Default.DefaultLineWeight = (short)value;
+                    Settings.Default.Save();
+                }
+            }
+        }
 
 
-		public ConversionOptions GetConversionOptions() {
+        public ConversionOptions GetConversionOptions() {
 			return new ConversionOptions() {
-				EnableComments = this.EnableComments,
 				ExportHandleAsID = this.ExportHandleAsID,
 				ExportLayerAsClass = this.ExportLayerAsClass,
 				ExportObjectTypeAsClass = this.ExportObjectTypeAsClass,
-				ReverseY = this.ReverseY
+				ReverseY = this.ReverseY,
+				DefaultLineWeight = (ACadSharp.LineweightType)this.DefaultLineWeight
 			};
 		}
 
