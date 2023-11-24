@@ -241,25 +241,25 @@ namespace ACadSvgStudio {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool StrokeEnabled {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool StrokeColorEnabled {
             get {
-                return ((bool)(this["StrokeEnabled"]));
+                return ((bool)(this["StrokeColorEnabled"]));
             }
             set {
-                this["StrokeEnabled"] = value;
+                this["StrokeColorEnabled"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool FillEnabled {
+        public bool FillColorEnabled {
             get {
-                return ((bool)(this["FillEnabled"]));
+                return ((bool)(this["FillColorEnabled"]));
             }
             set {
-                this["FillEnabled"] = value;
+                this["FillColorEnabled"] = value;
             }
         }
         
@@ -350,48 +350,12 @@ namespace ACadSvgStudio {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ExportHandleAsID {
+        public bool StrokeWidthEnabled {
             get {
-                return ((bool)(this["ExportHandleAsID"]));
+                return ((bool)(this["StrokeWidthEnabled"]));
             }
             set {
-                this["ExportHandleAsID"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ExportLayerAsClass {
-            get {
-                return ((bool)(this["ExportLayerAsClass"]));
-            }
-            set {
-                this["ExportLayerAsClass"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool EnableComments {
-            get {
-                return ((bool)(this["EnableComments"]));
-            }
-            set {
-                this["EnableComments"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ExportObjectTypeAsClass {
-            get {
-                return ((bool)(this["ExportObjectTypeAsClass"]));
-            }
-            set {
-                this["ExportObjectTypeAsClass"] = value;
+                this["StrokeWidthEnabled"] = value;
             }
         }
         
@@ -404,6 +368,54 @@ namespace ACadSvgStudio {
             }
             set {
                 this["EditorFont"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ExportHandleAsID {
+            get {
+                return ((bool)(this["ExportHandleAsID"]));
+            }
+            set {
+                this["ExportHandleAsID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ExportLayerAsClass {
+            get {
+                return ((bool)(this["ExportLayerAsClass"]));
+            }
+            set {
+                this["ExportLayerAsClass"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ExportObjectTypeAsClass {
+            get {
+                return ((bool)(this["ExportObjectTypeAsClass"]));
+            }
+            set {
+                this["ExportObjectTypeAsClass"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("25")]
+        public short DefaultLineWeight {
+            get {
+                return ((short)(this["DefaultLineWeight"]));
+            }
+            set {
+                this["DefaultLineWeight"] = value;
             }
         }
     }
