@@ -157,41 +157,32 @@ namespace ACadSvgStudio {
 
             switch (ext) {
             case ".svg":
-                _centerToFitOnLoad = true;
-                _scintillaSvgGroupEditor.Text = File.ReadAllText(filename);
-                _loadedFilename = filename;
-                this.Text = $"{AppName} - {filename}";
+                readSvgFile(filename);
                 break;
 
             case ".dwg":
-                readACadFile(filename, "DWG");
+                readDwgFile(filename);
+                _contentChanged = true;
+                return;
+
+            case ".dxf":
+                readDxfFile(filename);
                 _contentChanged = true;
                 return;
             }
         }
 
 
-        private void readACadFile(string filename, string fileFormat) {
-
+        private void createConversionContext() {
             _conversionContext = new ConversionContext() {
                 ConversionOptions = _svgProperties.GetConversionOptions(),
                 ViewboxData = _svgProperties.GetViewbox(),
                 GlobalAttributeData = _svgProperties.GetGlobalAttributeData()
             };
+        }
 
-            string svgText;
-            string scalesSvgText;
-            switch (fileFormat) {
-            case "DWG":
-                DocumentSvg docSvg = ACadLoader.LoadDwg(filename, _conversionContext);
-                svgText = docSvg.ToSvg();
-                scalesSvgText = docSvg.GetModelSpaceRectangle().ToString();
-                break;
-            case "DXF":
-            default:
-                throw new InvalidOperationException($"File format {fileFormat} not supported");
-            }
 
+        private void updateConversionInfo(string filename, string fileFormat, string svgText, string scalesSvgText) {
             _flippedFilename = _loadedDwgFilename;
             _flippedSvg = _scintillaSvgGroupEditor.Text;
             _flippedConversionLog = _conversionLog;
@@ -206,7 +197,38 @@ namespace ACadSvgStudio {
                 _scintillaScales.Text = scalesSvgText;
             }
             _loadedDwgFilename = filename;
-            this.Text = $"{AppName} - Converted {fileFormat}: {filename}";
+            this.Text = $"{AppName} - {fileFormat}: {filename}";
+        }
+
+
+        private void readDwgFile(string filename) {
+            createConversionContext();
+
+            DocumentSvg docSvg = ACadLoader.LoadDwg(filename, _conversionContext);
+            string svgText = docSvg.ToSvg();
+            string scalesSvgText = docSvg.GetModelSpaceRectangle().ToString();
+
+            updateConversionInfo(filename, "Converted DWG", svgText, scalesSvgText);
+        }
+
+
+        private void readDxfFile(string filename) {
+            createConversionContext();
+
+            DocumentSvg docSvg = ACadLoader.LoadDxf(filename, _conversionContext);
+            string svgText = docSvg.ToSvg();
+            string scalesSvgText = docSvg.GetModelSpaceRectangle().ToString();
+
+            updateConversionInfo(filename, "Converted DXF", svgText, scalesSvgText);
+        }
+
+
+        private void readSvgFile(string filename) {
+            createConversionContext();
+
+            string svgText = System.IO.File.ReadAllText(filename);
+
+            updateConversionInfo(filename, "SVG", svgText, string.Empty);
         }
 
 
@@ -557,7 +579,10 @@ namespace ACadSvgStudio {
 
                 // Check for unsupported files
                 foreach (string file in files) {
-                    if (!file.ToLower().EndsWith(".dwg")) {
+                    string fileLower = file.ToLower();
+                    if (!(fileLower.EndsWith(".dwg")
+                    || fileLower.EndsWith(".dxf")
+                    || fileLower.EndsWith(".svg"))) {
                         return;
                     }
                 }
@@ -588,9 +613,16 @@ namespace ACadSvgStudio {
                     return;
                 }
 
-                string filename = files[0];
-                //	Extension is always ".dwg"
-                readACadFile(filename, "DWG");
+                string filename = files[0].ToLower();
+                if (filename.EndsWith(".dwg")) {
+                    readDwgFile(filename);
+                }
+                else if (filename.EndsWith(".dxf")) {
+                    readDxfFile(filename);
+                }
+                else if (filename.EndsWith(".svg")) {
+                    readSvgFile(filename);
+                }
                 _contentChanged = true;
             }
             catch (Exception ex) {
@@ -684,10 +716,14 @@ namespace ACadSvgStudio {
 
                 switch (filterIndex) {
                 case 1: // ".dwg";
-                    readACadFile(filename, "DWG");
+                    readDwgFile(filename);
                     _contentChanged = true;
                     break;
-                case 2: // ".svg"
+                case 2: // ".dxf"
+                    readDxfFile(filename);
+                    _contentChanged = true;
+                    break;
+                case 3: // ".svg"
                     _centerToFitOnLoad = true;
                     _scintillaSvgGroupEditor.Text = File.ReadAllText(filename);
                     break;
@@ -1068,9 +1104,9 @@ namespace ACadSvgStudio {
 
             if (createFile) {
                 svgElement.Style = "background-color:black;";
-				svgElement.Width = _svgProperties.ViewBoxWidth.ToString();
-				svgElement.Height = _svgProperties.ViewBoxHeight.ToString();
-				svgElement.WithViewbox(null, null, null, null);
+                svgElement.Width = _svgProperties.ViewBoxWidth.ToString();
+                svgElement.Height = _svgProperties.ViewBoxHeight.ToString();
+                svgElement.WithViewbox(null, null, null, null);
             }
 
             svgElement.AddCss(_scintillaCss.Text, addCss);
@@ -1083,7 +1119,7 @@ namespace ACadSvgStudio {
                         XElement xElement = XElement.Parse(editorText);
                         int factor = _svgProperties.ReverseY ? -1 : 1;
                         xElement.SetAttributeValue("transform", $"scale(1, {factor}) translate({_svgProperties.ViewBoxMinX}, {factor * _svgProperties.ViewBoxMinY})");
-						editorText = xElement.ToString();
+                        editorText = xElement.ToString();
                     }
                     catch (Exception e) {
                         _statusLabel.Text = e.Message;
