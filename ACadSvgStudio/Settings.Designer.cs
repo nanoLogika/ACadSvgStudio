@@ -410,12 +410,48 @@ namespace ACadSvgStudio {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("25")]
-        public short DefaultLineWeight {
+        public short DefaultLineweight {
             get {
-                return ((short)(this["DefaultLineWeight"]));
+                return ((short)(this["DefaultLineweight"]));
             }
             set {
-                this["DefaultLineWeight"] = value;
+                this["DefaultLineweight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CreateScaleFromModelSpaceExtent {
+            get {
+                return ((bool)(this["CreateScaleFromModelSpaceExtent"]));
+            }
+            set {
+                this["CreateScaleFromModelSpaceExtent"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CreateViewboxFromModelSpaceExtent {
+            get {
+                return ((bool)(this["CreateViewboxFromModelSpaceExtent"]));
+            }
+            set {
+                this["CreateViewboxFromModelSpaceExtent"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double LineweightScaleFactor {
+            get {
+                return ((double)(this["LineweightScaleFactor"]));
+            }
+            set {
+                this["LineweightScaleFactor"] = value;
             }
         }
     }
