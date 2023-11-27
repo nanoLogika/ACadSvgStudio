@@ -430,7 +430,7 @@
 			// 
 			// _openFileDialog
 			// 
-			_openFileDialog.Filter = "DWG files|*.dwg|Files with SVG group|*.svg";
+			_openFileDialog.Filter = "DWG files|*.dwg|DXF files|*.dxf|Files with SVG group|*.svg|All files|*.*";
 			_openFileDialog.FileOk += eventOpenFileDialog_FileOk;
 			// 
 			// _saveFileDialog
