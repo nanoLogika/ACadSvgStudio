@@ -1,6 +1,6 @@
 # ACad SVG Studio
 
-A simple application to load and convert AutoCAD documents from DWG to SVG using [ACadSVG](https://github.com/nanoLogika/ACadSvg) and [ACadSharp](https://github.com/DomCR/ACadSharp). 
+A simple application to load and convert AutoCAD documents (DWG or DXF) to SVG using [ACadSVG](https://github.com/nanoLogika/ACadSvg) and [ACadSharp](https://github.com/DomCR/ACadSharp). 
 SVG code can be viewed and edited in a Scintilla text editor. The resulting drawing is displayed in an integrated browser control.
 
 *ACad SVG Studio* was designed to support projects with a produktLogika product configurator
@@ -11,7 +11,7 @@ Thus the converter focuses on converting the block structure, especially dynamic
 [Download Demo](https://github.com/nanoLogika/ACadSvgStudio/releases/tag/v0.2.0_Demo).
 
 ## Short Description
-* DWG or SVG documents can be loaded using the *File* menu or by drag-and-drop.
+* DWG, DXF, or SVG documents can be loaded using the *File* menu or by drag-and-drop.
 * The SVG text shows up in the editor on tab *Main Group*, and the drawing is displayed in the integrated browser control.
 * The displayed drawing can be scaled with the mouse wheel and moved with the mouse.
 * The SVG text can be modified in the *Main Group* editor. Additional SVG text and style definitions can be edited in the *Scales* editor and the *CSS-for-Preview* editor. The effect of the modifications appears immediately in the integrated browser control.
@@ -35,14 +35,20 @@ In this tab a CSS can be edited that is used for the display of the SVG drawing 
 ### Property Grid
 #### Conversion Options
 Conversion options can be specified in the property grid visible in the application window to be applied in the conversion process. If conversion options are changed the DWG document has to be loaded again to repeat the conversion using the new options.
-* Create class Attribute from Layer Name
-* Create class Attribute from Object Type<br>
+* *Create class Attribute from Layer Name*
+* *Create class Attribute from Object Type*<br>
   A *class* attribute is created for each converted AutoCAD element with the layer name and/or the object type. The assigned classes can be adressed in the *CSS-for-Preview* tab.
-* Create id Attribute from Handle<br>
+* *Create id Attribute from Handle*<br>
   An *id* attribute is created for each converted element. The element's handle provided by AutoCAD is used as the *id* value.
 * Reverse Y-Direction<br>
   This flag indicates that the positive y-direction is up instead of down.
   In SVG the y-coordinates grow from top to bottom. In AutoCAD the positive y-direction is up. If this flag is set, a transform attribute is assigned to the main group, so that y-coordinates from AutoCAD can be used as they are.
+* *Create Scale-Box from Model-Space Extent*<br>
+  A rectangle with the coordinates of the model-space extent is created as SVG and stored in the scales editor.
+* *Create Viewbox Rectangle from Model-Space Extent*<br>
+  The coordinates of the model-space extent are entered into the viewbox settings.
+* *Lineweight Scale Factor*<br>
+  This scale factor is used to scale lineweights. Specify 0 to use lineweights as they are.
 
 #### Viewbox
 With these settings a *viewbox* attribute can be defined for the display in the integrated browser control. If the *viewbox* attribute is enabled, only the portion of the drawing that is inside the viewbox is visbible. The *Center-to-Fit* option considers only this portion of the drawing.
