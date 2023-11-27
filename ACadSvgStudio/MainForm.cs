@@ -180,10 +180,12 @@ namespace ACadSvgStudio {
             };
 
             string svgText;
+            string scalesSvgText;
             switch (fileFormat) {
             case "DWG":
                 DocumentSvg docSvg = ACadLoader.LoadDwg(filename, _conversionContext);
                 svgText = docSvg.ToSvg();
+                scalesSvgText = docSvg.GetModelSpaceRectangle().ToString();
                 break;
             case "DXF":
             default:
@@ -200,6 +202,9 @@ namespace ACadSvgStudio {
             _occurringEntities = conversionInfo.OccurringEntities;
             _centerToFitOnLoad = true;
             _scintillaSvgGroupEditor.Text = svgText;
+            if (_conversionContext.ConversionOptions.CreateScaleFromModelSpaceExtent) {
+                _scintillaScales.Text = scalesSvgText;
+            }
             _loadedDwgFilename = filename;
             this.Text = $"{AppName} - Converted {fileFormat}: {filename}";
         }
@@ -1140,14 +1145,14 @@ namespace ACadSvgStudio {
 
         private void updateBrowserContent(string svg, string backgroundColor) {
             Task<HtmlBodyElement> tBody = _devToolsContext.QuerySelectorAsync<HtmlBodyElement>("body");
-            tBody.Wait();
+            tBody.Wait(500);
             Task tBodyResult = tBody.Result.SetAttributeAsync("style", $"background-color:{backgroundColor};");
-            tBodyResult.Wait();
+            tBodyResult.Wait(500);
 
             Task<HtmlDivElement> tSvgViewerDivElement = _devToolsContext.QuerySelectorAsync<HtmlDivElement>("#svg-viewer");
-            tSvgViewerDivElement.Wait();
+            tSvgViewerDivElement.Wait(500);
             Task tSvgViewerDivElementResult = tSvgViewerDivElement.Result.SetInnerHtmlAsync(svg);
-            tSvgViewerDivElementResult.Wait();
+            tSvgViewerDivElementResult.Wait(500);
         }
 
 

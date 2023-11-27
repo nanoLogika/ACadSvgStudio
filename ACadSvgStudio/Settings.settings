@@ -98,8 +98,17 @@
     <Setting Name="ExportObjectTypeAsClass" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="DefaultLineWeight" Type="System.Int16" Scope="User">
+    <Setting Name="DefaultLineweight" Type="System.Int16" Scope="User">
       <Value Profile="(Default)">25</Value>
+    </Setting>
+    <Setting Name="CreateScaleFromModelSpaceExtent" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CreateViewboxFromModelSpaceExtent" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LineweightScaleFactor" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

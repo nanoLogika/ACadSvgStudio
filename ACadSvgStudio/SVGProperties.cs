@@ -605,10 +605,10 @@ namespace ACadSvgStudio {
         [Category("Conversion Options")]
         [DisplayName("Default Line Weight.")]
         [Description("AutoCAD uses a default line weight of 25 in hundeth of mm or another value stored in an environment variable. Conversion will use the value set here.")]
-        public DefaultLineweightType DefaultLineWeight {
+        public DefaultLineweightType DefaultLineweight {
             get {
                 if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-                    return (DefaultLineweightType)Settings.Default.DefaultLineWeight;
+                    return (DefaultLineweightType)Settings.Default.DefaultLineweight;
                 }
                 else {
                     return DefaultLineweightType.W25;
@@ -616,7 +616,70 @@ namespace ACadSvgStudio {
             }
             set {
                 if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-                    Settings.Default.DefaultLineWeight = (short)value;
+                    Settings.Default.DefaultLineweight = (short)value;
+                    Settings.Default.Save();
+                }
+            }
+        }
+
+
+        [Category("Conversion Options")]
+        [DisplayName("Create Scale-Box from Model-Space Extent.")]
+        [Description("A rectangle with the coordinates of the model-space extent is created as SVG and stored in the scales editor.")]
+        public bool CreateScaleFromModelSpaceExtent {
+            get {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    return Settings.Default.CreateScaleFromModelSpaceExtent;
+                }
+                else {
+                    return false;
+                }
+            }
+            set {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    Settings.Default.CreateScaleFromModelSpaceExtent = value;
+                    Settings.Default.Save();
+                }
+            }
+        }
+
+
+        [Category("Conversion Options")]
+        [DisplayName("Create Viewbox Rectangle from Model Space Extent.")]
+        [Description("The coordinates of the model-space extent are entered into the viewbox settings.")]
+        public bool CreateViewboxFromModelSpaceExtent {
+            get {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    return Settings.Default.CreateViewboxFromModelSpaceExtent;
+                }
+                else {
+                    return false;
+                }
+            }
+            set {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    Settings.Default.CreateViewboxFromModelSpaceExtent = value;
+                    Settings.Default.Save();
+                }
+            }
+        }
+
+
+        [Category("Conversion Options")]
+        [DisplayName("Lineweight Scale Factor.")]
+        [Description("This scale factor is used to scale lineweights. Specify 0 to use lineweights as they are.")]
+        public double LineweightScaleFactor {
+            get {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    return Settings.Default.LineweightScaleFactor;
+                }
+                else {
+                    return 0;
+                }
+            }
+            set {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    Settings.Default.LineweightScaleFactor = value;
                     Settings.Default.Save();
                 }
             }
@@ -629,8 +692,11 @@ namespace ACadSvgStudio {
 				ExportLayerAsClass = this.ExportLayerAsClass,
 				ExportObjectTypeAsClass = this.ExportObjectTypeAsClass,
 				ReverseY = this.ReverseY,
-				DefaultLineWeight = (ACadSharp.LineweightType)this.DefaultLineWeight
-			};
+				DefaultLineweight = (ACadSharp.LineweightType)this.DefaultLineweight,
+                CreateScaleFromModelSpaceExtent = this.CreateScaleFromModelSpaceExtent,
+                CreateViewboxFromModelSpaceExtent = this.CreateViewboxFromModelSpaceExtent,
+				LineweightScaleFactor = this.LineweightScaleFactor
+            };
 		}
 
 		#endregion
