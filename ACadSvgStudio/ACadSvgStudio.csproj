@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>0.2.1</Version>
+    <Version>0.3.0</Version>
   </PropertyGroup>
 
 
@@ -62,13 +62,13 @@
 
   <ItemGroup>
     <Reference Include="ACadSharp">
-      <HintPath>..\..\ACadSvg\ACadSvg\bin\Release\net6.0\publish\ACadSharp.dll</HintPath>
+      <HintPath>Imports\ACadSharp.dll</HintPath>
     </Reference>
     <Reference Include="ACadSvg">
-      <HintPath>..\..\ACadSvg\ACadSvg\bin\Release\net6.0\publish\ACadSvg.dll</HintPath>
+      <HintPath>Imports\ACadSvg.dll</HintPath>
     </Reference>
     <Reference Include="SvgElements">
-      <HintPath>..\..\ACadSvg\ACadSvg\bin\Release\net6.0\publish\SvgElements.dll</HintPath>
+      <HintPath>Imports\SvgElements.dll</HintPath>
     </Reference>
   </ItemGroup>
 
