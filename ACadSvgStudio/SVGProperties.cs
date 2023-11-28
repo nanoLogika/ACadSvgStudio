@@ -67,7 +67,7 @@ namespace ACadSvgStudio {
 					Settings.Default.BackgroundColor = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -90,7 +90,7 @@ namespace ACadSvgStudio {
 					Settings.Default.ScalesEnabled = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -113,7 +113,7 @@ namespace ACadSvgStudio {
 					Settings.Default.CSSPreviewEnabled = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -138,7 +138,7 @@ namespace ACadSvgStudio {
 					Settings.Default.ViewBoxMinX = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -161,7 +161,7 @@ namespace ACadSvgStudio {
 					Settings.Default.ViewBoxMinY = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -183,7 +183,7 @@ namespace ACadSvgStudio {
 					Settings.Default.ViewBoxWidth = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -205,7 +205,7 @@ namespace ACadSvgStudio {
 					Settings.Default.ViewBoxHeight = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -227,7 +227,7 @@ namespace ACadSvgStudio {
 					Settings.Default.ViewBoxEnabled = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -243,10 +243,20 @@ namespace ACadSvgStudio {
 			};
         }
 
-		#endregion
-		#region SVG/Main Group Attributes
 
-		[Category("SVG/Main Group Attributes")]
+		public void SetViewbox(ViewboxData data) {
+            Settings.Default.ViewBoxEnabled = data.Enabled;
+            Settings.Default.ViewBoxMinX = data.MinX;
+            Settings.Default.ViewBoxMinY = data.MinY;
+            Settings.Default.ViewBoxWidth = data.Width;
+			Settings.Default.ViewBoxHeight = data.Height;
+            Settings.Default.Save();
+        }
+
+        #endregion
+        #region SVG/Main Group Attributes
+
+        [Category("SVG/Main Group Attributes")]
         [DisplayName("Stroke-Color Attribute Enabled")]
 		[Description("Indicates that, when true, a stroke=\"{color}\" attribute is to be set at the svg element; otherwise, no stroke attribute is set.")]
 		public bool StrokeColorEnabled {
@@ -263,7 +273,7 @@ namespace ACadSvgStudio {
 					Settings.Default.StrokeColorEnabled = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -286,7 +296,7 @@ namespace ACadSvgStudio {
                     Settings.Default.StrokeWidthEnabled = value;
                     Settings.Default.Save();
 
-                    _mainForm.UpdateHTML();
+                    _mainForm.ProposeUpdateHTML();
                 }
             }
         }
@@ -309,7 +319,7 @@ namespace ACadSvgStudio {
 					Settings.Default.FillColorEnabled = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -332,7 +342,7 @@ namespace ACadSvgStudio {
 					Settings.Default.StrokeColor = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -355,7 +365,7 @@ namespace ACadSvgStudio {
 					Settings.Default.StrokeWidth = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -378,7 +388,7 @@ namespace ACadSvgStudio {
 					Settings.Default.FillColor = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -401,7 +411,7 @@ namespace ACadSvgStudio {
 					Settings.Default.TransformTranslationX = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -424,7 +434,7 @@ namespace ACadSvgStudio {
 					Settings.Default.TransformTranslationY = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -447,7 +457,7 @@ namespace ACadSvgStudio {
 					Settings.Default.TransformScaleX = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}
@@ -471,7 +481,7 @@ namespace ACadSvgStudio {
 					Settings.Default.Save();
 				}
 
-				_mainForm.UpdateHTML();
+				_mainForm.ProposeUpdateHTML();
 			}
 		}
 
@@ -493,7 +503,7 @@ namespace ACadSvgStudio {
 					Settings.Default.TransformRotation = value;
 					Settings.Default.Save();
 
-					_mainForm.UpdateHTML();
+					_mainForm.ProposeUpdateHTML();
 				}
 			}
 		}

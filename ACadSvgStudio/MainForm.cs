@@ -38,9 +38,9 @@ namespace ACadSvgStudio {
         private FindReplace _findReplace;
         private int _maxLineNumberCharLength;
 
-        private bool _centerToFitOnLoad = false;
+        private bool _centerToFitOnLoad = true;
         private bool _executingPanScriptFailed;
-        private bool _updatingHTMLEnabled = true;
+        private bool _updatingHTMLEnabled = false;
 
         private string? _loadedFilename;
         private string? _loadedDwgFilename;
@@ -73,11 +73,6 @@ namespace ACadSvgStudio {
             initFindReplace();
 
             setEditorFont(Settings.Default.EditorFont);
-
-            _scintillaScales.Text = Settings.Default.ScalesSvg;
-            _scintillaCss.Text = Settings.Default.CSSPreview;
-
-            CreateHTML();
         }
 
         private void initFindReplace() {
@@ -191,11 +186,14 @@ namespace ACadSvgStudio {
             ConversionInfo conversionInfo = _conversionContext.ConversionInfo;
             _conversionLog = conversionInfo.GetLog();
             _occurringEntities = conversionInfo.OccurringEntities;
+            //_svgProperties.SetViewbox(_conversionContext.ViewboxData);
+
             _centerToFitOnLoad = true;
             _scintillaSvgGroupEditor.Text = svgText;
             if (_conversionContext.ConversionOptions.CreateScaleFromModelSpaceExtent) {
                 _scintillaScales.Text = scalesSvgText;
             }
+
             _loadedDwgFilename = filename;
             this.Text = $"{AppName} - {fileFormat}: {filename}";
         }
@@ -431,6 +429,12 @@ namespace ACadSvgStudio {
                     Settings.Default.WindowPositionInitialized = true;
                     saveWindowState();
                 }
+
+                _scintillaScales.Text = Settings.Default.ScalesSvg;
+                _scintillaCss.Text = Settings.Default.CSSPreview;
+                _updatingHTMLEnabled = true;
+
+                CreateHTML();
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
@@ -524,7 +528,9 @@ namespace ACadSvgStudio {
                 updateLineMargin(sender);
                 _contentChanged = true;
 
-                _textChangedTimer.Start();
+                if (_updatingHTMLEnabled) {
+                    _textChangedTimer.Restart();
+                }
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
@@ -540,7 +546,9 @@ namespace ACadSvgStudio {
 
                 updateLineMargin(sender);
 
-                _textChangedTimer.Start();
+                if (_updatingHTMLEnabled) {
+                    _textChangedTimer.Restart();
+                }
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
@@ -556,7 +564,9 @@ namespace ACadSvgStudio {
 
                 updateLineMargin(sender);
 
-                _textChangedTimer.Start();
+                if (_updatingHTMLEnabled) {
+                    _textChangedTimer.Restart();
+                }
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
@@ -609,24 +619,20 @@ namespace ACadSvgStudio {
                 }
 
                 string[] files = (string[])fileDropData;
-                if (files.Length == 0) {
+                if (files.Length != 1) {
                     return;
                 }
 
-                string filename = files[0].ToLower();
-                if (filename.EndsWith(".dwg")) {
-                    readDwgFile(filename);
-                }
-                else if (filename.EndsWith(".dxf")) {
-                    readDxfFile(filename);
-                }
-                else if (filename.EndsWith(".svg")) {
-                    readSvgFile(filename);
-                }
-                _contentChanged = true;
+                _updatingHTMLEnabled = false;
+                LoadFile(files[0]);
+
+                UpdateHTML();
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
+            }
+            finally {
+                _updatingHTMLEnabled = true;
             }
         }
 
@@ -710,29 +716,18 @@ namespace ACadSvgStudio {
 
         private void eventOpenFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e) {
             try {
-                int filterIndex = _openFileDialog.FilterIndex;
                 string filename = _openFileDialog.FileName;
 
+                _updatingHTMLEnabled = false;
+                LoadFile(filename);
 
-                switch (filterIndex) {
-                case 1: // ".dwg";
-                    readDwgFile(filename);
-                    _contentChanged = true;
-                    break;
-                case 2: // ".dxf"
-                    readDxfFile(filename);
-                    _contentChanged = true;
-                    break;
-                case 3: // ".svg"
-                    _centerToFitOnLoad = true;
-                    _scintillaSvgGroupEditor.Text = File.ReadAllText(filename);
-                    break;
-                default:
-                    break;
-                }
+                UpdateHTML();
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
+            }
+            finally {
+                _updatingHTMLEnabled = true;
             }
         }
 
@@ -1145,6 +1140,18 @@ namespace ACadSvgStudio {
         }
 
 
+        internal void ProposeUpdateHTML() {
+            try {
+                if (_updatingHTMLEnabled) {
+                    UpdateHTML();
+                }
+            }
+            catch (Exception ex) {
+                _statusLabel.Text = ex.Message;
+            }
+        }
+
+
         public void CreateHTML() {
             string backgroundColor = ColorTranslator.ToHtml(Settings.Default.BackgroundColor);
             var svg = buildSVG(Settings.Default.ScalesEnabled, Settings.Default.CSSPreviewEnabled, false);
@@ -1181,14 +1188,34 @@ namespace ACadSvgStudio {
 
         private void updateBrowserContent(string svg, string backgroundColor) {
             Task<HtmlBodyElement> tBody = _devToolsContext.QuerySelectorAsync<HtmlBodyElement>("body");
-            tBody.Wait(500);
+            if (!tBody.Wait(1000)) {
+                _statusLabel.Text = "Timeout at QuerySelectorAsync(body)";
+                _executingPanScriptFailed = true;
+                return;
+            }
+
             Task tBodyResult = tBody.Result.SetAttributeAsync("style", $"background-color:{backgroundColor};");
-            tBodyResult.Wait(500);
+            if (!tBodyResult.Wait(1000)) {
+                _statusLabel.Text = "Timeout at SetAttributeAsync";
+                _executingPanScriptFailed = true;
+                return;
+            }
 
             Task<HtmlDivElement> tSvgViewerDivElement = _devToolsContext.QuerySelectorAsync<HtmlDivElement>("#svg-viewer");
-            tSvgViewerDivElement.Wait(500);
+            if (!tSvgViewerDivElement.Wait(1000)) {
+                _statusLabel.Text = "Timeout at QuerySelectorAsync(#svg-viewer)";
+                _executingPanScriptFailed = true;
+                return;
+            }
+
             Task tSvgViewerDivElementResult = tSvgViewerDivElement.Result.SetInnerHtmlAsync(svg);
-            tSvgViewerDivElementResult.Wait(500);
+            if (!tSvgViewerDivElementResult.Wait(1000)) {
+                _statusLabel.Text = "Timeout at SetInnerHtmlAsync(svg)";
+                _executingPanScriptFailed = true;
+                return;
+            }
+
+            _executingPanScriptFailed = false;
         }
 
 
