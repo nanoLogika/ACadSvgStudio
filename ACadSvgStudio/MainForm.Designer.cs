@@ -15,7 +15,10 @@
 			{
 				components.Dispose();
 			}
-            _devToolsContext.Dispose();
+			if (disposing && (_devToolsContext != null))
+			{
+				_devToolsContext.Dispose();
+			}
             base.Dispose(disposing);
 		}
 
