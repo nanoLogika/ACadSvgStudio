@@ -47,8 +47,17 @@ Conversion options can be specified in the property grid visible in the applicat
   A rectangle with the coordinates of the model-space extent is created as SVG and stored in the scales editor.
 * *Create Viewbox Rectangle from Model-Space Extent*<br>
   The coordinates of the model-space extent are entered into the viewbox settings.
+* *Default Line Weight*<br>
+  AutoCAD uses a default line weight of 25 in hundeths of mm or another value stored in an environment variable. Conversion will use the value set here.
 * *Lineweight Scale Factor*<br>
   This scale factor is used to scale lineweights. Specify 0 to use lineweights as they are.
+* *Filter fo Blocks (by Name)*
+  By default all Blocks are read from the AutoCAD file and converted to SVG groups. Here you can specify a Regular Expression to filter the blocks by their name. The filter can be an exclude or include filter.
+* *Filter Mode for Blocks*<br>
+  Specifies how the Filter for Blocks ist o be applied.<br>
+  - Exclude: Blocks with a name matching the filter expression are not read.<br>
+  - Include: Only Blocks with a name matching the filter expression are read.<br>
+  - Off: The filter expression is ignored, all Blocks are read.
 
 #### Viewbox
 With these settings a *viewbox* attribute can be defined for the display in the integrated browser control. If the *viewbox* attribute is enabled, only the portion of the drawing that is inside the viewbox is visbible. The *Center-to-Fit* option considers only this portion of the drawing.
@@ -70,10 +79,14 @@ When an SVG document is saved, no *viewbox* attribute is assigned to the SVG ele
 #### File Menu
 * *Open*<br>
   Loads and converts DWG files. Loads SVG files or SVG groups.
+
 * *Save*<br>
   Saves the current SVG document with the filename as read or defaults to *Save as ...*.
+
 * *Save as ...*<br>
   Saves the current SVG text visible in the editor as is or as a complete SVG document, i.e. enclosed in an SVG element.
+
+* *Recently Opened Files ...*
 
 #### Edit Menu
 * *Undo*, *Redo*, *Cut*, *Copy*, *Paste*, *Delete*, *Select All*.
