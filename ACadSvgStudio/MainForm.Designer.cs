@@ -15,11 +15,11 @@
 			{
 				components.Dispose();
 			}
-			if (disposing && (_devToolsContext != null))
+			if (_devToolsContext != null)
 			{
 				_devToolsContext.Dispose();
 			}
-            base.Dispose(disposing);
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
@@ -71,6 +71,7 @@
 			_removeStylesMenuItem = new ToolStripMenuItem();
 			toolStripSeparator2 = new ToolStripSeparator();
 			_showDeveloperToolsMenuItem = new ToolStripMenuItem();
+			editorFontToolStripMenuItem = new ToolStripMenuItem();
 			_converisonInfoMenuItem = new ToolStripMenuItem();
 			_showConversionLogMenuItem = new ToolStripMenuItem();
 			_aboutACadSVGStudioMenuItem = new ToolStripMenuItem();
@@ -84,7 +85,8 @@
 			_statusLabel = new ToolStripStatusLabel();
 			_textChangedTimer = new System.Windows.Forms.Timer(components);
 			_fontDialog = new FontDialog();
-			editorFontToolStripMenuItem = new ToolStripMenuItem();
+			_recentlyOpenedFilesToolStripMenuItem = new ToolStripMenuItem();
+			_recentlyOpenedFilesToolStripSeparator = new ToolStripSeparator();
 			((System.ComponentModel.ISupportInitialize)_splitContainer1).BeginInit();
 			_splitContainer1.Panel1.SuspendLayout();
 			_splitContainer1.Panel2.SuspendLayout();
@@ -159,7 +161,7 @@
 			// _splitContainer2
 			// 
 			_splitContainer2.Dock = DockStyle.Fill;
-            _splitContainer2.FixedPanel = FixedPanel.Panel2;
+			_splitContainer2.FixedPanel = FixedPanel.Panel2;
 			_splitContainer2.Location = new Point(0, 0);
 			_splitContainer2.Name = "_splitContainer2";
 			// 
@@ -189,7 +191,7 @@
 			// 
 			// _fileToolStripMenuItem
 			// 
-			_fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _openMenuItem, _saveMenuItem, _saveAsMenuItem, _toolStripSeparator1, _exitMenuItem });
+			_fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _openMenuItem, _saveMenuItem, _saveAsMenuItem, _recentlyOpenedFilesToolStripSeparator, _recentlyOpenedFilesToolStripMenuItem, _toolStripSeparator1, _exitMenuItem });
 			_fileToolStripMenuItem.Name = "_fileToolStripMenuItem";
 			_fileToolStripMenuItem.Size = new Size(37, 20);
 			_fileToolStripMenuItem.Text = "File";
@@ -242,59 +244,59 @@
 			// _undoMenuItem
 			// 
 			_undoMenuItem.Name = "_undoMenuItem";
-			_undoMenuItem.Size = new Size(122, 22);
+			_undoMenuItem.Size = new Size(180, 22);
 			_undoMenuItem.Text = "Undo";
 			_undoMenuItem.Click += eventUndo_Click;
 			// 
 			// _redoMenuItem
 			// 
 			_redoMenuItem.Name = "_redoMenuItem";
-			_redoMenuItem.Size = new Size(122, 22);
+			_redoMenuItem.Size = new Size(180, 22);
 			_redoMenuItem.Text = "Redo";
 			_redoMenuItem.Click += eventRedo_Click;
 			// 
 			// _toolStripSeparator11
 			// 
 			_toolStripSeparator11.Name = "_toolStripSeparator11";
-			_toolStripSeparator11.Size = new Size(119, 6);
+			_toolStripSeparator11.Size = new Size(177, 6);
 			// 
 			// _cutMenuItem
 			// 
 			_cutMenuItem.Name = "_cutMenuItem";
-			_cutMenuItem.Size = new Size(122, 22);
+			_cutMenuItem.Size = new Size(180, 22);
 			_cutMenuItem.Text = "Cut";
 			_cutMenuItem.Click += eventCut_Click;
 			// 
 			// _copyMenuItem
 			// 
 			_copyMenuItem.Name = "_copyMenuItem";
-			_copyMenuItem.Size = new Size(122, 22);
+			_copyMenuItem.Size = new Size(180, 22);
 			_copyMenuItem.Text = "Copy";
 			_copyMenuItem.Click += eventCopy_Click;
 			// 
 			// _pasteMenuItem
 			// 
 			_pasteMenuItem.Name = "_pasteMenuItem";
-			_pasteMenuItem.Size = new Size(122, 22);
+			_pasteMenuItem.Size = new Size(180, 22);
 			_pasteMenuItem.Text = "Paste";
 			_pasteMenuItem.Click += eventPaste_Click;
 			// 
 			// _deleteMenuItem
 			// 
 			_deleteMenuItem.Name = "_deleteMenuItem";
-			_deleteMenuItem.Size = new Size(122, 22);
+			_deleteMenuItem.Size = new Size(180, 22);
 			_deleteMenuItem.Text = "Delete";
 			_deleteMenuItem.Click += eventDelete_Click;
 			// 
 			// _toolStripSeparator13
 			// 
 			_toolStripSeparator13.Name = "_toolStripSeparator13";
-			_toolStripSeparator13.Size = new Size(119, 6);
+			_toolStripSeparator13.Size = new Size(177, 6);
 			// 
 			// _selectAllMenuItem
 			// 
 			_selectAllMenuItem.Name = "_selectAllMenuItem";
-			_selectAllMenuItem.Size = new Size(122, 22);
+			_selectAllMenuItem.Size = new Size(180, 22);
 			_selectAllMenuItem.Text = "Select All";
 			_selectAllMenuItem.Click += eventSelectAll_Click;
 			// 
@@ -410,6 +412,13 @@
 			_showDeveloperToolsMenuItem.Text = "Show Developer Tools";
 			_showDeveloperToolsMenuItem.Click += eventShowDeveloperToolsMenuItem_Click;
 			// 
+			// editorFontToolStripMenuItem
+			// 
+			editorFontToolStripMenuItem.Name = "editorFontToolStripMenuItem";
+			editorFontToolStripMenuItem.Size = new Size(214, 22);
+			editorFontToolStripMenuItem.Text = "Editor Font";
+			editorFontToolStripMenuItem.Click += eventEditorFontToolStripMenuItem_Click;
+			// 
 			// _converisonInfoMenuItem
 			// 
 			_converisonInfoMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _showConversionLogMenuItem });
@@ -478,7 +487,7 @@
 			// 
 			// _statusLabel
 			// 
-            _statusLabel.ForeColor = Color.Red;
+			_statusLabel.ForeColor = Color.Red;
 			_statusLabel.Name = "_statusLabel";
 			_statusLabel.Size = new Size(1189, 17);
 			_statusLabel.Spring = true;
@@ -488,12 +497,16 @@
 			_textChangedTimer.Interval = 500;
 			_textChangedTimer.Tick += eventTextChangedTimer_Tick;
 			// 
-			// editorFontToolStripMenuItem
+			// _recentlyOpenedFilesToolStripMenuItem
 			// 
-			editorFontToolStripMenuItem.Name = "editorFontToolStripMenuItem";
-			editorFontToolStripMenuItem.Size = new Size(214, 22);
-			editorFontToolStripMenuItem.Text = "Editor Font";
-			editorFontToolStripMenuItem.Click += eventEditorFontToolStripMenuItem_Click;
+			_recentlyOpenedFilesToolStripMenuItem.Name = "_recentlyOpenedFilesToolStripMenuItem";
+			_recentlyOpenedFilesToolStripMenuItem.Size = new Size(249, 22);
+			_recentlyOpenedFilesToolStripMenuItem.Text = "Recently Opened Files";
+			// 
+			// _recentlyOpenedFilesToolStripSeparator
+			// 
+			_recentlyOpenedFilesToolStripSeparator.Name = "_recentlyOpenedFilesToolStripSeparator";
+			_recentlyOpenedFilesToolStripSeparator.Size = new Size(246, 6);
 			// 
 			// MainForm
 			// 
@@ -594,5 +607,7 @@
 		private System.Windows.Forms.Timer _textChangedTimer;
 		private FontDialog _fontDialog;
 		private ToolStripMenuItem editorFontToolStripMenuItem;
+		private ToolStripSeparator _recentlyOpenedFilesToolStripSeparator;
+		private ToolStripMenuItem _recentlyOpenedFilesToolStripMenuItem;
 	}
 }

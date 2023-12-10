@@ -16,7 +16,7 @@ namespace ACadSvgStudio {
 
 
         public void Open(string filename, string log, ISet<string> occurringEntities) {
-            this.Text = "DWG Conversion Info: " + filename;
+            this.Text = "DWG Conversion Info: " + new FileInfo(filename).Name;
 
             _conversionLogScintilla.ReadOnly = false;
             _conversionLogScintilla.Text = log;

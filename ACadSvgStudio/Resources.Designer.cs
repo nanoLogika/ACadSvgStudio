@@ -61,6 +61,26 @@ namespace ACadSvgStudio {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die function resetZoomAndPan() {
+        ///    try {
+        ///		// Destroy panZoom if already exists
+        ///		window.panZoomWasDefined = window.panZoom != null &amp;&amp; window.panZoom != undefined;
+        ///        window.prevPan = window.panZoomWasDefined ? window.panZoom.getPan() : undefined;
+        ///		window.prevZoom = window.panZoomWasDefined ? window.panZoom.getZoom() : undefined;
+        ///
+        ///        if (window.panZoomWasDefined &amp;&amp; window.panZoom != undefined) {
+        ///            window.panZoom.destroy();
+        ///        }
+        ///
+        ///        window.panZoom = svgPanZoom(&apos;#svg-el [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string reset_pan_zoom {
+            get {
+                return ResourceManager.GetString("reset-pan-zoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die // svg-pan-zoom v3.6.1
         ///// https://github.com/ariutta/svg-pan-zoom
         ///(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c=&quot;function&quot;==typeof require&amp;&amp;require;if(!f&amp;&amp;c)return c(i,!0);if(u)return u(i,!0);var a=new Error(&quot;Cannot find module &apos;&quot;+i+&quot;&apos;&quot;);throw a.code=&quot;MODULE_NOT_FOUND&quot;,a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u=&quot;function&quot;==typeof require&amp;&amp;require,i=0;i&lt;t.length;i++)o(t[i]);return [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
