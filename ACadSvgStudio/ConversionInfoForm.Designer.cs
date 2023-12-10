@@ -61,7 +61,7 @@
 			_conversionLogScintilla.AutoCMaxHeight = 9;
 			_conversionLogScintilla.BiDirectionality = ScintillaNET.BiDirectionalDisplayType.Disabled;
 			_conversionLogScintilla.BorderStyle = ScintillaNET.BorderStyle.FixedSingle;
-			_conversionLogScintilla.CaretLineBackColor = Color.Black;
+			_conversionLogScintilla.CaretLineBackColor = Color.White;
 			_conversionLogScintilla.CaretLineVisible = true;
 			_conversionLogScintilla.Dock = DockStyle.Fill;
 			_conversionLogScintilla.LexerName = null;

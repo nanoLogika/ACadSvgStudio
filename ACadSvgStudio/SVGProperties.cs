@@ -696,7 +696,49 @@ namespace ACadSvgStudio {
         }
 
 
-        public ConversionOptions GetConversionOptions() {
+		[Category("Conversion Options")]
+		[DisplayName("Filter for Blocks (by Name)")]
+		[Description("By default all Blocks are read from the AutoCAD file and converted to SVG groups. Here you can specify a Regular Expression to filter the blocks by their name. The filter can be an exclude or include filter.")]
+		public string GroupFilterRegex {
+			get {
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+					return Settings.Default.GroupFilterRegex;
+				}
+				else {
+					return string.Empty;
+				}
+			}
+			set {
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+					Settings.Default.GroupFilterRegex = value;
+					Settings.Default.Save();
+				}
+			}
+		}
+
+
+		[Category("Conversion Options")]
+		[DisplayName("Filter Mode for Blocks") ]
+		[Description("Specifies how the Filter for Blocks ist o be applied.\n- Exclude: Blocks with a name matching the filter expression are not read.\n- Include: Only Blocks with a nname matching the filter expression are read.\n- Off: The filter expression is ignored, all Blocks are read.")]
+		public ConversionOptions.FilterMode GroupFilterMode {
+			get {
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+					return (ConversionOptions.FilterMode)Settings.Default.FilterMode;
+				}
+				else {
+					return 0;
+				}
+			}
+			set {
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+					Settings.Default.FilterMode = (int)value;
+					Settings.Default.Save();
+				}
+			}
+		}
+
+
+		public ConversionOptions GetConversionOptions() {
 			return new ConversionOptions() {
 				ExportHandleAsID = this.ExportHandleAsID,
 				ExportLayerAsClass = this.ExportLayerAsClass,
@@ -705,7 +747,9 @@ namespace ACadSvgStudio {
 				DefaultLineweight = (ACadSharp.LineweightType)this.DefaultLineweight,
                 CreateScaleFromModelSpaceExtent = this.CreateScaleFromModelSpaceExtent,
                 CreateViewboxFromModelSpaceExtent = this.CreateViewboxFromModelSpaceExtent,
-				LineweightScaleFactor = this.LineweightScaleFactor
+				LineweightScaleFactor = this.LineweightScaleFactor,
+				GroupFilterRegex = this.GroupFilterRegex,
+				GroupFilterMode = this.GroupFilterMode
             };
 		}
 

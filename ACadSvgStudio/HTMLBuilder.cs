@@ -11,8 +11,7 @@ namespace ACadSvgStudio {
 
 	internal class HTMLBuilder {
 
-		public static string Build(string svg, string backgroundColor)
-		{
+		public static string Build(string svg, string backgroundColor) {
 			StringBuilder sb = new StringBuilder();
 
 			sb.AppendLine("<!DOCTYPE html>");
@@ -24,6 +23,8 @@ namespace ACadSvgStudio {
 			sb.AppendLine("<style>html, body { margin: 0; padding: 0; } body { width: 100%; height: 100%; }</style>");
 
 			sb.AppendLine(@"<script language=""JavaScript"">" + Resources.svg_pan_zoom + "</script>");
+			sb.AppendLine(@"<script language=""JavaScript"">" + Resources.reset_pan_zoom + "</script>");
+
 			sb.AppendLine("</head>");
 
 			sb.AppendLine($"<body style=\"background-color:{backgroundColor};\">");
@@ -36,26 +37,5 @@ namespace ACadSvgStudio {
 			sb.AppendLine("</html>");
 			return sb.ToString();
 		}
-
-		public static string GetPanZoomScript() {
-			string script = string.Empty;
-
-			// Destroy panZoom if already exists
-			script += "window.panZoomWasDefined = window.panZoom != null && window.panZoom != undefined;";
-			script += "window.prevPan = (window.panZoomWasDefined ? window.panZoom.getPan() : undefined);";
-			script += "window.prevZoom = (window.panZoomWasDefined ? window.panZoom.getZoom() : undefined);";
-
-			script += "if(window.panZoomWasDefined && window.panZoom != undefined) {window.panZoom.destroy();}";
-
-			script += "window.panZoom = svgPanZoom('#svg-element', { minZoom: 0.0001, maxZoom: 1000 });";
-
-			script += "if(window.panZoomWasDefined) {";
-			script += "window.panZoom.zoom(window.prevZoom);";
-			script += "window.panZoom.pan({x: window.prevPan.x, y: window.prevPan.y});";
-			script += "}";
-
-			return script;
-		}
-
 	}
 }

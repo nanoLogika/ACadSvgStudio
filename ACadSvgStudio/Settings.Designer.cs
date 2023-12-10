@@ -454,5 +454,40 @@ namespace ACadSvgStudio {
                 this["LineweightScaleFactor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int FilterMode {
+            get {
+                return ((int)(this["FilterMode"]));
+            }
+            set {
+                this["FilterMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GroupFilterRegex {
+            get {
+                return ((string)(this["GroupFilterRegex"]));
+            }
+            set {
+                this["GroupFilterRegex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection RecentlyOpenedFiles {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["RecentlyOpenedFiles"]));
+            }
+            set {
+                this["RecentlyOpenedFiles"] = value;
+            }
+        }
     }
 }
