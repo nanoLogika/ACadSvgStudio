@@ -1,0 +1,30 @@
+
+function resetZoomAndPan() {
+    try {
+        // Destroy panZoom if already exists
+        window.panZoomWasDefined = window.panZoom != null && window.panZoom != undefined;
+        window.prevPan = (window.panZoomWasDefined ? window.panZoom.getPan() : undefined);
+        window.prevZoom = (window.panZoomWasDefined ? window.panZoom.getZoom() : undefined);
+
+        if (window.panZoomWasDefined && window.panZoom != undefined) {
+            window.panZoom.destroy();
+        }
+
+        window.panZoom = svgPanZoom('#svg-element', { minZoom: 0.0001, maxZoom: 1000 });
+
+        if (window.panZoomWasDefined) {
+            window.panZoom.zoom(window.prevZoom);
+            window.panZoom.pan({x: window.prevPan.x, y: window.prevPan.y});
+        }
+    }
+    catch (ex) {
+        throw new Error(ex);
+    }
+}
+
+function centerToFit() {
+    window.panZoom.resize();
+    window.panZoom.center();
+    window.panZoom.fit();
+    window.panZoom.zoomBy(0.8);
+}
