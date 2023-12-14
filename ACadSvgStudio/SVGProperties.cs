@@ -614,7 +614,7 @@ namespace ACadSvgStudio {
 
         [Category("Conversion Options")]
         [DisplayName("Default Line Weight.")]
-        [Description("AutoCAD uses a default line weight of 25 in hundeth of mm or another value stored in an environment variable. Conversion will use the value set here.")]
+        [Description("AutoCAD uses a default line weight of 25 in hundredths of mm or another value stored in an environment variable. Conversion will use the value set here.")]
         public DefaultLineweightType DefaultLineweight {
             get {
                 if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
