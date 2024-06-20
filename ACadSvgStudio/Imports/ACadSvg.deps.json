@@ -1,0 +1,53 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "ACadSvg/0.3.0": {
+        "dependencies": {
+          "ACadSharp": "2.3.2.0",
+          "SvgElements": "0.3.0.0"
+        },
+        "runtime": {
+          "ACadSvg.dll": {}
+        }
+      },
+      "ACadSharp/2.3.2.0": {
+        "runtime": {
+          "ACadSharp.dll": {
+            "assemblyVersion": "2.3.2.0",
+            "fileVersion": "2.3.2.0"
+          }
+        }
+      },
+      "SvgElements/0.3.0.0": {
+        "runtime": {
+          "SvgElements.dll": {
+            "assemblyVersion": "0.3.0.0",
+            "fileVersion": "0.3.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ACadSvg/0.3.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ACadSharp/2.3.2.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SvgElements/0.3.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
