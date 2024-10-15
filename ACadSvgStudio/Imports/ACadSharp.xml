@@ -242,6 +242,9 @@
         <member name="M:ACadSharp.Blocks.BlockEnd.Clone">
             <inheritdoc/>
         </member>
+        <member name="M:ACadSharp.Blocks.BlockEnd.GetBoundingBox">
+            <inheritdoc/>
+        </member>
         <member name="T:ACadSharp.Blocks.BlockTypeFlags">
             <summary>
             Block-type flags (bit-coded values, may be combined).
@@ -461,6 +464,11 @@
             <param name="cadObject"></param>
             <returns></returns>
         </member>
+        <member name="M:ACadSharp.CadDocument.CreateDefaults">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:ACadSharp.CadDocument.UpdateCollections(System.Boolean)">
             <summary>
             Updates the collections in the document and link them to it's dictionary
@@ -523,7 +531,7 @@
         </member>
         <member name="M:ACadSharp.CadObject.#ctor">
             <summary>
-            Default constructor
+            Default constructor.
             </summary>
         </member>
         <member name="M:ACadSharp.CadObject.CreateExtendedDictionary">
@@ -537,26 +545,44 @@
             Creates a new object that is a copy of the current instance.
             </summary>
             <remarks>
-            The copy will be unatached from the document or any reference
+            The copy will be unattached from the document or any reference.
             </remarks>
             <returns>A new object that is a copy of this instance.</returns>
         </member>
         <member name="M:ACadSharp.CadObject.ToString">
             <inheritdoc/>
         </member>
+        <member name="T:ACadSharp.CadObjectCollection`1">
+            <summary>
+            Collection formed by <see cref="T:ACadSharp.CadObject"/> managed by an owner.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="E:ACadSharp.CadObjectCollection`1.OnAdd">
+            <inheritdoc/>
+        </member>
+        <member name="E:ACadSharp.CadObjectCollection`1.OnRemove">
+            <inheritdoc/>
+        </member>
         <member name="P:ACadSharp.CadObjectCollection`1.Owner">
             <summary>
-            Owner of the collection
+            Owner of the collection.
             </summary>
         </member>
         <member name="P:ACadSharp.CadObjectCollection`1.Count">
             <summary>
-            Gets the number of elements that are contained in the collection
+            Gets the number of elements that are contained in the collection.
             </summary>
+        </member>
+        <member name="M:ACadSharp.CadObjectCollection`1.#ctor(ACadSharp.CadObject)">
+            <summary>
+            Default constructor for a <see cref="T:ACadSharp.CadObjectCollection`1"/> with it's owner assigned.
+            </summary>
+            <param name="owner">Owner of the collection.</param>
         </member>
         <member name="M:ACadSharp.CadObjectCollection`1.Add(`0)">
             <summary>
-            Add a <see cref="T:ACadSharp.CadObject"/> to the collection, this method triggers <see cref="E:ACadSharp.CadObjectCollection`1.OnAdd"/>
+            Add a <see cref="T:ACadSharp.CadObject"/> to the collection, this method triggers <see cref="E:ACadSharp.CadObjectCollection`1.OnAdd"/>.
             </summary>
             <param name="item"></param>
             <exception cref="T:System.ArgumentException"></exception>
@@ -564,18 +590,18 @@
         </member>
         <member name="M:ACadSharp.CadObjectCollection`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
             <summary>
-            Add multiple <see cref="T:ACadSharp.CadObject"/> to the collection, this method triggers <see cref="E:ACadSharp.CadObjectCollection`1.OnAdd"/>
+            Add multiple <see cref="T:ACadSharp.CadObject"/> to the collection, this method triggers <see cref="E:ACadSharp.CadObjectCollection`1.OnAdd"/>.
             </summary>
             <param name="items"></param>
         </member>
         <member name="M:ACadSharp.CadObjectCollection`1.Clear">
             <summary>
-            Removes all elements from the Collection
+            Removes all elements from the Collection.
             </summary>
         </member>
         <member name="M:ACadSharp.CadObjectCollection`1.Remove(`0)">
             <summary>
-            Removes a <see cref="T:ACadSharp.CadObject"/> from the collection, this method triggers <see cref="E:ACadSharp.CadObjectCollection`1.OnRemove"/>
+            Removes a <see cref="T:ACadSharp.CadObject"/> from the collection, this method triggers <see cref="E:ACadSharp.CadObjectCollection`1.OnRemove"/>.
             </summary>
             <param name="item"></param>
             <returns>The removed <see cref="T:ACadSharp.CadObject"/></returns>
@@ -1086,6 +1112,11 @@
             Use 6.28 radians to specify a closed circle or ellipse.
             </remarks>
         </member>
+        <member name="M:ACadSharp.Entities.Arc.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
         <member name="M:ACadSharp.Entities.Arc.CreateFromBulge(CSMath.XY,CSMath.XY,System.Double)">
             <summary>
             Creates an arc using 2 points and a bulge
@@ -1094,6 +1125,23 @@
             <param name="p2"></param>
             <param name="bulge"></param>
             <returns></returns>
+        </member>
+        <member name="M:ACadSharp.Entities.Arc.GetEndVertices(CSMath.XY@,CSMath.XY@)">
+            <summary>
+            Process the 2 points limiting the arc segment
+            </summary>
+            <param name="start">Start point of the arc segment</param>
+            <param name="end">End point of the arc segment</param>
+        </member>
+        <member name="M:ACadSharp.Entities.Arc.PolygonalVertexes(System.Int32)">
+            <summary>
+            Converts the arc in a list of vertexes.
+            </summary>
+            <param name="precision">Number of vertexes generated.</param>
+            <returns>A list vertexes that represents the arc expressed in object coordinate system.</returns>
+        </member>
+        <member name="M:ACadSharp.Entities.Arc.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.AttachmentPointType">
             <summary>
@@ -1142,12 +1190,12 @@
         </member>
         <member name="P:ACadSharp.Entities.AttributeBase.Flags">
             <summary>
-            Attribute flags
+            Attribute flags.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.AttributeBase.AttributeType">
             <summary>
-            MText flag
+            Attribute type.
             </summary>
         </member>
         <member name="T:ACadSharp.Entities.AttributeDefinition">
@@ -1332,6 +1380,11 @@
             Describes if the hatch is an annotative block.
             </summary>
         </member>
+        <member name="T:ACadSharp.Entities.CadImageBase">
+            <summary>
+            Common base class for <see cref="T:ACadSharp.Entities.RasterImage" /> and <see cref="T:ACadSharp.Entities.Wipeout" />.
+            </summary>
+        </member>
         <member name="P:ACadSharp.Entities.CadImageBase.ClassVersion">
             <summary>
             Class version
@@ -1422,6 +1475,12 @@
             Reference to image definition reactor
             </summary>
         </member>
+        <member name="M:ACadSharp.Entities.CadImageBase.GetBoundingBox">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.CadImageBase.Clone">
+            <inheritdoc/>
+        </member>
         <member name="T:ACadSharp.Entities.Circle">
             <summary>
             Represents a <see cref="T:ACadSharp.Entities.Circle"/> entity.
@@ -1464,6 +1523,9 @@
             <summary>
             Default constructor
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Circle.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.ClipMode">
             <summary>
@@ -1587,8 +1649,8 @@
             <b>true</b> if the arrow is to be flipped; otherwise, <b>false</b>.
             </value>
             <remarks>
-            Arrows are by default drawn inside the extension lines if there is enaugh
-            space; otherwise, outside. This flag overrules the standard behaviour.
+            Arrows are by default drawn inside the extension lines if there is enough
+            space; otherwise, outside. This flag overrules the standard behavior.
             </remarks>
         </member>
         <member name="P:ACadSharp.Entities.Dimension.FlipArrow2">
@@ -1600,8 +1662,8 @@
             <b>true</b> if the arrow is to be flipped; otherwise, <b>false</b>.
             </value>
             <remarks>
-            Arrows are by default drawn inside the extension lines if there is enaugh
-            space; otherwise, outside. This flag overrules the standard behaviour.
+            Arrows are by default drawn inside the extension lines if there is enough
+            space; otherwise, outside. This flag overrules the standard behavior.
             </remarks>
         </member>
         <member name="P:ACadSharp.Entities.Dimension.Text">
@@ -1633,6 +1695,9 @@
             <summary>
             Dimension style
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Dimension.Clone">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.DimensionAligned">
             <summary>
@@ -1670,6 +1735,14 @@
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.DimensionAligned.Measurement">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.DimensionAligned.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.DimensionAligned.GetBoundingBox">
             <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.DimensionAngular2Line">
@@ -1713,6 +1786,14 @@
         <member name="P:ACadSharp.Entities.DimensionAngular2Line.Measurement">
             <inheritdoc/>
         </member>
+        <member name="M:ACadSharp.Entities.DimensionAngular2Line.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.DimensionAngular2Line.GetBoundingBox">
+            <inheritdoc/>
+        </member>
         <member name="T:ACadSharp.Entities.DimensionAngular3Pt">
             <summary>
             Represents a <see cref="T:ACadSharp.Entities.DimensionAngular3Pt"/> entity.
@@ -1749,6 +1830,14 @@
         <member name="P:ACadSharp.Entities.DimensionAngular3Pt.Measurement">
             <inheritdoc/>
         </member>
+        <member name="M:ACadSharp.Entities.DimensionAngular3Pt.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.DimensionAngular3Pt.GetBoundingBox">
+            <inheritdoc/>
+        </member>
         <member name="T:ACadSharp.Entities.DimensionDiameter">
             <summary>
             Represents a <see cref="T:ACadSharp.Entities.DimensionDiameter"/> entity.
@@ -1778,6 +1867,14 @@
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.DimensionDiameter.Measurement">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.DimensionDiameter.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.DimensionDiameter.GetBoundingBox">
             <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.DimensionLinear">
@@ -1842,6 +1939,14 @@
             Ordinate type. If true, ordinate is X-type else is ordinate is Y-type
             </summary>
         </member>
+        <member name="M:ACadSharp.Entities.DimensionOrdinate.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.DimensionOrdinate.GetBoundingBox">
+            <inheritdoc/>
+        </member>
         <member name="T:ACadSharp.Entities.DimensionRadius">
             <summary>
             Represents a <see cref="T:ACadSharp.Entities.DimensionRadius"/> entity.
@@ -1871,6 +1976,14 @@
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.DimensionRadius.Measurement">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.DimensionRadius.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.DimensionRadius.GetBoundingBox">
             <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.DimensionType">
@@ -1973,27 +2086,30 @@
         </member>
         <member name="P:ACadSharp.Entities.Ellipse.Normal">
             <summary>
-            Extrusion direction
+            Extrusion direction.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Ellipse.Center">
             <summary>
-            Center point (in WCS)
+            Center point (in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Ellipse.EndPoint">
             <summary>
-            Endpoint of major axis, relative to the center (in WCS)
+            Endpoint of major axis, relative to the center (in WCS).
             </summary>
+            <remarks>
+            Axis X is set as default.
+            </remarks>
         </member>
         <member name="P:ACadSharp.Entities.Ellipse.RadiusRatio">
             <summary>
-            Ratio of minor axis to major axis
+            Ratio of minor axis to major axis.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Ellipse.StartParameter">
             <summary>
-            Start parameter
+            Start parameter.
             </summary>
             <value>
             The valid range is 0 to 2 * PI.
@@ -2001,16 +2117,48 @@
         </member>
         <member name="P:ACadSharp.Entities.Ellipse.EndParameter">
             <summary>
-            End parameter
+            End parameter.
             </summary>
             <value>
             The valid range is 0 to 2 * PI.
             </value>
         </member>
-        <member name="M:ACadSharp.Entities.Ellipse.#ctor">
+        <member name="P:ACadSharp.Entities.Ellipse.Rotation">
             <summary>
-            Default constructor
+            Rotation of the major axis from the world X axis.
             </summary>
+        </member>
+        <member name="P:ACadSharp.Entities.Ellipse.MajorAxis">
+            <summary>
+            Length of the major axis.
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Entities.Ellipse.MinorAxis">
+            <summary>
+            Length of the minor axis.
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Entities.Ellipse.IsFullEllipse">
+            <summary>
+            Flag that indicates weather this ellipse is closed or not.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Ellipse.PolarCoordinateRelativeToCenter(System.Double)">
+            <summary>
+            Calculate the local point on the ellipse for a given angle relative to the center.
+            </summary>
+            <param name="angle">Angle in radians.</param>
+            <returns>A local point on the ellipse for the given angle relative to the center.</returns>
+        </member>
+        <member name="M:ACadSharp.Entities.Ellipse.PolygonalVertexes(System.Int32)">
+            <summary>
+            Converts the ellipse in a list of vertexes.
+            </summary>
+            <param name="precision">Number of vertexes generated.</param>
+            <returns>A list vertexes that represents the ellipse expressed in object coordinate system.</returns>
+        </member>
+        <member name="M:ACadSharp.Entities.Ellipse.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.Entity">
             <summary>
@@ -2045,9 +2193,10 @@
             <inheritdoc/>
         </member>
         <member name="M:ACadSharp.Entities.Entity.#ctor">
-            <summary>
-            Default constructor.
-            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Entity.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="M:ACadSharp.Entities.Entity.MatchProperties(ACadSharp.Entities.IEntity)">
             <inheritdoc/>
@@ -2075,17 +2224,17 @@
         </member>
         <member name="P:ACadSharp.Entities.Face3D.FirstCorner">
             <summary>
-            First corner(in WCS)
+            First corner(in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Face3D.SecondCorner">
             <summary>
-            Second corner(in WCS)
+            Second corner(in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Face3D.ThirdCorner">
             <summary>
-            Third corner(in WCS)
+            Third corner(in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Face3D.FourthCorner">
@@ -2098,8 +2247,11 @@
         </member>
         <member name="P:ACadSharp.Entities.Face3D.Flags">
             <summary>
-            Invisible edge flags
+            Invisible edge flags.
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Face3D.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Entities.GradientColor.Value">
             <summary>
@@ -2123,35 +2275,48 @@
             Dxf class name <see cref="F:ACadSharp.DxfSubclassMarker.Hatch"/>
             </remarks>
         </member>
+        <member name="T:ACadSharp.Entities.Hatch.BoundaryPath">
+            <summary>
+            Defines a hatch boundary.
+            </summary>
+        </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Arc.Type">
             <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Arc.Center">
             <summary>
-            Center point (in OCS)
+            Center point (in OCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Arc.Radius">
             <summary>
-            Radius
+            Radius.
             </summary>
             <remarks>
-            For the ellispe this is the length of minor axis (percentage of major axis length)
+            For the ellipse this is the length of minor axis (percentage of major axis length).
             </remarks>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Arc.StartAngle">
             <summary>
-            Start angle
+            Start angle.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Arc.EndAngle">
             <summary>
-            End angle
+            End angle.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Arc.CounterClockWise">
             <summary>
-            Is counterclockwise flag
+            Is counterclockwise flag.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Hatch.BoundaryPath.Arc.GetBoundingBox">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.IsPolyline">
+            <summary>
+            Flag that indicates that this boundary path is formed by a polyline.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Flags">
@@ -2161,26 +2326,46 @@
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Edges">
             <summary>
-            Number of edges in this boundary path
+            Number of edges in this boundary path.
             </summary>
             <remarks>
-            only if boundary is not a polyline
+            Only if boundary is not a polyline.
             </remarks>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Entities">
             <summary>
-            Source boundary objects
+            Source boundary objects.
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Hatch.BoundaryPath.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Hatch.BoundaryPath.GetBoundingBox">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Hatch.BoundaryPath.Clone">
+            <inheritdoc/>
         </member>
         <member name="F:ACadSharp.Entities.Hatch.BoundaryPath.EdgeType.Polyline">
             <remarks>
-            Not included in the documentation
+            Not included in the documentation.
             </remarks>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Edge.Type">
             <summary>
-            Edge type
+            Edge type.
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Hatch.BoundaryPath.Edge.Clone">
+            <summary>
+            Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ACadSharp.Entities.Hatch.BoundaryPath.Edge.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Ellipse.Type">
             <inheritdoc/>
@@ -2215,6 +2400,9 @@
             Is counterclockwise flag
             </summary>
         </member>
+        <member name="M:ACadSharp.Entities.Hatch.BoundaryPath.Ellipse.GetBoundingBox">
+            <inheritdoc/>
+        </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Line.Start">
             <summary>
             Start point (in OCS)
@@ -2225,17 +2413,20 @@
             Endpoint (in OCS)
             </summary>
         </member>
+        <member name="M:ACadSharp.Entities.Hatch.BoundaryPath.Line.GetBoundingBox">
+            <inheritdoc/>
+        </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Polyline.Type">
             <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Polyline.HasBulge">
             <summary>
-            The polyline has bulges with value different than 0
+            The polyline has bulges with value different than 0.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Polyline.IsClosed">
             <summary>
-            Is closed flag
+            Is closed flag.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Polyline.Bulges">
@@ -2247,52 +2438,61 @@
             </remarks>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Polyline.Vertices">
+            <summary>
+            Position values are only X and Y.
+            </summary>
             <remarks>
-            Position values are only X and Y
+            The vertex bulge is stored in the Z component.
             </remarks>
+        </member>
+        <member name="M:ACadSharp.Entities.Hatch.BoundaryPath.Polyline.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Spline.Type">
             <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Spline.Degree">
             <summary>
-            Degree
+            Degree.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Spline.Rational">
             <summary>
-            Rational
+            Rational.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Spline.Periodic">
             <summary>
-            Periodic
+            Periodic.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Spline.Knots">
             <summary>
-            Number of knots
+            Number of knots.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Spline.ControlPoints">
             <remarks>
-            Position values are only X and Y, Z represents the weight
+            Position values are only X and Y, Z represents the weight.
             </remarks>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Spline.FitPoints">
             <remarks>
-            Number of fit data
+            Number of fit data.
             </remarks>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Spline.StartTangent">
             <summary>
-            Start tangent
+            Start tangent.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.BoundaryPath.Spline.EndTangent">
             <summary>
-            End tangent
+            End tangent.
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Hatch.BoundaryPath.Spline.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.ObjectType">
             <inheritdoc/>
@@ -2328,12 +2528,12 @@
         </member>
         <member name="P:ACadSharp.Entities.Hatch.IsAssociative">
             <summary>
-            Associativity flag
+            Associativity flag.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.Style">
             <summary>
-            Hatch style
+            Hatch style.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.PatternType">
@@ -2368,13 +2568,22 @@
         </member>
         <member name="P:ACadSharp.Entities.Hatch.GradientColor">
             <summary>
-            Gradient color pattern, if exists
+            Gradient color pattern, if exists.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Hatch.Paths">
             <summary>
-            Boundary paths (loops)
+            Boundary paths (loops).
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Hatch.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Hatch.GetBoundingBox">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Hatch.Clone">
+            <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Entities.HatchGradientPattern.Enabled">
             <summary>
@@ -2541,6 +2750,17 @@
             </summary>
             <param name="entity"></param>
         </member>
+        <member name="T:ACadSharp.Entities.IGeometricEntity">
+            <summary>
+            Objects with geometric qualities in the drawing.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.IGeometricEntity.GetBoundingBox">
+            <summary>
+            Gets the bounding box aligned with the axis XYZ that occupies this entity.
+            </summary>
+            <returns>The bounding box where this entity resides.</returns>
+        </member>
         <member name="F:ACadSharp.Entities.ImageDisplayFlags.None">
             <summary>
             None
@@ -2668,6 +2888,9 @@
             </summary>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>
+        <member name="M:ACadSharp.Entities.Insert.GetBoundingBox">
+            <inheritdoc/>
+        </member>
         <member name="M:ACadSharp.Entities.Insert.Clone">
             <inheritdoc/>
         </member>
@@ -2703,7 +2926,7 @@
         </member>
         <member name="P:ACadSharp.Entities.IPolyline.IsClosed">
             <summary>
-            Indicates that the polyline is closed
+            Indicates that the polyline is closed.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.IPolyline.Elevation">
@@ -2719,6 +2942,22 @@
         <member name="P:ACadSharp.Entities.IPolyline.Thickness">
             <summary>
             Specifies the distance a 2D object is extruded above or below its elevation.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.IPolyline.Explode">
+            <summary>
+            Explodes the polyline into a collection of entities formed by <see cref="T:ACadSharp.Entities.Line"/> and <see cref="T:ACadSharp.Entities.Arc"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:ACadSharp.Entities.IPolyline.Vertices">
+            <summary>
+            Vertices that form the Polyline.
+            </summary>
+        </member>
+        <member name="T:ACadSharp.Entities.IText">
+            <summary>
+            Common interface for all text entities in the drawing.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.IText.Height">
@@ -2794,17 +3033,17 @@
         </member>
         <member name="P:ACadSharp.Entities.Leader.Style">
             <summary>
-            Dimension Style
+            Dimension Style.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Leader.ArrowHeadEnabled">
             <summary>
-            Arrowhead flag
+            Arrowhead flag.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Leader.PathType">
             <summary>
-            Leader Path Type
+            Leader Path Type.
             </summary>
             <value>
             0 = straight lines
@@ -2813,7 +3052,7 @@
         </member>
         <member name="P:ACadSharp.Entities.Leader.CreationType">
             <summary>
-            Leader creation flag, AssociatedAnnotation type
+            Leader creation flag, AssociatedAnnotation type.
             </summary>
             <value>
             0 = mtext
@@ -2824,7 +3063,7 @@
         </member>
         <member name="P:ACadSharp.Entities.Leader.HookLineDirection">
             <summary>
-            Hookline direction flag
+            Hookline direction flag.
             </summary>
             <value>
             0 = Hookline(or end of tangent for a splined leader) is the opposite direction from the horizontal vector <br/>
@@ -2833,48 +3072,54 @@
         </member>
         <member name="P:ACadSharp.Entities.Leader.HasHookline">
             <summary>
-            Hookline flag
+            Hookline flag.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Leader.TextHeight">
             <summary>
-            Text annotation height
+            Text annotation height.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Leader.TextWidth">
             <summary>
-            Text annotation width
+            Text annotation width.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Leader.Vertices">
             <summary>
-            Vertices in leader
+            Vertices in leader.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Leader.AssociatedAnnotation">
             <summary>
-            Hard reference to associated annotation (mtext, tolerance, or insert entity)
+            Hard reference to associated annotation (mtext, tolerance, or insert entity).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Leader.Normal">
             <summary>
-            Normal vector
+            Normal vector.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Leader.HorizontalDirection">
             <summary>
-            Horizontal direction for leader
+            Horizontal direction for leader.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Leader.BlockOffset">
             <summary>
-            Offset of last leader vertex from block reference insertion point
+            Offset of last leader vertex from block reference insertion point.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Leader.AnnotationOffset">
             <summary>
-            Offset of last leader vertex from annotation placement point
+            Offset of last leader vertex from annotation placement point.
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Leader.Clone">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Leader.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.LeaderCreationType">
             <summary>
@@ -2975,6 +3220,9 @@
             <param name="start"></param>
             <param name="end"></param>
         </member>
+        <member name="M:ACadSharp.Entities.Line.GetBoundingBox">
+            <inheritdoc/>
+        </member>
         <member name="T:ACadSharp.Entities.LineSpacingStyleType">
             <summary>
             Line spacing style for Multiline text and Dimensions.
@@ -3009,7 +3257,7 @@
         </member>
         <member name="P:ACadSharp.Entities.LwPolyline.Flags">
             <summary>
-            Polyline flags
+            Polyline flags.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.LwPolyline.ConstantWidth">
@@ -3041,6 +3289,15 @@
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.LwPolyline.IsClosed">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Entities.LwPolyline.ACadSharp#Entities#IPolyline#Vertices">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.LwPolyline.Explode">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.LwPolyline.GetBoundingBox">
             <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Entities.LwPolyline.Vertex.Location">
@@ -3131,6 +3388,9 @@
             Edges of level 0
             </summary>
         </member>
+        <member name="M:ACadSharp.Entities.Mesh.GetBoundingBox">
+            <inheritdoc/>
+        </member>
         <member name="P:ACadSharp.Entities.Mesh.Edge.Start">
             <summary>
             Index from the vertices where this edge starts
@@ -3145,6 +3405,13 @@
             <summary>
             Edge crease value, null if not set
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Mesh.Edge.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Edge constructor with the start and end of the edge.
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
         </member>
         <member name="T:ACadSharp.Entities.MLine">
             <summary>
@@ -3203,6 +3470,12 @@
             <summary>
             Vertices in the MLine
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.MLine.Clone">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.MLine.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Entities.MLine.Vertex.Position">
             <summary>
@@ -3312,12 +3585,12 @@
         </member>
         <member name="P:ACadSharp.Entities.MText.RectangleWidth">
             <summary>
-            Reference rectangle width
+            Reference rectangle width.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.MText.RectangleHeight">
             <summary>
-            Reference rectangle height
+            Reference rectangle height.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.MText.AttachmentPoint">
@@ -3353,10 +3626,9 @@
             read-only, ignored if supplied
             </remarks>
         </member>
-        <member name="P:ACadSharp.Entities.MText.VerticalWidth">
+        <member name="P:ACadSharp.Entities.MText.VerticalHeight">
             <summary>
-            Horizontal width of the characters that make up the mtext entity.
-            This value will always be equal to or less than the value of group code 41 
+            Vertical height of the mtext entity
             </summary>
             <remarks>
             read-only, ignored if supplied
@@ -3377,7 +3649,7 @@
         </member>
         <member name="P:ACadSharp.Entities.MText.LineSpacing">
             <summary>
-            Mtext line spacing factor 
+            Mtext line spacing factor.
             </summary>
             <remarks>
             Percentage of default (3-on-5) line spacing to be applied.Valid values range from 0.25 to 4.00
@@ -3405,6 +3677,15 @@
             <summary>
             Transparency of background fill color
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.MText.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.MText.GetBoundingBox">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.MText.Clone">
+            <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Entities.MText.TextColumn.ColumnType">
             <summary>
@@ -3446,7 +3727,7 @@
             Represents a <see cref="T:ACadSharp.Entities.MultiLeader"/> entity.
             </summary>
             <remarks>
-            Object name <see cref="!:DxfFileToken.EntityMLeader"/> <br/>
+            Object name <see cref="F:ACadSharp.DxfFileToken.EntityMultiLeader"/> <br/>
             Dxf class name <see cref="F:ACadSharp.DxfSubclassMarker.MultiLeader"/>
             </remarks>
         </member>
@@ -3581,6 +3862,13 @@
             when the <see cref="F:ACadSharp.Entities.MultiLeaderPropertyOverrideFlags.LandingDistance"/> flag is set in the
             <see cref="P:ACadSharp.Entities.MultiLeader.PropertyOverrideFlags"/> property.
             </summary>
+            <remarks><para>
+            There is only one field for the landing distance in the multileader property grid.
+            The value entered arrives in this property and the <see cref="P:ACadSharp.Objects.MultiLeaderAnnotContext.LeaderRoot.LandingDistance"/>
+            property. If two leader roots exist both receive the same value. I seems 
+            <see cref="F:ACadSharp.Entities.MultiLeaderPropertyOverrideFlags.LandingDistance"/> flag is never set.
+            </para>
+            </remarks>
         </member>
         <member name="P:ACadSharp.Entities.MultiLeader.Arrowhead">
             <summary>
@@ -3844,8 +4132,8 @@
             or attach to the top/bottom.
             </para><para>
             The value for all leader lines can be overridden for each individual leader line by the
-            <see cref="!:MultiLeaderAnnotContext.LeaderRoot.AttachmentDirection"/> property when the
-            <see cref="!:LeaderLinePropertOverrideFlags.TextAttachmentDirection"/> flag is set in the 
+            <see cref="P:ACadSharp.Objects.MultiLeaderAnnotContext.LeaderRoot.TextAttachmentDirection"/> property when the
+            <see cref="F:ACadSharp.Entities.MultiLeaderPropertyOverrideFlags.TextAttachmentDirection"/> flag is set in the 
             <see cref="P:ACadSharp.Objects.MultiLeaderAnnotContext.LeaderLine.OverrideFlags"/> property.
             </para>
             </remarks>
@@ -3895,6 +4183,12 @@
             <summary>
             Leader extended to text
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.MultiLeader.Clone">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.MultiLeader.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="F:ACadSharp.Entities.MultiLeaderPropertyOverrideFlags.None">
             <summary>
@@ -4051,6 +4345,21 @@
             Override <see cref="P:ACadSharp.Objects.MultiLeaderStyle.TextBottomAttachment"/> property.
             </summary>
         </member>
+        <member name="T:ACadSharp.Entities.PdfUnderlay">
+            <summary>
+            Represents a <see cref="T:ACadSharp.Entities.PdfUnderlay"/> entity.
+            </summary>
+            <remarks>
+            Object name <see cref="F:ACadSharp.DxfFileToken.EntityPdfUnderlay"/> <br/>
+            Dxf class name <see cref="F:ACadSharp.DxfSubclassMarker.Underlay"/>
+            </remarks>
+        </member>
+        <member name="P:ACadSharp.Entities.PdfUnderlay.ObjectType">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Entities.PdfUnderlay.ObjectName">
+            <inheritdoc/>
+        </member>
         <member name="T:ACadSharp.Entities.Point">
             <summary>
             Represents a <see cref="T:ACadSharp.Entities.Point"/> entity.
@@ -4103,6 +4412,9 @@
             </summary>
             <param name="location"></param>
         </member>
+        <member name="M:ACadSharp.Entities.Point.GetBoundingBox">
+            <inheritdoc/>
+        </member>
         <member name="T:ACadSharp.Entities.PolyfaceMesh">
             <summary>
             Represents a <see cref="T:ACadSharp.Entities.PolyfaceMesh"/> entity.
@@ -4121,9 +4433,12 @@
         <member name="P:ACadSharp.Entities.PolyfaceMesh.SubclassMarker">
             <inheritdoc/>
         </member>
+        <member name="M:ACadSharp.Entities.PolyfaceMesh.Clone">
+            <inheritdoc/>
+        </member>
         <member name="T:ACadSharp.Entities.Polyline">
             <summary>
-            Represents a <see cref="T:ACadSharp.Entities.Polyline"/> entity
+            Represents a <see cref="T:ACadSharp.Entities.Polyline"/> entity.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Polyline.ObjectName">
@@ -4140,22 +4455,22 @@
         </member>
         <member name="P:ACadSharp.Entities.Polyline.Flags">
             <summary>
-            Polyline flags
+            Polyline flags.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Polyline.StartWidth">
             <summary>
-            Start width
+            Start width.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Polyline.EndWidth">
             <summary>
-            End width
+            End width.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Polyline.SmoothSurface">
             <summary>
-            Curves and smooth surface type
+            Curves and smooth surface type.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Polyline.Vertices">
@@ -4167,6 +4482,18 @@
             </remarks>
         </member>
         <member name="P:ACadSharp.Entities.Polyline.IsClosed">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Entities.Polyline.ACadSharp#Entities#IPolyline#Vertices">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Polyline.Explode">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Polyline.GetBoundingBox">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Polyline.Clone">
             <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.Polyline2D">
@@ -4267,12 +4594,6 @@
         <member name="P:ACadSharp.Entities.RasterImage.SubclassMarker">
             <inheritdoc/>
         </member>
-        <member name="M:ACadSharp.Entities.RasterImage.SetImageDefinition(ACadSharp.Objects.ImageDefinition)">
-            <summary>
-            Set the image definition
-            </summary>
-            <param name="definition"></param>
-        </member>
         <member name="T:ACadSharp.Entities.Ray">
             <summary>
             Represents a <see cref="T:ACadSharp.Entities.Ray"/> entity.
@@ -4293,13 +4614,16 @@
         </member>
         <member name="P:ACadSharp.Entities.Ray.StartPoint">
             <summary>
-            Start point(in WCS)
+            Start point(in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Ray.Direction">
             <summary>
-            Unit direction vector(in WCS)
+            Unit direction vector(in WCS).
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Ray.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.Seqend">
             <summary>
@@ -4313,6 +4637,12 @@
             <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Entities.Seqend.ObjectName">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Seqend.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Seqend.GetBoundingBox">
             <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.ShadowMode">
@@ -4340,42 +4670,42 @@
         </member>
         <member name="P:ACadSharp.Entities.Shape.Thickness">
             <summary>
-            Thickness
+            Thickness.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Shape.InsertionPoint">
             <summary>
-            Insertion point (in WCS)
+            Insertion point (in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Shape.Size">
             <summary>
-            Size
+            Size.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Shape.ShapeStyle">
             <summary>
-            Shape name
+            Shape name.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Shape.Rotation">
             <summary>
-            Rotation angle
+            Rotation angle.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Shape.RelativeXScale">
             <summary>
-            Relative X scale factor
+            Relative X scale factor.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Shape.ObliqueAngle">
             <summary>
-            Oblique angle
+            Oblique angle.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Shape.Normal">
             <summary>
-            Extrusion direction
+            Extrusion direction.
             </summary>
         </member>
         <member name="M:ACadSharp.Entities.Shape.#ctor(ACadSharp.Tables.TextStyle)">
@@ -4383,6 +4713,12 @@
             Initializes a shape by the <see cref="T:ACadSharp.Tables.TextStyle"/>
             </summary>
             <param name="textStyle">Text style with the flag <see cref="P:ACadSharp.Tables.TextStyle.IsShapeFile"/></param>
+        </member>
+        <member name="M:ACadSharp.Entities.Shape.Clone">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Shape.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.SmoothSurfaceType">
             <summary>
@@ -4455,6 +4791,9 @@
         <member name="P:ACadSharp.Entities.Solid3D.SubclassMarker">
             <inheritdoc/>
         </member>
+        <member name="M:ACadSharp.Entities.Solid3D.GetBoundingBox">
+            <inheritdoc/>
+        </member>
         <member name="T:ACadSharp.Entities.Spline">
             <summary>
             Represents a <see cref="T:ACadSharp.Entities.Spline"/> entity.
@@ -4478,63 +4817,69 @@
             Specifies the three-dimensional normal unit vector for the object.
             </summary>
             <remarks>
-            omitted if the spline is nonplanar
+            Omitted if the spline is nonplanar.
             </remarks>
         </member>
         <member name="P:ACadSharp.Entities.Spline.Flags">
             <summary>
-            Spline flags
+            Spline flags.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Spline.Degree">
             <summary>
-            Degree of the spline curve
+            Degree of the spline curve.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Spline.Knots">
             <summary>
-            Number of knots
+            Number of knots.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Spline.ControlPoints">
             <summary>
-            Number of control points (in WCS)
+            Number of control points (in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Spline.FitPoints">
             <summary>
-            Number of fit points (in WCS)
+            Number of fit points (in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Spline.KnotTolerance">
             <summary>
-            Knot tolerance
+            Knot tolerance.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Spline.ControlPointTolerance">
             <summary>
-            Control-point tolerance
+            Control-point tolerance.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Spline.FitTolerance">
             <summary>
-            Fit tolerance
+            Fit tolerance.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Spline.StartTangent">
             <summary>
-            Start tangent—may be omitted in WCS
+            Start tangent—may be omitted in WCS.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Spline.EndTangent">
             <summary>
-            End tangent—may be omitted in WCS
+            End tangent—may be omitted in WCS.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Spline.Weights">
             <summary>
-            Weight(if not 1); with multiple group pairs, they are present if all are not 1
+            Weight(if not 1); with multiple group pairs, they are present if all are not 1.
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Spline.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Spline.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.SplineFlags">
             <summary>
@@ -4693,6 +5038,12 @@
             Vertical text justification type.
             </summary>
         </member>
+        <member name="M:ACadSharp.Entities.TextEntity.GetBoundingBox">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.TextEntity.Clone">
+            <inheritdoc/>
+        </member>
         <member name="F:ACadSharp.Entities.TextHorizontalAlignment.Aligned">
             <summary>
             Aligned (if vertical alignment = 0)
@@ -4786,12 +5137,111 @@
             Visual representation of the tolerance
             </summary>
         </member>
-        <member name="T:ACadSharp.Entities.UnknownEntity">
+        <member name="M:ACadSharp.Entities.Tolerance.GetBoundingBox">
+            <inheritdoc/>
+        </member>
+        <member name="T:ACadSharp.Entities.UnderlayDisplayFlags">
             <summary>
-            Class that holds the basic information for an unknown entity
+            Underlay display options.
+            </summary>
+        </member>
+        <member name="F:ACadSharp.Entities.UnderlayDisplayFlags.ClippingOn">
+            <summary>
+            Clipping is on.
+            </summary>
+        </member>
+        <member name="F:ACadSharp.Entities.UnderlayDisplayFlags.ShowUnderlay">
+            <summary>
+            Underlay is on.
+            </summary>
+        </member>
+        <member name="F:ACadSharp.Entities.UnderlayDisplayFlags.Monochrome">
+            <summary>
+            Show as monochrome.
+            </summary>
+        </member>
+        <member name="F:ACadSharp.Entities.UnderlayDisplayFlags.AdjustForBackground">
+            <summary>
+            Adjust for background.
+            </summary>
+        </member>
+        <member name="F:ACadSharp.Entities.UnderlayDisplayFlags.ClipInsideMode">
+            <summary>
+            Clip is inside mode.
+            </summary>
+        </member>
+        <member name="T:ACadSharp.Entities.UnderlayEntity">
+            <summary>
+            Common base class for all underlay entities, like <see cref="T:ACadSharp.Entities.PdfUnderlay" />.
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Entities.UnderlayEntity.SubclassMarker">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Entities.UnderlayEntity.Normal">
+            <summary>
+            Specifies the three-dimensional normal unit vector for the object.
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Entities.UnderlayEntity.InsertPoint">
+            <summary>
+            Insertion point(in WCS)
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Entities.UnderlayEntity.XScale">
+            <summary>
+            X scale factor 
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Entities.UnderlayEntity.YScale">
+            <summary>
+            Y scale factor 
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Entities.UnderlayEntity.ZScale">
+            <summary>
+            Z scale factor 
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Entities.UnderlayEntity.Rotation">
+            <summary>
+            Specifies the rotation angle for the object.
+            </summary>
+            <value>
+            The rotation angle in radians.
+            </value>
+        </member>
+        <member name="P:ACadSharp.Entities.UnderlayEntity.Flags">
+            <summary>
+            Underlay display options.
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Entities.UnderlayEntity.Contrast">
+            <summary>
+            Contrast
             </summary>
             <remarks>
-            Unknown entities may appear in the <see cref="T:ACadSharp.CadDocument"/> if the dwg file contains proxies or entities not yet supported by ACadSharp
+            0-100; default = 50
+            </remarks>
+        </member>
+        <member name="P:ACadSharp.Entities.UnderlayEntity.Fade">
+            <summary>
+            Fade
+            </summary>
+            <value>
+            Range: 0 - 100 <br/>
+            Default: 0
+            </value>
+        </member>
+        <member name="M:ACadSharp.Entities.UnderlayEntity.GetBoundingBox">
+            <inheritdoc/>
+        </member>
+        <member name="T:ACadSharp.Entities.UnknownEntity">
+            <summary>
+            Class that holds the basic information for an unknown <see cref="T:ACadSharp.Entities.Entity"/>.
+            </summary>
+            <remarks>
+            Unknown entities may appear in the <see cref="T:ACadSharp.CadDocument"/> if the cad file contains proxies or entities not yet supported by ACadSharp.
             </remarks>
         </member>
         <member name="P:ACadSharp.Entities.UnknownEntity.ObjectType">
@@ -4805,8 +5255,14 @@
         </member>
         <member name="P:ACadSharp.Entities.UnknownEntity.DxfClass">
             <summary>
-            Dxf class linked to this entity
+            Dxf class linked to this entity.
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.UnknownEntity.GetBoundingBox">
+            <inheritdoc/>
+            <remarks>
+            An Unknown Entity does not have any geometric shape, therfore it's bounding box will be always 0
+            </remarks>
         </member>
         <member name="T:ACadSharp.Entities.Vertex">
             <summary>
@@ -4848,6 +5304,9 @@
             <summary>
             Vertex identifier
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Vertex.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.Vertex2D">
             <summary>
@@ -5009,6 +5468,11 @@
             Dxf class name <see cref="F:ACadSharp.DxfSubclassMarker.Viewport"/>
             </remarks>
         </member>
+        <member name="F:ACadSharp.Entities.Viewport.PaperViewId">
+            <summary>
+            Paper view Id, it indicates that the viewport acts as a paper size.
+            </summary>
+        </member>
         <member name="P:ACadSharp.Entities.Viewport.ObjectType">
             <inheritdoc/>
         </member>
@@ -5020,27 +5484,27 @@
         </member>
         <member name="P:ACadSharp.Entities.Viewport.Center">
             <summary>
-            Center point(in WCS)
+            Center point(in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Viewport.Width">
             <summary>
-            Width in paper space units
+            Width in paper space units.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Viewport.Height">
             <summary>
-            Height in paper space units
+            Height in paper space units.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Viewport.Id">
             <summary>
-            Viewport ID
+            Viewport ID.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Viewport.ViewCenter">
             <summary>
-            View center point(in DCS)
+            View center point(in DCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Viewport.SnapBase">
@@ -5075,17 +5539,22 @@
         </member>
         <member name="P:ACadSharp.Entities.Viewport.FrontClipPlane">
             <summary>
-            Front clip plane Z value
+            Front clip plane Z value.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Viewport.BackClipPlane">
             <summary>
-            Back clip plane Z value
+            Back clip plane Z value.
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Viewport.ViewHeight">
             <summary>
-            View height(in model space units)
+            View height(in model space units).
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Entities.Viewport.ViewWidth">
+            <summary>
+            View width (in model space units).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.Viewport.SnapAngle">
@@ -5204,7 +5673,7 @@
             View brightness
             </summary>
         </member>
-        <member name="P:ACadSharp.Entities.Viewport.Constrast">
+        <member name="P:ACadSharp.Entities.Viewport.Contrast">
             <summary>
             View contrast
             </summary>
@@ -5213,6 +5682,15 @@
             <summary>
             Ambient light color.Write only if not black color.
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.Viewport.Clone">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Viewport.GetBoundingBox">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Entities.Viewport.GetModelBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.ViewportStatusFlags">
             <summary>
@@ -5367,13 +5845,16 @@
         </member>
         <member name="P:ACadSharp.Entities.XLine.FirstPoint">
             <summary>
-            First point(in WCS)
+            First point(in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Entities.XLine.Direction">
             <summary>
-            Unit direction vector(in WCS)
+            Unit direction vector(in WCS).
             </summary>
+        </member>
+        <member name="M:ACadSharp.Entities.XLine.GetBoundingBox">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Entities.BlockContentConnectionType">
             <summary>
@@ -7680,27 +8161,52 @@
         </member>
         <member name="P:ACadSharp.INamedCadObject.Name">
             <summary>
-            Name identifier for this object
+            Name identifier for this object.
             </summary>
         </member>
-        <member name="E:ACadSharp.IObservableCollection`1.OnAdd">
+        <member name="T:ACadSharp.IObservableCadCollection`1">
+            <summary>
+            Events for an observed cad collection.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="E:ACadSharp.IObservableCadCollection`1.OnAdd">
             <summary>
             Event triggerrs when an object is added to the collection
             </summary>
         </member>
-        <member name="E:ACadSharp.IObservableCollection`1.OnRemove">
+        <member name="E:ACadSharp.IObservableCadCollection`1.OnRemove">
             <summary>
             Event triggerrs when an object is removed from the collection
             </summary>
         </member>
-        <member name="M:ACadSharp.IO.CadReaderBase.Read">
+        <member name="T:ACadSharp.IO.CadReaderBase`1">
+            <summary>
+            Base class for the DWG and DXF readers.
+            </summary>
+            <typeparam name="T">Configuration type for the reader.</typeparam>
+        </member>
+        <member name="E:ACadSharp.IO.CadReaderBase`1.OnNotification">
             <inheritdoc/>
         </member>
-        <member name="M:ACadSharp.IO.CadReaderBase.ReadHeader">
+        <member name="P:ACadSharp.IO.CadReaderBase`1.Configuration">
+            <summary>
+            Reader configuration.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.IO.CadReaderBase`1.Read">
             <inheritdoc/>
         </member>
-        <member name="M:ACadSharp.IO.CadReaderBase.Dispose">
+        <member name="M:ACadSharp.IO.CadReaderBase`1.ReadHeader">
             <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.IO.CadReaderBase`1.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="T:ACadSharp.IO.CadReaderConfiguration">
+            <summary>
+            Base configuration for all the <see cref="T:ACadSharp.IO.CadReaderBase`1"/> classes.
+            </summary>
         </member>
         <member name="P:ACadSharp.IO.CadReaderConfiguration.Failsafe">
             <summary>
@@ -7716,22 +8222,65 @@
             which may be a proxy or an entity that is not yet supported by ACadSharp, default value is set to false.
             </summary>
             <remarks>
-            These entities do not contain any geometric information and will be ignored by the writers
+            These entities do not contain any geometric information and will be ignored by the writers.
             </remarks>
         </member>
-        <member name="P:ACadSharp.IO.CadWriterBase.CloseStream">
+        <member name="P:ACadSharp.IO.CadReaderConfiguration.KeepUnknownNonGraphicalObjects">
             <summary>
-            Notifies the writer to close the stream once the operation is completed
+            The reader will try to read and add to the document all <see cref="F:ACadSharp.ObjectType.UNLISTED"/> that are linked to a <see cref="T:ACadSharp.Classes.DxfClass"/> 
+            which may be a proxy or an NonGraphicalObject that is not yet supported by ACadSharp, default value is set to false.
+            </summary>
+            <remarks>
+            These NonGraphicalObjects do not contain any information and will be ignored by the writers.
+            </remarks>
+        </member>
+        <member name="T:ACadSharp.IO.CadWriterBase`1">
+            <summary>
+            Base class for the CAD writers.
+            </summary>
+        </member>
+        <member name="E:ACadSharp.IO.CadWriterBase`1.OnNotification">
+            <summary>
+            Notification event to get information about the writing process.
+            </summary>
+            <remarks>
+            The notification system informs about any issue or non critical errors during the writing.
+            </remarks>
+        </member>
+        <member name="P:ACadSharp.IO.CadWriterBase`1.Configuration">
+            <summary>
+            Configuration for the writer.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.IO.CadWriterBase`1.Write">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.IO.CadWriterBase`1.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="T:ACadSharp.IO.CadWriterConfiguration">
+            <summary>
+            Configuration for the <see cref="T:ACadSharp.IO.CadWriterBase`1"/> class.
+            </summary>
+        </member>
+        <member name="P:ACadSharp.IO.CadWriterConfiguration.CloseStream">
+            <summary>
+            The writer will close the stream once the operation is completed.
             </summary>
             <value>
-            true
+            default: true
             </value>
         </member>
-        <member name="M:ACadSharp.IO.CadWriterBase.Write">
-            <inheritdoc/>
-        </member>
-        <member name="M:ACadSharp.IO.CadWriterBase.Dispose">
-            <inheritdoc/>
+        <member name="P:ACadSharp.IO.CadWriterConfiguration.WriteXRecords">
+            <summary>
+            Will not ignore the <see cref="T:ACadSharp.Objects.XRecord"/> objects in the document.
+            </summary>
+            <remarks>
+            Due the complexity of XRecords, if this flag is set to true, it may cause a corruption of the file if the records have been modified manually.
+            </remarks>
+            <value>
+            default: false
+            </value>
         </member>
         <member name="F:ACadSharp.IO.DWG.CRC.CrcTable">
             <summary>
@@ -8370,6 +8919,11 @@
             <param name="position"></param>
             <returns></returns>
         </member>
+        <member name="T:ACadSharp.IO.DwgReader">
+            <summary>
+            Class for reading a DWG file into a <see cref="T:ACadSharp.CadDocument"></see>.
+            </summary>
+        </member>
         <member name="M:ACadSharp.IO.DwgReader.#ctor(System.String,ACadSharp.IO.NotificationEventHandler)">
             <summary>
             Initializes a new instance of the <see cref="T:ACadSharp.IO.DwgReader"/> class.
@@ -8403,7 +8957,7 @@
         </member>
         <member name="M:ACadSharp.IO.DwgReader.Read(System.String,ACadSharp.IO.NotificationEventHandler)">
             <summary>
-            Read a dwg document from a file
+            Read a dwg document from a file.
             </summary>
             <param name="filename"></param>
             <param name="notification">Notification handler, sends any message or notification about the reading process.</param>
@@ -8411,7 +8965,7 @@
         </member>
         <member name="M:ACadSharp.IO.DwgReader.Read(System.String,ACadSharp.IO.DwgReaderConfiguration,ACadSharp.IO.NotificationEventHandler)">
             <summary>
-            Read a dwg document from a file
+            Read a dwg document from a file.
             </summary>
             <param name="filename"></param>
             <param name="configuration"></param>
@@ -8546,6 +9100,11 @@
             <param name="stream"></param>
             <returns></returns>
         </member>
+        <member name="T:ACadSharp.IO.DwgReaderConfiguration">
+            <summary>
+            Configuration for reading DWG files.
+            </summary>
+        </member>
         <member name="P:ACadSharp.IO.DwgReaderConfiguration.CrcCheck">
             <summary>
             Use the Standard Cycling Redundancy Check to verify the integrity of the file, default value is set to false.
@@ -8555,16 +9114,21 @@
             if this flag is enabled the reader will perform this verification to detect any possible error, but it will greatly increase the reading time.
             </remarks>
         </member>
+        <member name="T:ACadSharp.IO.DwgWriter">
+            <summary>
+            Class for writing a DWG from a <see cref="T:ACadSharp.CadDocument"/>.
+            </summary>
+        </member>
         <member name="M:ACadSharp.IO.DwgWriter.#ctor(System.String,ACadSharp.CadDocument)">
             <summary>
-            
+            Initializes a new instance of the <see cref="T:ACadSharp.IO.DwgWriter"/> class.
             </summary>
             <param name="filename"></param>
             <param name="document"></param>
         </member>
         <member name="M:ACadSharp.IO.DwgWriter.#ctor(System.IO.Stream,ACadSharp.CadDocument)">
             <summary>
-            
+            Initializes a new instance of the <see cref="T:ACadSharp.IO.DwgWriter"/> class.
             </summary>
             <param name="stream"></param>
             <param name="document"></param>
@@ -8575,12 +9139,13 @@
         <member name="M:ACadSharp.IO.DwgWriter.Dispose">
             <inheritdoc/>
         </member>
-        <member name="M:ACadSharp.IO.DwgWriter.Write(System.String,ACadSharp.CadDocument,ACadSharp.IO.NotificationEventHandler)">
+        <member name="M:ACadSharp.IO.DwgWriter.Write(System.String,ACadSharp.CadDocument,ACadSharp.IO.CadWriterConfiguration,ACadSharp.IO.NotificationEventHandler)">
             <summary>
             Write a <see cref="T:ACadSharp.CadDocument"/> into a file
             </summary>
             <param name="filename"></param>
             <param name="document"></param>
+            <param name="configuration"></param>
             <param name="notification"></param>
         </member>
         <member name="M:ACadSharp.IO.DwgWriter.Write(System.IO.Stream,ACadSharp.CadDocument,ACadSharp.IO.NotificationEventHandler)">
@@ -8609,6 +9174,11 @@
         </member>
         <member name="M:ACadSharp.IO.DXF.DxfStreamWriterBase.Dispose">
             <inheritdoc/>
+        </member>
+        <member name="T:ACadSharp.IO.DxfReader">
+            <summary>
+            Class for reading a DXF file into a <see cref="T:ACadSharp.CadDocument"></see>.
+            </summary>
         </member>
         <member name="M:ACadSharp.IO.DxfReader.#ctor(System.String,ACadSharp.IO.NotificationEventHandler)">
             <summary>
@@ -8714,9 +9284,19 @@
             Read the THUMBNAILIMAGE section of the DXF file.
             </summary>
         </member>
+        <member name="T:ACadSharp.IO.DxfReaderConfiguration">
+            <summary>
+            Configuration for reading DXF files.
+            </summary>
+        </member>
         <member name="P:ACadSharp.IO.DxfReaderConfiguration.ClearChache">
             <summary>
             Clears the cache after the reading
+            </summary>
+        </member>
+        <member name="T:ACadSharp.IO.DxfWriter">
+            <summary>
+            Class for writing a DXF from a <see cref="T:ACadSharp.CadDocument"/>.
             </summary>
         </member>
         <member name="P:ACadSharp.IO.DxfWriter.IsBinary">
@@ -8763,28 +9343,33 @@
             <param name="document"></param>
             <param name="binary"></param>
         </member>
-        <member name="F:ACadSharp.IO.DxfWriterOptions.Variables">
+        <member name="T:ACadSharp.IO.DxfWriterConfiguration">
+            <summary>
+            Configuration for writing DWG files.
+            </summary>
+        </member>
+        <member name="F:ACadSharp.IO.DxfWriterConfiguration.Variables">
             <summary>
             Variables that must be writen in a dxf file
             </summary>
         </member>
-        <member name="P:ACadSharp.IO.DxfWriterOptions.WriteAllHeaderVariables">
+        <member name="P:ACadSharp.IO.DxfWriterConfiguration.WriteAllHeaderVariables">
             <summary>
             Flag to write all the header variables in the dxf file
             </summary>
             <remarks>
-            Some variables are version sensitive, writing all the variables may cause a crash in other applications, to write an specific variable add it to the <see cref="M:ACadSharp.IO.DxfWriterOptions.AddHeaderVariable(System.String)"/> set
+            Some variables are version sensitive, writing all the variables may cause a crash in other applications, to write an specific variable add it to the <see cref="M:ACadSharp.IO.DxfWriterConfiguration.AddHeaderVariable(System.String)"/> set
             </remarks>
             <value>
             false
             </value>
         </member>
-        <member name="P:ACadSharp.IO.DxfWriterOptions.HeaderVariables">
+        <member name="P:ACadSharp.IO.DxfWriterConfiguration.HeaderVariables">
             <summary>
             Header variables to write in the dxf file
             </summary>
         </member>
-        <member name="M:ACadSharp.IO.DxfWriterOptions.AddHeaderVariable(System.String)">
+        <member name="M:ACadSharp.IO.DxfWriterConfiguration.AddHeaderVariable(System.String)">
             <summary>
             Add a Header variable name to be added in the dxf document
             </summary>
@@ -8794,25 +9379,38 @@
             <param name="name"></param>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:ACadSharp.IO.DxfWriterOptions.RemoveHeaderVariable(System.String)">
+        <member name="M:ACadSharp.IO.DxfWriterConfiguration.RemoveHeaderVariable(System.String)">
             <summary>
             Remove a Header variable name so is not added in the dxf document
             </summary>
             <remarks>
-            The name cannot be a in the <see cref="F:ACadSharp.IO.DxfWriterOptions.Variables"/> list
+            The name cannot be a in the <see cref="F:ACadSharp.IO.DxfWriterConfiguration.Variables"/> list
             </remarks>
             <param name="name"></param>
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="T:ACadSharp.IO.ICadReader">
+            <summary>
+            Common interface for the different Cad readers.
+            </summary>
+        </member>
+        <member name="E:ACadSharp.IO.ICadReader.OnNotification">
+            <summary>
+            Notification event to get information about the reading process.
+            </summary>
+            <remarks>
+            The notification system informs about any issue or non critical errors during the reading.
+            </remarks>
+        </member>
         <member name="M:ACadSharp.IO.ICadReader.ReadHeader">
             <summary>
-            Read the Cad header section of the file
+            Read the Cad header section of the file.
             </summary>
         </member>
         <member name="M:ACadSharp.IO.ICadReader.Read">
             <summary>
-            Read the cad document
+            Read the cad document.
             </summary>
         </member>
         <member name="M:ACadSharp.IO.ICadWriter.Write">
@@ -8820,15 +9418,30 @@
             Write the <see cref="T:ACadSharp.CadDocument"/>
             </summary>
         </member>
-        <member name="F:ACadSharp.MathUtils.RadToDeg">
+        <member name="F:ACadSharp.MathUtils.RadToDegFactor">
             <summary>
             Factor for converting radians to degrees.
             </summary>
         </member>
-        <member name="F:ACadSharp.MathUtils.DegToRad">
+        <member name="F:ACadSharp.MathUtils.DegToRadFactor">
             <summary>
             Factor for converting degrees to radians.
             </summary>
+        </member>
+        <member name="M:ACadSharp.MathUtils.IsZero(System.Double)">
+            <summary>
+            Checks if a number is close to zero.
+            </summary>
+            <param name="number">Double precision number.</param>
+            <returns>True if its close to one or false in any other case.</returns>
+        </member>
+        <member name="M:ACadSharp.MathUtils.IsZero(System.Double,System.Double)">
+            <summary>
+            Checks if a number is close to zero.
+            </summary>
+            <param name="number">Double precision number.</param>
+            <param name="threshold">Tolerance.</param>
+            <returns>True if its close to one or false in any other case.</returns>
         </member>
         <member name="M:ACadSharp.MathUtils.GetCenter``1(``0,``0,System.Double)">
             <summary>
@@ -9073,9 +9686,14 @@
         </member>
         <member name="M:ACadSharp.Objects.CadDictionary.CreateRoot">
             <summary>
-            Creates the root dictionary with the default entries
+            Creates the root dictionary with the default entries.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:ACadSharp.Objects.CadDictionary.CreateDefaultEntries(ACadSharp.Objects.CadDictionary)">
+            <summary>
+            Create the default entries for the root dictionary.
+            </summary>
         </member>
         <member name="M:ACadSharp.Objects.CadDictionary.#ctor">
             <summary>
@@ -9102,12 +9720,32 @@
             <param name="value">the name of the NonGraphicalObject will be used as a key for the dictionary</param>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:ACadSharp.Objects.CadDictionary.Remove(System.String)">
+        <member name="M:ACadSharp.Objects.CadDictionary.TryAdd(ACadSharp.Objects.NonGraphicalObject)">
             <summary>
-            Removes a <see cref="T:ACadSharp.CadObject"/> from the collection, this method triggers <see cref="E:ACadSharp.Objects.CadDictionary.OnRemove"/>
+            Tries to add the <see cref="T:ACadSharp.Objects.NonGraphicalObject"/> entry using the name as key.
+            </summary>
+            <param name="value"></param>
+            <returns>true if the element is successfully added; otherwise, false.</returns>
+        </member>
+        <member name="M:ACadSharp.Objects.CadDictionary.ContainsKey(System.String)">
+            <summary>
+            Determines whether the <see cref="T:ACadSharp.Objects.CadDictionary"/> contains the specified key.
+            </summary>
+            <param name="key">The key to locate in the <see cref="T:ACadSharp.Objects.CadDictionary"/></param>
+            <returns></returns>
+        </member>
+        <member name="M:ACadSharp.Objects.CadDictionary.Remove(System.String,ACadSharp.Objects.NonGraphicalObject@)">
+            <summary>
+            Removes a <see cref="T:ACadSharp.Objects.NonGraphicalObject"/> from the collection, this method triggers <see cref="E:ACadSharp.Objects.CadDictionary.OnRemove"/>
             </summary>
             <param name="key"></param>
-            <returns>The removed <see cref="T:ACadSharp.CadObject"/></returns>
+            <param name="item"></param>
+            <returns>true if the element is successfully removed; otherwise, false.</returns>
+        </member>
+        <member name="M:ACadSharp.Objects.CadDictionary.Clear">
+            <summary>
+            Removes all keys and values from the <see cref="T:ACadSharp.Objects.CadDictionary"/>.
+            </summary>
         </member>
         <member name="M:ACadSharp.Objects.CadDictionary.GetEntry``1(System.String)">
             <summary>
@@ -9149,6 +9787,9 @@
             Currently only used for plot style dictionary's default entry, named “Normal”
             </remarks>
         </member>
+        <member name="M:ACadSharp.Objects.Collections.LayoutCollection.Remove(System.String,ACadSharp.Objects.Layout@)">
+            <inheritdoc/>
+        </member>
         <member name="T:ACadSharp.Objects.Collections.ObjectDictionaryCollection`1">
             <summary>
             Object collection linked to a dictionary
@@ -9164,21 +9805,40 @@
             </summary>
             <param name="entry"></param>
         </member>
+        <member name="M:ACadSharp.Objects.Collections.ObjectDictionaryCollection`1.ContainsKey(System.String)">
+            <summary>
+            Determines whether the <see cref="T:ACadSharp.Objects.Collections.ObjectDictionaryCollection`1"/> contains the specified key.
+            </summary>
+            <param name="key">The key to locate in the <see cref="T:ACadSharp.Objects.Collections.ObjectDictionaryCollection`1"/></param>
+            <returns></returns>
+        </member>
         <member name="M:ACadSharp.Objects.Collections.ObjectDictionaryCollection`1.TryGetValue(System.String,`0@)">
             <summary>
             Gets the value associated with the specific key
             </summary>
-            <typeparam name="T"></typeparam>
             <param name="name"></param>
             <param name="entry"></param>
-            <returns>true if the value is found or false if not found</returns>
+            <returns>true if the value is found or false if not found.</returns>
         </member>
-        <member name="M:ACadSharp.Objects.Collections.ObjectDictionaryCollection`1.Remove(`0)">
+        <member name="M:ACadSharp.Objects.Collections.ObjectDictionaryCollection`1.Remove(System.String)">
             <summary>
-            Remove an entry from the collection
+            Remove an entry from the collection.
             </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ACadSharp.Objects.Collections.ObjectDictionaryCollection`1.Remove(System.String,`0@)">
+            <summary>
+            Remove an entry from the collection.
+            </summary>
+            <param name="name"></param>
             <param name="entry"></param>
             <returns></returns>
+        </member>
+        <member name="M:ACadSharp.Objects.Collections.ObjectDictionaryCollection`1.Clear">
+            <summary>
+            Removes all keys and values from the <see cref="T:ACadSharp.Objects.Collections.ObjectDictionaryCollection`1"/>.
+            </summary>
         </member>
         <member name="M:ACadSharp.Objects.Collections.ObjectDictionaryCollection`1.GetEnumerator">
             <inheritdoc/>
@@ -9251,7 +9911,7 @@
         </member>
         <member name="T:ACadSharp.Objects.EvaluationGraph">
             <summary>
-            Represents a evaluation graph containing a list of <see cref="T:ACadSharp.Objects.EvaluationGraph.GraphNode"/>
+            Represents an evaluation graph containing a list of <see cref="T:ACadSharp.Objects.EvaluationGraph.GraphNode"/>
             objects.
             </summary>
         </member>
@@ -9441,11 +10101,11 @@
         </member>
         <member name="T:ACadSharp.Objects.Layout">
             <summary>
-            Represents a <see cref="T:ACadSharp.Objects.Layout"/> object
+            Represents a <see cref="T:ACadSharp.Objects.Layout"/> object.
             </summary>
             <remarks>
-            Object name <see cref="F:ACadSharp.DxfFileToken.ObjectLayout"/> <br/>
-            Dxf class name <see cref="F:ACadSharp.DxfSubclassMarker.Layout"/>
+            Object name <see cref="F:ACadSharp.DxfFileToken.ObjectLayout"/>. <br/>
+            Dxf class name <see cref="F:ACadSharp.DxfSubclassMarker.Layout"/>.
             </remarks>
         </member>
         <member name="P:ACadSharp.Objects.Layout.ObjectType">
@@ -9459,94 +10119,102 @@
         </member>
         <member name="P:ACadSharp.Objects.Layout.Name">
             <summary>
-            Layout name
+            Layout name.
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.LayoutFlags">
             <summary>
-            Layout flags
+            Layout flags.
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.TabOrder">
             <summary>
-            Tab order.This number is an ordinal indicating this layout's ordering in the tab control that is attached to the drawing window. Note that the “Model” tab always appears as the first tab regardless of its tab order
+            Tab order. This number is an ordinal indicating this layout's ordering in the tab control that is attached to the drawing window. Note that the “Model” tab always appears as the first tab regardless of its tab order.
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.MinLimits">
             <summary>
-            Minimum limits for this layout (defined by LIMMIN while this layout is current)
+            Minimum limits for this layout (defined by LIMMIN while this layout is current).
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.MaxLimits">
             <summary>
-            Maximum limits for this layout(defined by LIMMAX while this layout is current)
+            Maximum limits for this layout(defined by LIMMAX while this layout is current).
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.InsertionBasePoint">
             <summary>
-            Insertion base point for this layout(defined by INSBASE while this layout is current) 
+            Insertion base point for this layout(defined by INSBASE while this layout is current).
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.MinExtents">
             <summary>
-            Minimum extents for this layout(defined by EXTMIN while this layout is current)
+            Minimum extents for this layout(defined by EXTMIN while this layout is current).
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.MaxExtents">
             <summary>
-            Maximum extents for this layout(defined by EXTMAX while this layout is current)
+            Maximum extents for this layout(defined by EXTMAX while this layout is current).
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.Elevation">
             <summary>
-            Layout elevation
+            Layout elevation.
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.Origin">
             <summary>
-            UCS origin
+            UCS origin.
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.XAxis">
             <summary>
-            UCS X-axis
+            UCS X-axis.
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.YAxis">
             <summary>
-            UCS Y-axis
+            UCS Y-axis.
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.UcsOrthographicType">
             <summary>
-            Orthographic type of UCS
+            Orthographic type of UCS.
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.AssociatedBlock">
             <summary>
-            The associated paper space block table record
+            The associated paper space block table record.
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.Viewport">
             <summary>
-            Viewport that was last active in this layout when the layout was current
+            Viewport that was last active in this layout when the layout was current.
             </summary>
         </member>
         <member name="P:ACadSharp.Objects.Layout.UCS">
             <summary>
-            UCS Table Record if UCS is a named UCS
+            UCS Table Record if UCS is a named UCS.
             </summary>
             <remarks>
-            If not present, then UCS is unnamed
+            If not present, then UCS is unnamed.
             </remarks>
         </member>
         <member name="P:ACadSharp.Objects.Layout.BaseUCS">
             <summary>
-            UCSTableRecord of base UCS if UCS is orthographic (<see cref="P:ACadSharp.Objects.Layout.UcsOrthographicType"/> is non-zero)
+            UCSTableRecord of base UCS if UCS is orthographic (<see cref="P:ACadSharp.Objects.Layout.UcsOrthographicType"/> is non-zero).
             </summary>
             <remarks>
-            If not present and <see cref="P:ACadSharp.Objects.Layout.UcsOrthographicType"/> is non-zero, then base UCS is taken to be WORLD
+            If not present and <see cref="P:ACadSharp.Objects.Layout.UcsOrthographicType"/> is non-zero, then base UCS is taken to be WORLD.
             </remarks>
+        </member>
+        <member name="P:ACadSharp.Objects.Layout.IsPaperSpace">
+            <summary>
+            If true, the layout is a paper space.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Objects.Layout.Clone">
+            <inheritdoc/>
         </member>
         <member name="M:ACadSharp.Objects.Layout.ToString">
             <inheritdoc/>
@@ -9654,6 +10322,15 @@
             <see cref="P:ACadSharp.Objects.MultiLeaderAnnotContext.LeaderLine.Arrowhead" /> property
             overrides settings from <see cref="T:ACadSharp.Entities.MultiLeader"/> and <see cref="T:ACadSharp.Objects.MultiLeaderStyle"/>.
             </summary>
+        </member>
+        <member name="P:ACadSharp.Objects.Material.ObjectType">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Objects.Material.ObjectName">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Objects.Material.SubclassMarker">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Objects.MLineStyle">
             <summary>
@@ -10985,6 +11662,21 @@
         </member>
         <member name="P:ACadSharp.Objects.NonGraphicalObject.Name">
             <inheritdoc/>
+            <remarks>
+            The name of a <see cref="T:ACadSharp.Objects.NonGraphicalObject"/> will be used as the name of the entry when the owner is a <see cref="T:ACadSharp.Objects.CadDictionary"/>
+            otherwise the name may not be saved if there is no dxf code assigned to the <see cref="T:ACadSharp.CadObject"/>.
+            </remarks>
+        </member>
+        <member name="M:ACadSharp.Objects.NonGraphicalObject.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Objects.NonGraphicalObject.#ctor(System.String)">
+            <summary>
+            Initialize a <see cref="T:ACadSharp.Objects.NonGraphicalObject"/> with an specific name.
+            </summary>
+            <param name="name"></param>
         </member>
         <member name="M:ACadSharp.Objects.NonGraphicalObject.ToString">
             <inheritdoc/>
@@ -11022,6 +11714,26 @@
             <param name="bottom">Margin on bottom side of paper.</param>
             <param name="right">Margin on right side of paper.</param>
             <param name="top">Margin on top side of paper.</param>
+        </member>
+        <member name="T:ACadSharp.Objects.PdfUnderlayDefinition">
+            <summary>
+            Represents a <see cref="T:ACadSharp.Objects.PdfUnderlayDefinition"/> object
+            </summary>
+            <remarks>
+            Object name <see cref="F:ACadSharp.DxfFileToken.ObjectPdfDefinition"/> <br/>
+            Dxf class name <see cref="F:ACadSharp.DxfSubclassMarker.UnderlayDefinition"/>
+            </remarks>
+        </member>
+        <member name="P:ACadSharp.Objects.PdfUnderlayDefinition.ObjectName">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Objects.PdfUnderlayDefinition.Page">
+            <summary>
+            Gets or sets the PDF page to show.
+            </summary>
+        </member>
+        <member name="M:ACadSharp.Objects.PdfUnderlayDefinition.#ctor">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Objects.PlotFlags">
             <summary>
@@ -11501,6 +12213,47 @@
             <param name="entity">Enity in the block to be sorted.</param>
             <param name="handle">Sorter handle, will use the entity handle if null.</param>
         </member>
+        <member name="T:ACadSharp.Objects.UnderlayDefinition">
+            <summary>
+            Common base class for all underlay definitions, like <see cref="T:ACadSharp.Objects.PdfUnderlayDefinition" />.
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Objects.UnderlayDefinition.ObjectType">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Objects.UnderlayDefinition.SubclassMarker">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Objects.UnderlayDefinition.File">
+            <summary>
+            Gets or sets the underlay file.
+            </summary>
+            <remarks>
+            The file extension must match the underlay type.
+            </remarks>
+        </member>
+        <member name="T:ACadSharp.Objects.UnknownNonGraphicalObject">
+            <summary>
+            Class that holds the basic information for an unknown <see cref="T:ACadSharp.Objects.NonGraphicalObject"/>.
+            </summary>
+            <remarks>
+            Unknown entities may appear in the <see cref="T:ACadSharp.CadDocument"/> if the cad file contains proxies or objects not yet supported by ACadSharp.
+            </remarks>
+        </member>
+        <member name="P:ACadSharp.Objects.UnknownNonGraphicalObject.ObjectType">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Objects.UnknownNonGraphicalObject.ObjectName">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Objects.UnknownNonGraphicalObject.SubclassMarker">
+            <inheritdoc/>
+        </member>
+        <member name="P:ACadSharp.Objects.UnknownNonGraphicalObject.DxfClass">
+            <summary>
+            Dxf class linked to this entity.
+            </summary>
+        </member>
         <member name="T:ACadSharp.Objects.VisualStyle">
             <summary>
             Represents a <see cref="T:ACadSharp.Objects.VisualStyle"/> object
@@ -11634,9 +12387,14 @@
         </member>
         <member name="T:ACadSharp.SeqendCollection`1">
             <summary>
-            Represents a collection of <see cref="T:ACadSharp.CadObject"/> ended by a <see cref="T:ACadSharp.Entities.Seqend"/> entity
+            Represents a collection of <see cref="T:ACadSharp.CadObject"/> ended by a <see cref="T:ACadSharp.Entities.Seqend"/> entity.
             </summary>
             <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:ACadSharp.SeqendCollection`1.Seqend">
+            <summary>
+            Sequence end entity for dxf.
+            </summary>
         </member>
         <member name="M:ACadSharp.SeqendCollection`1.Add(`0)">
             <inheritdoc/>
@@ -11665,6 +12423,9 @@
             <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Tables.AppId.SubclassMarker">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Tables.AppId.#ctor(System.String)">
             <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Tables.ArcLengthSymbolPosition">
@@ -11705,6 +12466,22 @@
             <summary>
             Default block record name for the paper space
             </summary>
+        </member>
+        <member name="P:ACadSharp.Tables.BlockRecord.ModelSpace">
+            <summary>
+            Create an instance of the *Model_Space block.
+            </summary>
+            <remarks>
+            It only can be one Model in each document.
+            </remarks>
+        </member>
+        <member name="P:ACadSharp.Tables.BlockRecord.PaperSpace">
+            <summary>
+            Create an instance of the *Paper_Space block.
+            </summary>
+            <remarks>
+            This is the default paper space in the document.
+            </remarks>
         </member>
         <member name="P:ACadSharp.Tables.BlockRecord.ObjectType">
             <inheritdoc/>
@@ -11760,19 +12537,16 @@
         </member>
         <member name="P:ACadSharp.Tables.BlockRecord.Entities">
             <summary>
-            Entities owned by this block
+            Entities owned by this block.
             </summary>
             <remarks>
-            Entities with an owner cannot be added to another block
+            Entities with an owner cannot be added to another block.
             </remarks>
         </member>
         <member name="P:ACadSharp.Tables.BlockRecord.SortEntitiesTable">
             <summary>
             Sort entities table for this block record.
             </summary>
-            <remarks>
-            
-            </remarks>
         </member>
         <member name="P:ACadSharp.Tables.BlockRecord.BlockEntity">
             <summary>
@@ -12248,7 +13022,7 @@
         </member>
         <member name="P:ACadSharp.Tables.DimensionStyle.AlternateUnitFormat">
             <summary>
-            Gets or sets the units format for alternate units of all dimension substyles
+            Gets or sets the units format for alternate units of all dimension sub-styles
             except Angular
             (see DIMALTU System Variable).
             </summary>
@@ -12498,8 +13272,8 @@
             Positive values of <i>LinearScaleFactor</i> are applied to dimensions in both model space and
             paper space; negative values are applied to paper space only.
             </para><para>
-            <i>LinearScaleFactor</i> applies primarily to nonassociative dimensions (DIMASSOC set 0 or 1).
-            For nonassociative dimensions in paper space, <i>LinearScaleFactor</i> must be set individually
+            <i>LinearScaleFactor</i> applies primarily to non-associative dimensions (DIMASSOC set 0 or 1).
+            For non-associative dimensions in paper space, <i>LinearScaleFactor</i> must be set individually
             for each layout viewport to accommodate viewport scaling.
             </para><para>
             <i>LinearScaleFactor</i> has no effect on angular dimensions, and is not applied to the values held in
@@ -12632,7 +13406,7 @@
         </member>
         <member name="P:ACadSharp.Tables.DimensionStyle.DimensionLineWeight">
             <summary>
-            Assigns lineweight to dimension lines
+            Assigns line weight to dimension lines
             (see DIMLWD System Variable).
             </summary>
             <value>
@@ -12642,7 +13416,7 @@
         </member>
         <member name="P:ACadSharp.Tables.DimensionStyle.ExtensionLineWeight">
             <summary>
-            Assigns lineweight to extension lines
+            Assigns line weight to extension lines
             (see DIMLWE System Variable).
             </summary>
             <value>
@@ -12925,7 +13699,7 @@
         </member>
         <member name="P:ACadSharp.Tables.Layer.LineType">
             <summary>
-            The linetype of an object. The default linetype is the linetype of the layer (ByLayer).
+            The line type of an object. The default line type is the line type of the layer (ByLayer).
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.Layer.PlotFlag">
@@ -12935,7 +13709,7 @@
         </member>
         <member name="P:ACadSharp.Tables.Layer.LineWeight">
             <summary>
-            Specifies the lineweight of an individual object or the default lineweight for the drawing.
+            Specifies the line weight of an individual object or the default line weight for the drawing.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.Layer.PlotStyleName">
@@ -12999,7 +13773,7 @@
         </member>
         <member name="T:ACadSharp.Tables.LineType">
             <summary>
-            Represents a <see cref="T:ACadSharp.Tables.LineType"/> entry
+            Represents a <see cref="T:ACadSharp.Tables.LineType"/> entry.
             </summary>
             <remarks>
             Object name <see cref="F:ACadSharp.DxfFileToken.TableLinetype"/> <br/>
@@ -13017,63 +13791,73 @@
         </member>
         <member name="P:ACadSharp.Tables.LineType.Description">
             <summary>
-            Descriptive text for linetype
+            Descriptive text for line type.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.LineType.PatternLen">
             <summary>
-            Total pattern length
+            Total pattern length.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.LineType.Alignment">
             <summary>
-            Alignment code
+            Alignment code.
             </summary>
             <value>
-            value is always 65, the ASCII code for A
+            value is always 65, the ASCII code for A.
             </value>
         </member>
         <member name="P:ACadSharp.Tables.LineType.Segments">
             <summary>
-            Linetype Segments
+            LineType Segments
             </summary>
+        </member>
+        <member name="M:ACadSharp.Tables.LineType.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSharp.Tables.LineType.AddSegment(ACadSharp.Tables.LineType.Segment)">
+            <summary>
+            Add a segment to this line type.
+            </summary>
+            <param name="segment"></param>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:ACadSharp.Tables.LineType.Clone">
             <inheritdoc/>
         </member>
         <member name="P:ACadSharp.Tables.LineType.Segment.Length">
             <summary>
-            Dash, dot or space length 
+            Dash, dot or space length.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.LineType.Segment.Shapeflag">
             <summary>
-            Complex linetype element type
+            Complex linetype element type.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.LineType.Segment.ShapeNumber">
             <summary>
-            Shape number 
+            Shape number.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.LineType.Segment.Offset">
             <summary>
-            Offset
+            Offset.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.LineType.Segment.Rotation">
             <summary>
-            Rotation value in radians of embedded shape or text
+            Rotation value in radians of embedded shape or text.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.LineType.Segment.Scale">
             <summary>
-            Scale value
+            Scale value.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.LineType.Segment.Text">
             <summary>
-            Text string
+            Text string.
             </summary>
             <remarks>
             Only present if <see cref="F:ACadSharp.Tables.LinetypeShapeFlags.Text"/> is present
@@ -13176,6 +13960,11 @@
             drawing was edited.
             </summary>
         </member>
+        <member name="E:ACadSharp.Tables.TableEntry.OnNameChanged">
+            <summary>
+            Event occurs when the <see cref="P:ACadSharp.Tables.TableEntry.Name"/> changes.
+            </summary>
+        </member>
         <member name="P:ACadSharp.Tables.TableEntry.SubclassMarker">
             <inheritdoc/>
         </member>
@@ -13188,6 +13977,13 @@
             <summary>
             Standard flags
             </summary>
+        </member>
+        <member name="M:ACadSharp.Tables.TableEntry.#ctor(System.String)">
+            <summary>
+            Default constructor.
+            </summary>
+            <param name="name">Name for the entry, must be unique is added to a <see cref="T:ACadSharp.CadDocument"/>.</param>
+            <exception cref="T:System.ArgumentNullException"></exception>
         </member>
         <member name="M:ACadSharp.Tables.TableEntry.ToString">
             <inheritdoc/>
@@ -13250,7 +14046,7 @@
         </member>
         <member name="T:ACadSharp.Tables.TextStyle">
             <summary>
-            Represents a <see cref="T:ACadSharp.Tables.TextStyle"/> entry
+            Represents a <see cref="T:ACadSharp.Tables.TextStyle"/> entry.
             </summary>
             <remarks>
             Object name <see cref="F:ACadSharp.DxfFileToken.TableStyle"/> <br/>
@@ -13286,7 +14082,7 @@
         </member>
         <member name="P:ACadSharp.Tables.TextStyle.BigFontFilename">
             <summary>
-            Bigfont file name, blank if none.
+            Big-font file name, blank if none.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.TextStyle.Height">
@@ -13319,13 +14115,16 @@
         </member>
         <member name="P:ACadSharp.Tables.TextStyle.TrueType">
             <summary>
-            A long value which contains a truetype font’s pitch and family, character set, and italic and bold flags
+            A long value which contains a true-type font’s pitch and family, character set, and italic and bold flags
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.TextStyle.IsShapeFile">
             <summary>
-            Flag that indicates wheater this <see cref="T:ACadSharp.Tables.TextStyle"/> is linked to a Shape file
+            Flag that indicates weather this <see cref="T:ACadSharp.Tables.TextStyle"/> is linked to a Shape file
             </summary>
+        </member>
+        <member name="M:ACadSharp.Tables.TextStyle.#ctor(System.String)">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Tables.ToleranceAlignment">
             <summary>
@@ -13349,7 +14148,7 @@
         </member>
         <member name="T:ACadSharp.Tables.UCS">
             <summary>
-            Represents a <see cref="T:ACadSharp.Tables.UCS"/> entry
+            Represents a <see cref="T:ACadSharp.Tables.UCS"/> entry.
             </summary>
             <remarks>
             Object name <see cref="F:ACadSharp.DxfFileToken.TableUcs"/> <br/>
@@ -13367,33 +14166,36 @@
         </member>
         <member name="P:ACadSharp.Tables.UCS.Origin">
             <summary>
-            Origin (in WCS)
+            Origin (in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.UCS.XAxis">
             <summary>
-            X-axis direction (in WCS)
+            X-axis direction (in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.UCS.YAxis">
             <summary>
-            Y-axis direction(in WCS)
+            Y-axis direction(in WCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.UCS.OrthographicType">
             <summary>
-            Orthographic type
+            Orthographic type.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.UCS.OrthographicViewType">
             <summary>
-            Always 0
+            Always 0.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.UCS.Elevation">
             <summary>
-            Elevation
+            Elevation.
             </summary>
+        </member>
+        <member name="M:ACadSharp.Tables.UCS.#ctor(System.String)">
+            <inheritdoc/>
         </member>
         <member name="T:ACadSharp.Tables.UscIconType">
             <summary>
@@ -13422,7 +14224,7 @@
         </member>
         <member name="T:ACadSharp.Tables.View">
             <summary>
-            Represents a <see cref="T:ACadSharp.Tables.View"/> entry
+            Represents a <see cref="T:ACadSharp.Tables.View"/> entry.
             </summary>
             <remarks>
             Object name <see cref="F:ACadSharp.DxfFileToken.TableView"/> <br/>
@@ -13440,47 +14242,47 @@
         </member>
         <member name="P:ACadSharp.Tables.View.Height">
             <summary>
-            View height (in DCS)
+            View height (in DCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.View.Width">
             <summary>
-            View width (in DCS)
+            View width (in DCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.View.LensLength">
             <summary>
-            View width (in DCS)
+            View width (in DCS).
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.View.FrontClipping">
             <summary>
-            Front clipping plane (offset from target point)
+            Front clipping plane (offset from target point).
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.View.BackClipping">
             <summary>
-            Back clipping plane (offset from target point)
+            Back clipping plane (offset from target point).
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.View.Angle">
             <summary>
-            Twist angle
+            Twist angle.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.View.ViewMode">
             <summary>
-            View mode (see VIEWMODE system variable)
+            View mode (see VIEWMODE system variable).
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.View.IsUcsAssociated">
             <summary>
-            1 if there is a UCS associated to this view; 0 otherwise
+            1 if there is a UCS associated to this view; 0 otherwise.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.View.IsPlottable">
             <summary>
-            1 if the camera is plottable
+            1 if the camera is plottable.
             </summary>
         </member>
         <member name="P:ACadSharp.Tables.View.RenderMode">
@@ -13910,6 +14712,26 @@
             Center of text (y-coordinate only), and overline top/underline bottom content.
             </summary>
         </member>
+        <member name="T:ACadSharp.Transparency">
+            <summary>
+            Represents the transparency for the graphical objects.
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Transparency.ByLayer">
+            <summary>
+            Gets the ByLayer transparency.
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Transparency.ByBlock">
+            <summary>
+            Gets the ByBlock transparency.
+            </summary>
+        </member>
+        <member name="P:ACadSharp.Transparency.Opaque">
+            <summary>
+            Gets the Opaque transparency.
+            </summary>
+        </member>
         <member name="P:ACadSharp.Transparency.IsByLayer">
             <summary>
             Defines if the transparency is defined by layer.
@@ -13925,12 +14747,28 @@
             Gets or sets the transparency value.
             </summary>
             <remarks>
-            Transparency values must be in range from 0 to 90, the reserved values -1 and 100 represents ByLayer and ByBlock.
+            Transparency values must be in range from 0 (opaque) to 90 (transparent), the reserved values -1 and 100 represents ByLayer and ByBlock.
             </remarks>
         </member>
-        <member name="M:ACadSharp.Transparency.FromValue(System.Int32)">
+        <member name="M:ACadSharp.Transparency.#ctor(System.Int16)">
             <summary>
-            Gets the transparency value within range of a valid value
+            Initializes a new instance of the Transparency struct.
+            </summary>
+            <param name="value">Alpha value range from 0 to 90.</param>
+            <remarks>
+            Transparency values must be in range from 0 (opaque) to 90 (transparent), the reserved values -1 and 100 represents ByLayer and ByBlock.
+            </remarks>
+        </member>
+        <member name="M:ACadSharp.Transparency.ToAlphaValue(ACadSharp.Transparency)">
+            <summary>
+            Gets the alpha value of a transperency.
+            </summary>
+            <param name="transparency"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ACadSharp.Transparency.FromAlphaValue(System.Int32)">
+            <summary>
+            Gets the transparency from a transparency value
             </summary>
             <param name="value">A transparency value</param>
             <returns>A <see cref="T:ACadSharp.Transparency"></see></returns>
@@ -14430,6 +15268,16 @@
             Bounding box representation aligned to XYZ axis.
             </summary>
         </member>
+        <member name="F:CSMath.BoundingBox.Null">
+            <summary>
+            Instance of a null bounding box.
+            </summary>
+        </member>
+        <member name="F:CSMath.BoundingBox.Infinite">
+            <summary>
+            Instance of an infinite bounding box.
+            </summary>
+        </member>
         <member name="P:CSMath.BoundingBox.Min">
             <summary>
             Get the min corner of the bounding box.
@@ -14454,7 +15302,7 @@
         </member>
         <member name="M:CSMath.BoundingBox.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
             <summary>
-            Bounding box contructor.
+            Bounding box constructor.
             </summary>
             <param name="minX"></param>
             <param name="minY"></param>
@@ -14463,12 +15311,33 @@
             <param name="maxY"></param>
             <param name="maxZ"></param>
         </member>
+        <member name="M:CSMath.BoundingBox.Move(CSMath.XYZ)">
+            <summary>
+            Move the bounding box the amount of specified units.
+            </summary>
+            <param name="xyz"></param>
+            <returns></returns>
+        </member>
         <member name="M:CSMath.BoundingBox.Merge(CSMath.BoundingBox)">
             <summary>
             Merge 2 boxes into the common one.
             </summary>
             <param name="box"></param>
             <returns>The merged box.</returns>
+        </member>
+        <member name="M:CSMath.BoundingBox.Merge(System.Collections.Generic.IEnumerable{CSMath.BoundingBox})">
+            <summary>
+            Merge Multiple boxes into the common one.
+            </summary>
+            <param name="boxes"></param>
+            <returns>The merged box.</returns>
+        </member>
+        <member name="M:CSMath.BoundingBox.FromPoints(System.Collections.Generic.IEnumerable{CSMath.XYZ})">
+            <summary>
+            Create a bounding box from a collection of points.
+            </summary>
+            <param name="points"></param>
+            <returns></returns>
         </member>
         <member name="P:CSMath.Geometry.ILine`1.Origin">
             <summary>
@@ -14750,29 +15619,29 @@
             <param name="v"></param>
             <returns>Result matrix</returns>
         </member>
-        <member name="F:CSMath.MathUtils.RadToDegFactor">
+        <member name="F:CSMath.Utilities.RadToDegFactor">
             <summary>
             Factor for converting radians to degrees.
             </summary>
         </member>
-        <member name="F:CSMath.MathUtils.DegToRadFactor">
+        <member name="F:CSMath.Utilities.DegToRadFactor">
             <summary>
             Factor for converting degrees to radians.
             </summary>
         </member>
-        <member name="F:CSMath.MathUtils.Epsilon">
+        <member name="F:CSMath.Utilities.Epsilon">
             <summary>
             Default tolerance
             </summary>
         </member>
-        <member name="M:CSMath.MathUtils.IsZero(System.Double)">
+        <member name="M:CSMath.Utilities.IsZero(System.Double)">
             <summary>
             Checks if a number is close to zero.
             </summary>
             <param name="number">Double precision number.</param>
             <returns>True if its close to one or false in any other case.</returns>
         </member>
-        <member name="M:CSMath.MathUtils.IsZero(System.Double,System.Double)">
+        <member name="M:CSMath.Utilities.IsZero(System.Double,System.Double)">
             <summary>
             Checks if a number is close to zero.
             </summary>
@@ -14780,30 +15649,30 @@
             <param name="threshold">Tolerance.</param>
             <returns>True if its close to one or false in any other case.</returns>
         </member>
-        <member name="M:CSMath.MathUtils.RadToDeg(System.Double)">
+        <member name="M:CSMath.Utilities.RadToDeg(System.Double)">
             <summary>
             Convert a value from radian to degree
             </summary>
-            <param name="degree">Value in radians</param>
+            <param name="value">Value in radians</param>
             <returns>The radian value</returns>
         </member>
-        <member name="M:CSMath.MathUtils.DegToRad(System.Double)">
+        <member name="M:CSMath.Utilities.DegToRad(System.Double)">
             <summary>
             Convert a value from degree to radian
             </summary>
-            <param name="degree">Value in degrees</param>
+            <param name="value">Value in degrees</param>
             <returns>The radian value</returns>
         </member>
-        <member name="M:CSMath.MathUtils.Sin(System.Double)">
+        <member name="M:CSMath.Utilities.Sin(System.Double)">
             <summary>
-            Returns the sine of specific angle in radians adjusting the value to 0 using <see cref="F:CSMath.MathUtils.Epsilon"/> as tolerance.
+            Returns the sine of specific angle in radians adjusting the value to 0 using <see cref="F:CSMath.Utilities.Epsilon"/> as tolerance.
             </summary>
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="M:CSMath.MathUtils.Cos(System.Double)">
+        <member name="M:CSMath.Utilities.Cos(System.Double)">
             <summary>
-            Returns the cosine of specific angle in radians adjusting the value to 0 using <see cref="F:CSMath.MathUtils.Epsilon"/> as tolerance.
+            Returns the cosine of specific angle in radians adjusting the value to 0 using <see cref="F:CSMath.Utilities.Epsilon"/> as tolerance.
             </summary>
             <param name="value"></param>
             <returns></returns>
@@ -14899,6 +15768,71 @@
             <param name="other"></param>
             <param name="ndecimals">Number of decimals digits to be set as precision.</param>
             <returns></returns>
+        </member>
+        <member name="T:CSMath.Transform">
+            <summary>
+            Contains the information for translate/scale/rotation or transform matrix to apply to a geometric shape.
+            </summary>
+        </member>
+        <member name="P:CSMath.Transform.Translation">
+            <summary>
+            Translation applied in the transformation.
+            </summary>
+        </member>
+        <member name="P:CSMath.Transform.Scale">
+            <summary>
+            Scale applied in the transformation.
+            </summary>
+        </member>
+        <member name="P:CSMath.Transform.EulerRotation">
+            <summary>
+            Rotation in Euler angles, the value is in degrees.
+            </summary>
+        </member>
+        <member name="P:CSMath.Transform.Quaternion">
+            <summary>
+            Rotation represented in quaternion form.
+            </summary>
+        </member>
+        <member name="P:CSMath.Transform.Matrix">
+            <summary>
+            Transform matrix.
+            </summary>
+        </member>
+        <member name="M:CSMath.Transform.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:CSMath.Transform.#ctor(CSMath.XYZ,CSMath.XYZ,CSMath.XYZ)">
+            <summary>
+            Initialize a transform instance with the specified values.
+            </summary>
+            <param name="translation"></param>
+            <param name="scale"></param>
+            <param name="rotation">Rotation value in degrees.</param>
+        </member>
+        <member name="M:CSMath.Transform.#ctor(CSMath.Matrix4)">
+            <summary>
+            Initialize a transform instance with the specified matrix.
+            </summary>
+            <param name="matrix"></param>
+        </member>
+        <member name="M:CSMath.Transform.ApplyTransform(CSMath.XYZ,System.Boolean)">
+            <summary>
+            Apply transform to a <see cref="T:CSMath.XYZ"/>.
+            </summary>
+            <param name="xyz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSMath.Transform.TryDecompose(CSMath.XYZ@,CSMath.XYZ@,CSMath.Quaternion@)">
+            <summary>
+            Try to decompose the transform into it's components.
+            </summary>
+            <param name="translation"></param>
+            <param name="scaling"></param>
+            <param name="rotation"></param>
+            <returns>true, if the decompose has succeeded.</returns>
         </member>
         <member name="M:CSMath.VectorExtensions.AngleFrom``1(``0,``0)">
             <summary>
@@ -15070,6 +16004,14 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="v"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSMath.VectorExtensions.RoundZero``1(``0)">
+            <summary>
+            Round the zeros within the threshold defined by <see cref="!:MathUtils.Epsilon"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="vector"></param>
             <returns></returns>
         </member>
         <member name="M:CSMath.XY.op_Addition(CSMath.XY,CSMath.XY)">
