@@ -37,12 +37,18 @@
 			_scalesTabPage = new TabPage();
 			_cssTabPage = new TabPage();
 			_splitContainer2 = new SplitContainer();
+			_rightTabControl = new TabControl();
+			_propertiesTabPage = new TabPage();
 			_propertyGrid = new PropertyGrid();
+			_defsTabPage = new TabPage();
+			_defsTreeView = new TreeView();
 			_menuStrip = new MenuStrip();
 			_fileToolStripMenuItem = new ToolStripMenuItem();
 			_openMenuItem = new ToolStripMenuItem();
 			_saveMenuItem = new ToolStripMenuItem();
 			_saveAsMenuItem = new ToolStripMenuItem();
+			_recentlyOpenedFilesToolStripSeparator = new ToolStripSeparator();
+			_recentlyOpenedFilesToolStripMenuItem = new ToolStripMenuItem();
 			_toolStripSeparator1 = new ToolStripSeparator();
 			_exitMenuItem = new ToolStripMenuItem();
 			_editMenuItem = new ToolStripMenuItem();
@@ -85,8 +91,6 @@
 			_statusLabel = new ToolStripStatusLabel();
 			_textChangedTimer = new System.Windows.Forms.Timer(components);
 			_fontDialog = new FontDialog();
-			_recentlyOpenedFilesToolStripMenuItem = new ToolStripMenuItem();
-			_recentlyOpenedFilesToolStripSeparator = new ToolStripSeparator();
 			((System.ComponentModel.ISupportInitialize)_splitContainer1).BeginInit();
 			_splitContainer1.Panel1.SuspendLayout();
 			_splitContainer1.Panel2.SuspendLayout();
@@ -95,6 +99,9 @@
 			((System.ComponentModel.ISupportInitialize)_splitContainer2).BeginInit();
 			_splitContainer2.Panel2.SuspendLayout();
 			_splitContainer2.SuspendLayout();
+			_rightTabControl.SuspendLayout();
+			_propertiesTabPage.SuspendLayout();
+			_defsTabPage.SuspendLayout();
 			_menuStrip.SuspendLayout();
 			_webBrowserContextMenuStrip.SuspendLayout();
 			_statusStrip.SuspendLayout();
@@ -167,18 +174,61 @@
 			// 
 			// _splitContainer2.Panel2
 			// 
-			_splitContainer2.Panel2.Controls.Add(_propertyGrid);
+			_splitContainer2.Panel2.Controls.Add(_rightTabControl);
 			_splitContainer2.Size = new Size(744, 716);
 			_splitContainer2.SplitterDistance = 455;
 			_splitContainer2.TabIndex = 0;
 			// 
+			// _rightTabControl
+			// 
+			_rightTabControl.Controls.Add(_propertiesTabPage);
+			_rightTabControl.Controls.Add(_defsTabPage);
+			_rightTabControl.Dock = DockStyle.Fill;
+			_rightTabControl.Location = new Point(0, 0);
+			_rightTabControl.Name = "_rightTabControl";
+			_rightTabControl.SelectedIndex = 0;
+			_rightTabControl.Size = new Size(285, 716);
+			_rightTabControl.TabIndex = 2;
+			// 
+			// _propertiesTabPage
+			// 
+			_propertiesTabPage.Controls.Add(_propertyGrid);
+			_propertiesTabPage.Location = new Point(4, 24);
+			_propertiesTabPage.Name = "_propertiesTabPage";
+			_propertiesTabPage.Padding = new Padding(3);
+			_propertiesTabPage.Size = new Size(277, 688);
+			_propertiesTabPage.TabIndex = 0;
+			_propertiesTabPage.Text = "Properties";
+			_propertiesTabPage.UseVisualStyleBackColor = true;
+			// 
 			// _propertyGrid
 			// 
 			_propertyGrid.Dock = DockStyle.Fill;
-			_propertyGrid.Location = new Point(0, 0);
+			_propertyGrid.Location = new Point(3, 3);
 			_propertyGrid.Name = "_propertyGrid";
-			_propertyGrid.Size = new Size(285, 716);
+			_propertyGrid.Size = new Size(271, 682);
 			_propertyGrid.TabIndex = 0;
+			// 
+			// _defsTabPage
+			// 
+			_defsTabPage.Controls.Add(_defsTreeView);
+			_defsTabPage.Location = new Point(4, 24);
+			_defsTabPage.Name = "_defsTabPage";
+			_defsTabPage.Padding = new Padding(3);
+			_defsTabPage.Size = new Size(277, 688);
+			_defsTabPage.TabIndex = 1;
+			_defsTabPage.Text = "Defs";
+			_defsTabPage.UseVisualStyleBackColor = true;
+			// 
+			// _defsTreeView
+			// 
+			_defsTreeView.CheckBoxes = true;
+			_defsTreeView.Dock = DockStyle.Fill;
+			_defsTreeView.Location = new Point(3, 3);
+			_defsTreeView.Name = "_defsTreeView";
+			_defsTreeView.Size = new Size(271, 682);
+			_defsTreeView.TabIndex = 1;
+			_defsTreeView.AfterCheck += _defsTreeView_AfterCheck;
 			// 
 			// _menuStrip
 			// 
@@ -200,7 +250,7 @@
 			// 
 			_openMenuItem.Name = "_openMenuItem";
 			_openMenuItem.ShortcutKeys = Keys.Control | Keys.O;
-			_openMenuItem.Size = new Size(249, 22);
+			_openMenuItem.Size = new Size(196, 22);
 			_openMenuItem.Text = "Open";
 			_openMenuItem.Click += eventOpenClick;
 			// 
@@ -208,7 +258,7 @@
 			// 
 			_saveMenuItem.Name = "_saveMenuItem";
 			_saveMenuItem.ShortcutKeys = Keys.Control | Keys.S;
-			_saveMenuItem.Size = new Size(249, 22);
+			_saveMenuItem.Size = new Size(196, 22);
 			_saveMenuItem.Text = "Save";
 			_saveMenuItem.Click += eventSaveSvgGroupClick;
 			// 
@@ -216,20 +266,31 @@
 			// 
 			_saveAsMenuItem.Name = "_saveAsMenuItem";
 			_saveAsMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
-			_saveAsMenuItem.Size = new Size(249, 22);
+			_saveAsMenuItem.Size = new Size(196, 22);
 			_saveAsMenuItem.Text = "Save as ...";
 			_saveAsMenuItem.Click += eventSaveSvgGroupAsClick;
+			// 
+			// _recentlyOpenedFilesToolStripSeparator
+			// 
+			_recentlyOpenedFilesToolStripSeparator.Name = "_recentlyOpenedFilesToolStripSeparator";
+			_recentlyOpenedFilesToolStripSeparator.Size = new Size(193, 6);
+			// 
+			// _recentlyOpenedFilesToolStripMenuItem
+			// 
+			_recentlyOpenedFilesToolStripMenuItem.Name = "_recentlyOpenedFilesToolStripMenuItem";
+			_recentlyOpenedFilesToolStripMenuItem.Size = new Size(196, 22);
+			_recentlyOpenedFilesToolStripMenuItem.Text = "Recently Opened Files";
 			// 
 			// _toolStripSeparator1
 			// 
 			_toolStripSeparator1.Name = "_toolStripSeparator1";
-			_toolStripSeparator1.Size = new Size(246, 6);
+			_toolStripSeparator1.Size = new Size(193, 6);
 			// 
 			// _exitMenuItem
 			// 
 			_exitMenuItem.Name = "_exitMenuItem";
 			_exitMenuItem.ShortcutKeys = Keys.Alt | Keys.F4;
-			_exitMenuItem.Size = new Size(249, 22);
+			_exitMenuItem.Size = new Size(196, 22);
 			_exitMenuItem.Text = "Exit";
 			_exitMenuItem.Click += eventExit_Click;
 			// 
@@ -311,7 +372,7 @@
 			// 
 			_quickFindMenuItem.Name = "_quickFindMenuItem";
 			_quickFindMenuItem.ShortcutKeys = Keys.Control | Keys.F;
-			_quickFindMenuItem.Size = new Size(289, 22);
+			_quickFindMenuItem.Size = new Size(236, 22);
 			_quickFindMenuItem.Text = "Quick Find";
 			_quickFindMenuItem.Click += eventQuickFind_Click;
 			// 
@@ -319,7 +380,7 @@
 			// 
 			_findAndReplaceMenuItem.Name = "_findAndReplaceMenuItem";
 			_findAndReplaceMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F;
-			_findAndReplaceMenuItem.Size = new Size(289, 22);
+			_findAndReplaceMenuItem.Size = new Size(236, 22);
 			_findAndReplaceMenuItem.Text = "Find and Replace";
 			_findAndReplaceMenuItem.Click += eventFindAndReplace_Click;
 			// 
@@ -334,14 +395,14 @@
 			// 
 			_centerToFitMenuItem.Name = "_centerToFitMenuItem";
 			_centerToFitMenuItem.ShortcutKeys = Keys.Control | Keys.E;
-			_centerToFitMenuItem.Size = new Size(181, 22);
+			_centerToFitMenuItem.Size = new Size(180, 22);
 			_centerToFitMenuItem.Text = "Center to Fit";
 			_centerToFitMenuItem.Click += eventCenterToFitMenuItem_Click;
 			// 
 			// _toolStripSeparator3
 			// 
 			_toolStripSeparator3.Name = "_toolStripSeparator3";
-			_toolStripSeparator3.Size = new Size(178, 6);
+			_toolStripSeparator3.Size = new Size(177, 6);
 			// 
 			// _propertyGridToolStripMenuItem
 			// 
@@ -349,25 +410,26 @@
 			_propertyGridToolStripMenuItem.CheckOnClick = true;
 			_propertyGridToolStripMenuItem.CheckState = CheckState.Checked;
 			_propertyGridToolStripMenuItem.Name = "_propertyGridToolStripMenuItem";
-			_propertyGridToolStripMenuItem.Size = new Size(181, 22);
+			_propertyGridToolStripMenuItem.Size = new Size(180, 22);
 			_propertyGridToolStripMenuItem.Text = "Property Grid";
+			_propertyGridToolStripMenuItem.CheckedChanged += eventPropertyGridMenuItem_CheckedChanged;
 			// 
 			// _toolStripSeparator5
 			// 
 			_toolStripSeparator5.Name = "_toolStripSeparator5";
-			_toolStripSeparator5.Size = new Size(178, 6);
+			_toolStripSeparator5.Size = new Size(177, 6);
 			// 
 			// _collapseAllMenuItem
 			// 
 			_collapseAllMenuItem.Name = "_collapseAllMenuItem";
-			_collapseAllMenuItem.Size = new Size(181, 22);
+			_collapseAllMenuItem.Size = new Size(180, 22);
 			_collapseAllMenuItem.Text = "Collapse All";
 			_collapseAllMenuItem.Click += eventCollapseAllMenuItem_Click;
 			// 
 			// _expandAllToolStripMenuItem
 			// 
 			_expandAllToolStripMenuItem.Name = "_expandAllToolStripMenuItem";
-			_expandAllToolStripMenuItem.Size = new Size(181, 22);
+			_expandAllToolStripMenuItem.Size = new Size(180, 22);
 			_expandAllToolStripMenuItem.Text = "Expand All";
 			_expandAllToolStripMenuItem.Click += eventExpandAllMenuItem_Click;
 			// 
@@ -381,7 +443,7 @@
 			// _restorePreviousMenuItem
 			// 
 			_restorePreviousMenuItem.Name = "_restorePreviousMenuItem";
-			_restorePreviousMenuItem.Size = new Size(161, 22);
+			_restorePreviousMenuItem.Size = new Size(180, 22);
 			_restorePreviousMenuItem.Text = "Restore Previous";
 			_restorePreviousMenuItem.Click += eventFlipContent_Click;
 			// 
@@ -497,17 +559,6 @@
 			_textChangedTimer.Interval = 500;
 			_textChangedTimer.Tick += eventTextChangedTimer_Tick;
 			// 
-			// _recentlyOpenedFilesToolStripMenuItem
-			// 
-			_recentlyOpenedFilesToolStripMenuItem.Name = "_recentlyOpenedFilesToolStripMenuItem";
-			_recentlyOpenedFilesToolStripMenuItem.Size = new Size(249, 22);
-			_recentlyOpenedFilesToolStripMenuItem.Text = "Recently Opened Files";
-			// 
-			// _recentlyOpenedFilesToolStripSeparator
-			// 
-			_recentlyOpenedFilesToolStripSeparator.Name = "_recentlyOpenedFilesToolStripSeparator";
-			_recentlyOpenedFilesToolStripSeparator.Size = new Size(246, 6);
-			// 
 			// MainForm
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -528,6 +579,9 @@
 			_splitContainer2.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)_splitContainer2).EndInit();
 			_splitContainer2.ResumeLayout(false);
+			_rightTabControl.ResumeLayout(false);
+			_propertiesTabPage.ResumeLayout(false);
+			_defsTabPage.ResumeLayout(false);
 			_menuStrip.ResumeLayout(false);
 			_menuStrip.PerformLayout();
 			_webBrowserContextMenuStrip.ResumeLayout(false);
@@ -609,5 +663,9 @@
 		private ToolStripMenuItem editorFontToolStripMenuItem;
 		private ToolStripSeparator _recentlyOpenedFilesToolStripSeparator;
 		private ToolStripMenuItem _recentlyOpenedFilesToolStripMenuItem;
+		private TabControl _rightTabControl;
+		private TabPage _propertiesTabPage;
+		private TabPage _defsTabPage;
+		private TreeView _defsTreeView;
 	}
 }
