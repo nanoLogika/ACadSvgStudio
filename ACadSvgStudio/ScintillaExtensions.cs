@@ -18,5 +18,15 @@ namespace ACadSvgStudio {
 		public static void ExpandChildren(this ScintillaNET.Scintilla scintilla) {
 			scintilla.DirectMessage(NativeMethods.SCI_EXPANDCHILDREN, IntPtr.Zero, IntPtr.Zero);
 		}
+
+		public static int GetFoldExpanded(this ScintillaNET.Scintilla scintilla, int lineIndex)
+		{
+			return scintilla.DirectMessage(NativeMethods.SCI_GETFOLDEXPANDED, new IntPtr(lineIndex), IntPtr.Zero).ToInt32();
+		}
+
+		public static void SetFoldExpanded(this ScintillaNET.Scintilla scintilla, int lineIndex, int state)
+		{
+			scintilla.DirectMessage(NativeMethods.SCI_FOLDLINE, new IntPtr(lineIndex), new IntPtr(state));
+		}
 	}
 }

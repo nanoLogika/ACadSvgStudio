@@ -229,51 +229,76 @@ namespace ACadSvgStudio {
             this.Text = $"{AppName} - {fileFormat}: {new FileInfo(filename).Name}";
         }
 
-        #region -  Devs tree view																	-
+		#region -  Devs tree view																	-
 
-        private void eventDefsTreeViewAfterCheck(object sender, TreeViewEventArgs e) {
-            if (_suppressOnChecked) {
-                return;
-            }
+		private void eventDefsTreeViewAfterCheck(object sender, TreeViewEventArgs e) {
+			if (_suppressOnChecked) {
+				return;
+			}
 
-            TreeNode treeNode = e.Node!;
 
-            XDocument xDocument = XDocument.Parse(_scintillaSvgGroupEditor.Text);
+			// Save collapsed/expanded states
+			List<int> prevFolderExpanded = new List<int>();
+			for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++) {
+				prevFolderExpanded.Add(_scintillaSvgGroupEditor.GetFoldExpanded(x));
+			}
 
-            if (treeNode.Checked) {
-                if (treeNode.Tag is UseElement useElement) {
-                    xDocument.Root!.AddFirst(useElement.GetXml());
-                }
+
+			TreeNode treeNode = e.Node!;
+
+			XDocument xDocument = XDocument.Parse(_scintillaSvgGroupEditor.Text);
+
+			if (treeNode.Checked) {
+				if (treeNode.Tag is UseElement useElement) {
+					xDocument.Root!.AddFirst(useElement.GetXml());
+					prevFolderExpanded.Insert(1, 1);
+				}
                 else if (treeNode.Tag is IList<UseElement> useElements) {
                     foreach (UseElement ue in useElements) {
-                        xDocument.Root!.AddFirst(ue.GetXml());
-                    }
-                }
-            }
+						xDocument.Root!.AddFirst(ue.GetXml());
+						prevFolderExpanded.Insert(1, 1);
+					}
+				}
+			}
             else {
-                List<XElement> useElements = DefsUtils.FindUseElements(treeNode.Name, xDocument.Root!);
+				List<XElement> useElements = DefsUtils.FindUseElements(treeNode.Name, xDocument.Root!);
                 foreach (XElement useElement in useElements) {
-                    useElement.Remove();
-                }
-            }
+					useElement.Remove();
+					prevFolderExpanded.RemoveAt(1);
+				}
+			}
 
-            //	TODO This should be optimized
-            //	Update xml display only once!
-            _scintillaSvgGroupEditor.Text = xDocument.ToString();
+			//	TODO This should be optimized
+			//	Update xml display only once!
+			_scintillaSvgGroupEditor.Text = xDocument.ToString();
 
-            TreeNode parent = treeNode.Parent;
+
+			// Restore collapsed/expanded states
+			for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++) {
+				if (prevFolderExpanded[x] == 1) {
+					_scintillaSvgGroupEditor.SetFoldExpanded(x, prevFolderExpanded[x]);
+				}
+			}
+			for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++) {
+				if (prevFolderExpanded[x] == 0) {
+					_scintillaSvgGroupEditor.SetFoldExpanded(x, prevFolderExpanded[x]);
+				}
+			}
+
+
+			TreeNode parent = treeNode.Parent;
             if (treeNode.Checked) {
                 if (parent != null) {
-                    parent.Checked = false;
-                }
+					parent.Checked = false;
+				}
                 foreach (TreeNode childTreeNode in treeNode.Nodes) {
-                    childTreeNode.Checked = false;
-                }
-            }
-        }
+					childTreeNode.Checked = false;
+				}
+			}
+		}
 
 
-        private void collectFlatListOfTreeNodes(TreeNodeCollection nodes, IDictionary<string, TreeNode> flatListOfTreeNodes) {
+		private void collectFlatListOfTreeNodes(TreeNodeCollection nodes, IDictionary<string, TreeNode> flatListOfTreeNodes) {
             foreach (TreeNode node in nodes) {
                 flatListOfTreeNodes.Add(node.Name, node);
                 collectFlatListOfTreeNodes(node.Nodes, flatListOfTreeNodes);
