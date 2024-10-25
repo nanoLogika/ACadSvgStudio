@@ -48,8 +48,8 @@ namespace ACadSvgStudio {
         private string? _loadedFilename;
         private string? _loadedDwgFilename;
 
-        //  Current-conversion Info
-        private string _conversionLog;
+		//  Current-conversion Info
+		private string _conversionLog;
         private bool _contentChanged;
         private ISet<string> _occurringEntities;
 
@@ -289,7 +289,11 @@ namespace ACadSvgStudio {
 
             IDictionary<string, TreeNode> prevTreeNodes = new Dictionary<string, TreeNode>();
             foreach (TreeNode node in _defsTreeView.Nodes) {
-                prevTreeNodes.Add(node.Name, node);
+				prevTreeNodes.Add(node.Name, node);
+
+				foreach (TreeNode childNode in node.Nodes) {
+					prevTreeNodes.Add(childNode.Name, childNode);
+				}
             }
 
             List<TreeNode> newTreeNodes = new List<TreeNode>();
@@ -316,6 +320,13 @@ namespace ACadSvgStudio {
                     node.Text = prevNode.Text;
                     node.Tag = prevNode.Tag;
                 }
+
+                foreach (TreeNode childNode in node.Nodes) {
+					if (prevTreeNodes.TryGetValue(childNode.Name, out TreeNode prevChildNode)) {
+						childNode.Text = prevChildNode.Text;
+						childNode.Tag = prevChildNode.Tag;
+					}
+				}
             }
 
             //	Scan list of <use> tags
