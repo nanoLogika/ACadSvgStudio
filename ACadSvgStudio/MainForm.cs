@@ -273,6 +273,32 @@ namespace ACadSvgStudio {
         }
 
 
+        private void collectFlatListOfTreeNodes(TreeNodeCollection nodes, IDictionary<string, TreeNode> flatListOfTreeNodes) {
+            foreach (TreeNode node in nodes) {
+                flatListOfTreeNodes.Add(node.Name, node);
+                collectFlatListOfTreeNodes(node.Nodes, flatListOfTreeNodes);
+			}
+        }
+
+        private void applyFlatListOfTreeNodes(TreeNode newTreeNode, IDictionary<string, TreeNode> prevTreeNodes) {
+			if (prevTreeNodes.TryGetValue(newTreeNode.Name, out TreeNode prevNode)) {
+				if (prevNode.IsExpanded) {
+					newTreeNode.Expand();
+				}
+				else {
+					newTreeNode.Collapse();
+				}
+				//	Extended Text and UseElements may be present at previous tree node
+				newTreeNode.Text = prevNode.Text;
+				newTreeNode.Tag = prevNode.Tag;
+			}
+
+			foreach (TreeNode node in newTreeNode.Nodes) {
+                applyFlatListOfTreeNodes(node, prevTreeNodes);
+			}
+		}
+
+
         private bool updateDefs(string xmlValue) {
             if (string.IsNullOrWhiteSpace(xmlValue)) {
                 return false;
@@ -288,13 +314,7 @@ namespace ACadSvgStudio {
             }
 
             IDictionary<string, TreeNode> prevTreeNodes = new Dictionary<string, TreeNode>();
-            foreach (TreeNode node in _defsTreeView.Nodes) {
-				prevTreeNodes.Add(node.Name, node);
-
-				foreach (TreeNode childNode in node.Nodes) {
-					prevTreeNodes.Add(childNode.Name, childNode);
-				}
-            }
+            collectFlatListOfTreeNodes(_defsTreeView.Nodes, prevTreeNodes);
 
             List<TreeNode> newTreeNodes = new List<TreeNode>();
 
@@ -308,26 +328,8 @@ namespace ACadSvgStudio {
             _defsTreeView.Nodes.Clear();
             foreach (TreeNode node in newTreeNodes) {
                 _defsTreeView.Nodes.Add(node);
-
-                if (prevTreeNodes.TryGetValue(node.Name, out TreeNode prevNode)) {
-                    if (prevNode.IsExpanded) {
-                        node.Expand();
-                    }
-                    else {
-                        node.Collapse();
-                    }
-                    //	Extended Text and UseElements may be present at previous tree node
-                    node.Text = prevNode.Text;
-                    node.Tag = prevNode.Tag;
-                }
-
-                foreach (TreeNode childNode in node.Nodes) {
-					if (prevTreeNodes.TryGetValue(childNode.Name, out TreeNode prevChildNode)) {
-						childNode.Text = prevChildNode.Text;
-						childNode.Tag = prevChildNode.Tag;
-					}
-				}
-            }
+				applyFlatListOfTreeNodes(node, prevTreeNodes);
+			}
 
             //	Scan list of <use> tags
             IList<UseElement> usedDefsItems = DefsUtils.FindAllUsedDefs(xElement);
