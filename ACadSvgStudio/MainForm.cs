@@ -17,6 +17,7 @@ using CefSharp.Dom;
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
 using SvgElements;
+using ACadSvgStudio.Defs;
 
 namespace ACadSvgStudio {
 
@@ -47,10 +48,12 @@ namespace ACadSvgStudio {
         private string? _loadedFilename;
         private string? _loadedDwgFilename;
 
-        //  Current-conversion Info
-        private string _conversionLog;
+		//  Current-conversion Info
+		private string _conversionLog;
         private bool _contentChanged;
         private ISet<string> _occurringEntities;
+
+        private bool _suppressOnChecked = false;
 
         //  Flipped data and info
         private string _flippedFilename;
@@ -226,6 +229,177 @@ namespace ACadSvgStudio {
             this.Text = $"{AppName} - {fileFormat}: {new FileInfo(filename).Name}";
         }
 
+        #region -  Devs tree view																	-
+
+        private void eventDefsTreeViewAfterCheck(object sender, TreeViewEventArgs e) {
+            if (_suppressOnChecked) {
+                return;
+            }
+
+            TreeNode treeNode = e.Node!;
+
+            XDocument xDocument = XDocument.Parse(_scintillaSvgGroupEditor.Text);
+
+            if (treeNode.Checked) {
+                if (treeNode.Tag is UseElement useElement) {
+                    xDocument.Root!.AddFirst(useElement.GetXml());
+                }
+                else if (treeNode.Tag is IList<UseElement> useElements) {
+                    foreach (UseElement ue in useElements) {
+                        xDocument.Root!.AddFirst(ue.GetXml());
+                    }
+                }
+            }
+            else {
+                List<XElement> useElements = DefsUtils.FindUseElements(treeNode.Name, xDocument.Root!);
+                foreach (XElement useElement in useElements) {
+                    useElement.Remove();
+                }
+            }
+
+            //	TODO This should be optimized
+            //	Update xml display only once!
+            _scintillaSvgGroupEditor.Text = xDocument.ToString();
+
+            TreeNode parent = treeNode.Parent;
+            if (treeNode.Checked) {
+                if (parent != null) {
+                    parent.Checked = false;
+                }
+                foreach (TreeNode childTreeNode in treeNode.Nodes) {
+                    childTreeNode.Checked = false;
+                }
+            }
+        }
+
+
+        private void collectFlatListOfTreeNodes(TreeNodeCollection nodes, IDictionary<string, TreeNode> flatListOfTreeNodes) {
+            foreach (TreeNode node in nodes) {
+                flatListOfTreeNodes.Add(node.Name, node);
+                collectFlatListOfTreeNodes(node.Nodes, flatListOfTreeNodes);
+			}
+        }
+
+        private void applyFlatListOfTreeNodes(TreeNode newTreeNode, IDictionary<string, TreeNode> prevTreeNodes) {
+			if (prevTreeNodes.TryGetValue(newTreeNode.Name, out TreeNode prevNode)) {
+				if (prevNode.IsExpanded) {
+					newTreeNode.Expand();
+				}
+				else {
+					newTreeNode.Collapse();
+				}
+				//	Extended Text and UseElements may be present at previous tree node
+				newTreeNode.Text = prevNode.Text;
+				newTreeNode.Tag = prevNode.Tag;
+			}
+
+			foreach (TreeNode node in newTreeNode.Nodes) {
+                applyFlatListOfTreeNodes(node, prevTreeNodes);
+			}
+		}
+
+
+        private bool updateDefs(string xmlValue) {
+            if (string.IsNullOrWhiteSpace(xmlValue)) {
+                return false;
+            }
+
+            XElement xElement = XElement.Parse(xmlValue);
+
+            List<DefsItem> defsItems = new List<DefsItem>();
+            DefsUtils.FindAllDefs(xElement, null, defsItems);
+
+            if (defsItems.Count == 0) {
+                return false;
+            }
+
+            IDictionary<string, TreeNode> prevTreeNodes = new Dictionary<string, TreeNode>();
+            collectFlatListOfTreeNodes(_defsTreeView.Nodes, prevTreeNodes);
+
+            List<TreeNode> newTreeNodes = new List<TreeNode>();
+
+            foreach (DefsItem defsItem in defsItems) {
+                TreeNode node = createDefsTreeNode(defsItem);
+                newTreeNodes.Add(node);
+            }
+
+            //	Build new tree but restore tags and expanded/collapsed from previous
+            //	all nodes are unchecked.
+            _defsTreeView.Nodes.Clear();
+            foreach (TreeNode node in newTreeNodes) {
+                _defsTreeView.Nodes.Add(node);
+				applyFlatListOfTreeNodes(node, prevTreeNodes);
+			}
+
+            //	Scan list of <use> tags
+            IList<UseElement> usedDefsItems = DefsUtils.FindAllUsedDefs(xElement);
+            IList<string> assignedDefIds = new List<string>();
+            foreach (UseElement useElement in usedDefsItems) {
+                string id = useElement.GroupId.Substring(1);
+
+                TreeNode node = findNode(_defsTreeView.Nodes, id);
+                if (node != null) {
+                    if (useElement.X != 0 || useElement.Y != 0) {
+                        node.Text = $"{id} ({useElement.X}, {useElement.Y})";
+                    }
+                    //	Only expand to List of UseElement when Tag was set here before
+                    if (assignedDefIds.Contains(id)) {
+                        if (node.Tag is UseElement tagUseElement) {
+                            node.Tag = new List<UseElement>() { tagUseElement, useElement };
+                        }
+                        else if (node.Tag is IList<UseElement>) {
+                            ((List<UseElement>)node.Tag).Add(useElement);
+                        }
+                        node.Text = $"{id} (multiple pos)";
+                    }
+                    else {
+                        //	This may override a tag from the previous tree vie
+                        node.Tag = useElement;
+                        assignedDefIds.Add(id);
+                    }
+
+                    _suppressOnChecked = true;
+                    node.Checked = true;
+                    _suppressOnChecked = false;
+                }
+            }
+
+            return true;
+        }
+
+
+        private TreeNode findNode(TreeNodeCollection nodes, string id) {
+            foreach (TreeNode node in nodes) {
+                if (node.Name == id) {
+                    return node;
+                }
+                else {
+                    TreeNode foundNode = findNode(node.Nodes, id);
+                    if (foundNode != null) {
+                        return foundNode;
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        private TreeNode createDefsTreeNode(DefsItem defsItem) {
+            TreeNode treeNode = new TreeNode() {
+                Name = defsItem.Id,
+                Text = defsItem.Id,
+                Tag = new UseElement().WithGroupId(defsItem.Id)
+            };
+
+            foreach (DefsItem childDefsItem in defsItem.Children) {
+                TreeNode childTreeNode = createDefsTreeNode(childDefsItem);
+                treeNode.Nodes.Add(childTreeNode);
+            }
+
+            return treeNode;
+        }
+
+        #endregion
 
         private void readDwgFile(string filename) {
             createConversionContext();
@@ -1181,6 +1355,9 @@ namespace ACadSvgStudio {
 
             XElement svg = svgElement.GetXml();
             sb.AppendLine(svgElement.ToString().Replace("&gt;", ">").Replace("&lt;", "<"));
+
+            bool hasDefs = updateDefs(svg.Value);
+            _defsTabPage.Visible = hasDefs;
 
             string svgText = sb.ToString();
             return svgText;

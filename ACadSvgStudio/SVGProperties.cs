@@ -738,18 +738,63 @@ namespace ACadSvgStudio {
 		}
 
 
-		public ConversionOptions GetConversionOptions() {
+        [Category("Conversion Options")]
+		[DisplayName("Concentrate Inserts (converted to <use>)")]
+		[Description("Inserts converted to <use> elements are concentrated at the end of the main group.")]
+		public bool ConcentrateInserts {
+			get {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    return Settings.Default.GroupInserts;
+                }
+                else {
+					return false;
+                }
+			}
+			set {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    Settings.Default.GroupInserts = value;
+                    Settings.Default.Save();
+                }
+            }
+        }
+
+
+        [Category("Conversion Options")]
+        [DisplayName("Create extra group for free elements")]
+        [Description("Elemens that are not part of a block converted to <defs><g> ... are grouped in a new group included in the <defs> section. A <use> element referring to that group is placed at the beginning of the main group.")]
+        public bool CreateExtraGroupForFreeElements {
+            get {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    return Settings.Default.CreateExtraGroupForFreeElements;
+                }
+                else {
+                    return false;
+                }
+            }
+            set {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    Settings.Default.CreateExtraGroupForFreeElements = value;
+                    Settings.Default.Save();
+                }
+            }
+        }
+
+
+
+        public ConversionOptions GetConversionOptions() {
 			return new ConversionOptions() {
-				ExportHandleAsID = this.ExportHandleAsID,
-				ExportLayerAsClass = this.ExportLayerAsClass,
-				ExportObjectTypeAsClass = this.ExportObjectTypeAsClass,
-				ReverseY = this.ReverseY,
-				DefaultLineweight = (ACadSharp.LineweightType)this.DefaultLineweight,
+                ExportHandleAsID = this.ExportHandleAsID,
+                ExportLayerAsClass = this.ExportLayerAsClass,
+                ExportObjectTypeAsClass = this.ExportObjectTypeAsClass,
+                ReverseY = this.ReverseY,
+                DefaultLineweight = (ACadSharp.LineweightType)this.DefaultLineweight,
                 CreateScaleFromModelSpaceExtent = this.CreateScaleFromModelSpaceExtent,
                 CreateViewboxFromModelSpaceExtent = this.CreateViewboxFromModelSpaceExtent,
-				LineweightScaleFactor = this.LineweightScaleFactor,
-				GroupFilterRegex = this.GroupFilterRegex,
-				GroupFilterMode = this.GroupFilterMode
+                LineweightScaleFactor = this.LineweightScaleFactor,
+                GroupFilterRegex = this.GroupFilterRegex,
+                GroupFilterMode = this.GroupFilterMode,
+                ConcentrateInserts = this.ConcentrateInserts,
+                CreateExtraGroupForFreeElements = this.CreateExtraGroupForFreeElements
             };
 		}
 
