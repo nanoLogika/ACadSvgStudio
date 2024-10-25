@@ -83,9 +83,7 @@ namespace ACadSvgStudio.Defs {
                     UseElement useElement = new UseElement()
                         .WithGroupId(id)
                         .WithXY(x, y);
-                    //  TODO Set string transform attribute
-                    //       Transform property must be writable, i.e. alternate string representation of transforms.
-                    //  useElement.Transform = transformAtt);
+                    useElement.Transform = transformAtt;
                     useElements.Add(useElement);
                 }
                 else if (searchChildren) {
