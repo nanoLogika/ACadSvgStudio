@@ -6,20 +6,18 @@
 #endregion
 
 
-namespace ACadSvgStudio.Defs
-{
+namespace ACadSvgStudio.Defs {
 
-    internal class DefsItem
-    {
+    internal class DefsItem {
 
-        public string Id { get; private set; }
-
-        public List<DefsItem> Children { get; private set; } = new List<DefsItem>();
-
-
-        public DefsItem(string id)
-        {
+        public DefsItem(string id) {
             Id = id;
         }
+
+
+        public string Id { get; }
+
+
+        public List<DefsItem> Children { get; } = new List<DefsItem>();
     }
 }
