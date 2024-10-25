@@ -53,7 +53,6 @@ namespace ACadSvgStudio {
         private bool _contentChanged;
         private ISet<string> _occurringEntities;
 
-        //private bool _defsTreeViewAfterCheckEnabled = true;
         private bool _suppressOnChecked = false;
 
         //  Flipped data and info
