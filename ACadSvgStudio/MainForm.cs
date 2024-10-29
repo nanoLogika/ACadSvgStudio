@@ -1409,7 +1409,16 @@ namespace ACadSvgStudio {
 			sb.AppendLine(svgElement.ToString().Replace("&gt;", ">").Replace("&lt;", "<"));
 
 			bool hasDefs = updateDefs(svg.Value);
-			_defsTabPage.Visible = hasDefs;
+			if (hasDefs) {
+				if (!_rightTabControl.TabPages.Contains(_defsTabPage)) {
+					_rightTabControl.TabPages.Add(_defsTabPage);
+				}
+			}
+			else {
+				if (_rightTabControl.TabPages.Contains(_defsTabPage)) {
+					_rightTabControl.TabPages.Remove(_defsTabPage);
+				}
+			}
 
 			string svgText = sb.ToString();
 			return svgText;
