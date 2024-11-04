@@ -92,5 +92,14 @@ namespace ACadSvgStudio.Defs {
             }
             return useElements;
         }
+
+
+        internal static void RemoveUseElements(XElement xElement) {
+            xElement.Elements("use").Remove();
+
+            foreach (XElement child in xElement.Elements()) {
+                RemoveUseElements(child);
+            }
+        }
     }
 }

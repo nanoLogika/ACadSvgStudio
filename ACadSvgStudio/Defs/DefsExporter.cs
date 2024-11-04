@@ -13,11 +13,13 @@ namespace ACadSvgStudio.Defs {
 
 		private XDocument _doc;
 		private ICollection<string> _selectedDefsIds;
+		private bool _resolveDefs;
 
 
-		public DefsExporter(string doc, ICollection<string> selectedDefsIds) {
+		public DefsExporter(string doc, ICollection<string> selectedDefsIds, bool resolveDefs) {
 			_doc = XDocument.Parse(doc);
 			_selectedDefsIds = selectedDefsIds;
+			_resolveDefs = resolveDefs;
 		}
 
 
@@ -97,8 +99,18 @@ namespace ACadSvgStudio.Defs {
 					defs.Add(def);
 				}
 			}
+
 			if (defs.HasElements) {
-				root.Add(defs);
+				if (_resolveDefs) {
+					foreach (XElement defsElement in defs.Elements()) {
+						root.Add(defsElement);
+					}
+
+					DefsUtils.RemoveUseElements(root);
+				}
+				else {
+					root.Add(defs);
+				}
 			}
 
 			doc.Add(root);

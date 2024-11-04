@@ -957,7 +957,7 @@ namespace ACadSvgStudio {
 				saveFileDialog.Filter = "SVG files|*.svg";
 
 				if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-					DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, selectedTreeNodes.Keys);
+					DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, selectedTreeNodes.Keys, _svgProperties.ResolveDefs);
 					exporter.Export(saveFileDialog.FileName);
 				}
 			}

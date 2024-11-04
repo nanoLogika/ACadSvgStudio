@@ -780,6 +780,25 @@ namespace ACadSvgStudio {
         }
 
 
+		[Category("Export Options")]
+		public bool ResolveDefs {
+			get {
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+					return Settings.Default.ResolveDefs;
+				}
+				else {
+					return false;
+				}
+			}
+			set {
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+					Settings.Default.ResolveDefs = value;
+					Settings.Default.Save();
+				}
+			}
+		}
+
+
 
         public ConversionOptions GetConversionOptions() {
 			return new ConversionOptions() {
