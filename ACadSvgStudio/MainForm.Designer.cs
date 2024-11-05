@@ -504,12 +504,12 @@
 			// 
 			// _openFileDialog
 			// 
-			_openFileDialog.Filter = "DWG files|*.dwg|DXF files|*.dxf|SVG group files|*.svgg|All files|*.*";
+			_openFileDialog.Filter = "DWG files|*.dwg|DXF files|*.dxf|SVG group files|*.g.svg|All files|*.*";
 			_openFileDialog.FileOk += eventOpenFileDialog_FileOk;
 			// 
 			// _saveFileDialog
 			// 
-			_saveFileDialog.Filter = "SVG file|*.svg|SVG group files|*.svgg";
+			_saveFileDialog.Filter = "SVG files|*.svg|SVG group files|*.g.svg";
 			_saveFileDialog.FileOk += eventSaveFileDialog_FileOk;
 			// 
 			// _webBrowserContextMenuStrip

@@ -83,6 +83,26 @@ namespace ACadSvgStudio {
 		}
 
 
+		private bool isFileSupported(string filename) {
+			string[] supportedFiles = new string[] {
+				"dwg",
+				"dxf",
+				"svg",
+				"g.svg"
+			};
+
+			string filenameLower = filename.ToLower();
+
+			foreach (string supportedFile in supportedFiles) {
+				if (filenameLower.EndsWith($".{supportedFile}")) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+
         private void updateRecentlyOpenedFiles() {
 			bool hasRecentlyOpenedFiles = recentlyOpenedFilesManager.HasRecentlyOpenedFiles();
 			_recentlyOpenedFilesToolStripSeparator.Visible = hasRecentlyOpenedFiles;
@@ -833,10 +853,7 @@ namespace ACadSvgStudio {
 
 				// Check for unsupported files
                 foreach (string file in files) {
-					string fileLower = file.ToLower();
-					if (!(fileLower.EndsWith(".dwg")
-					|| fileLower.EndsWith(".dxf")
-                    || fileLower.EndsWith(".svg"))) {
+					if (!isFileSupported(file)) {
 						return;
 					}
 				}
@@ -953,12 +970,11 @@ namespace ACadSvgStudio {
 				IDictionary<string, TreeNode> selectedTreeNodes = new Dictionary<string, TreeNode>();
 				collectFlatListOfTreeNodes(_defsTreeView.Nodes, selectedTreeNodes, true);
 
-				SaveFileDialog saveFileDialog = new SaveFileDialog();
-				saveFileDialog.Filter = "SVG files|*.svg";
+				_saveFileDialog.FilterIndex = 2;
 
-				if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+				if (_saveFileDialog.ShowDialog() == DialogResult.OK) {
 					DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, selectedTreeNodes.Keys, _svgProperties.ResolveDefs);
-					exporter.Export(saveFileDialog.FileName);
+					exporter.Export(_saveFileDialog.FileName);
 				}
 			}
 			catch (Exception ex) {
