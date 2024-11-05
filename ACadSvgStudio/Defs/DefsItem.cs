@@ -8,7 +8,7 @@
 
 namespace ACadSvgStudio.Defs {
 
-    internal class DefsItem {
+    public class DefsItem {
 
         public DefsItem(string id) {
             Id = id;
