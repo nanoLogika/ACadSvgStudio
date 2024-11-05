@@ -943,31 +943,12 @@ namespace ACadSvgStudio {
         private void eventSaveSvgGroupAsClick(object sender, EventArgs e) {
             try {
 				_saveFileDialog.FileName = _loadedFilename;
-				_saveFileDialog.FilterIndex = 1;
-				_saveFileDialog.ShowDialog();
-			}
-            catch (Exception ex) {
-				_statusLabel.Text = ex.Message;
-			}
-		}
-
-
-        private void eventSaveSvgGroupFileAsDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e) {
-            try {
-				_saveFileDialog.FileName = _loadedFilename;
-				_saveFileDialog.FilterIndex = 2;
-				_saveFileDialog.ShowDialog();
-			}
-            catch (Exception ex) {
-				_statusLabel.Text = ex.Message;
-			}
-		}
-
-
-        private void eventSaveSvgFileClick(object sender, EventArgs e) {
-            try {
-				_saveFileDialog.FileName = _loadedFilename;
-				_saveFileDialog.FilterIndex = 1;
+				if (!string.IsNullOrEmpty(_loadedFilename) && _loadedFilename.EndsWith(".g.svg")) {
+					_saveFileDialog.FilterIndex = 2;
+				}
+				else {
+					_saveFileDialog.FilterIndex = 1;
+				}
 				_saveFileDialog.ShowDialog();
 			}
             catch (Exception ex) {
