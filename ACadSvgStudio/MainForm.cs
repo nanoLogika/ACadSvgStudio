@@ -203,6 +203,7 @@ namespace ACadSvgStudio {
 
             switch (ext) {
 				case ".svg":
+				case ".g.svg":
 					readSvgFile(filename);
 					break;
 
@@ -491,6 +492,8 @@ namespace ACadSvgStudio {
 
 			recentlyOpenedFilesManager.RegisterFile(filename);
 			updateRecentlyOpenedFiles();
+
+			_loadedFilename = filename;
 		}
 
 
@@ -726,6 +729,7 @@ namespace ACadSvgStudio {
 								File.WriteAllText(_loadedFilename, _scintillaSvgGroupEditor.Text);
 								return;
 							}
+							_saveFileDialog.FileName = _loadedFilename;
 							_saveFileDialog.FilterIndex = 1;
 							e.Cancel = _saveFileDialog.ShowDialog() == DialogResult.Cancel;
 							break;
@@ -934,6 +938,7 @@ namespace ACadSvgStudio {
 
         private void eventSaveSvgGroupAsClick(object sender, EventArgs e) {
             try {
+				_saveFileDialog.FileName = _loadedFilename;
 				_saveFileDialog.FilterIndex = 1;
 				_saveFileDialog.ShowDialog();
 			}
@@ -945,6 +950,7 @@ namespace ACadSvgStudio {
 
         private void eventSaveSvgGroupFileAsDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e) {
             try {
+				_saveFileDialog.FileName = _loadedFilename;
 				_saveFileDialog.FilterIndex = 2;
 				_saveFileDialog.ShowDialog();
 			}
@@ -956,6 +962,7 @@ namespace ACadSvgStudio {
 
         private void eventSaveSvgFileClick(object sender, EventArgs e) {
             try {
+				_saveFileDialog.FileName = _loadedFilename;
 				_saveFileDialog.FilterIndex = 1;
 				_saveFileDialog.ShowDialog();
 			}
@@ -970,6 +977,7 @@ namespace ACadSvgStudio {
 				IDictionary<string, TreeNode> selectedTreeNodes = new Dictionary<string, TreeNode>();
 				collectFlatListOfTreeNodes(_defsTreeView.Nodes, selectedTreeNodes, true);
 
+				_saveFileDialog.FileName = _loadedFilename;
 				_saveFileDialog.FilterIndex = 2;
 
 				if (_saveFileDialog.ShowDialog() == DialogResult.OK) {
