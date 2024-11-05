@@ -1417,7 +1417,10 @@ namespace ACadSvgStudio {
 			XElement svg = svgElement.GetXml();
 			sb.AppendLine(svgElement.ToString().Replace("&gt;", ">").Replace("&lt;", "<"));
 
-			updateDefs(svg.Value);
+			bool hasDefs = updateDefs(svg.Value);
+			if (!hasDefs) {
+				_defsTreeView.Nodes.Clear();
+			}
 
 			string svgText = sb.ToString();
 			return svgText;
