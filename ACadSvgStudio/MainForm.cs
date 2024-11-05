@@ -466,6 +466,8 @@ namespace ACadSvgStudio {
 
 			recentlyOpenedFilesManager.RegisterFile(filename);
 			updateRecentlyOpenedFiles();
+
+			_loadedFilename = null;
 		}
 
 
@@ -480,6 +482,8 @@ namespace ACadSvgStudio {
 
 			recentlyOpenedFilesManager.RegisterFile(filename);
 			updateRecentlyOpenedFiles();
+
+			_loadedFilename = null;
 		}
 
 
