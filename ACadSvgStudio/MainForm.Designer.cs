@@ -37,8 +37,8 @@
 			_cssTabPage = new TabPage();
 			_splitContainer2 = new SplitContainer();
 			_rightTabControl = new TabControl();
-            _propertiesTabPage = new TabPage();
-            _propertyGrid = new PropertyGrid();
+			_propertiesTabPage = new TabPage();
+			_propertyGrid = new PropertyGrid();
 			_defsTabPage = new TabPage();
 			_defsTreeView = new TreeView();
 			_menuStrip = new MenuStrip();
@@ -504,12 +504,12 @@
 			// 
 			// _openFileDialog
 			// 
-			_openFileDialog.Filter = "DWG files|*.dwg|DXF files|*.dxf|Files with SVG group|*.svg|All files|*.*";
+			_openFileDialog.Filter = "DWG files|*.dwg|DXF files|*.dxf|SVG group files|*.g.svg|All files|*.*";
 			_openFileDialog.FileOk += eventOpenFileDialog_FileOk;
 			// 
 			// _saveFileDialog
 			// 
-			_saveFileDialog.Filter = "Normal SVG file|*.svg|Files with SVG group|*.svg";
+			_saveFileDialog.Filter = "SVG files|*.svg|SVG group files|*.g.svg";
 			_saveFileDialog.FileOk += eventSaveFileDialog_FileOk;
 			// 
 			// _webBrowserContextMenuStrip
