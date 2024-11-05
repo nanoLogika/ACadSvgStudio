@@ -962,7 +962,13 @@ namespace ACadSvgStudio {
 				IDictionary<string, TreeNode> selectedTreeNodes = new Dictionary<string, TreeNode>();
 				collectFlatListOfTreeNodes(_defsTreeView.Nodes, selectedTreeNodes, true);
 
-				ExportSVGForm exportSvgForm = new ExportSVGForm(_loadedFilename, selectedTreeNodes);
+				List<DefsItem> defsItems = new List<DefsItem>();
+				foreach (KeyValuePair<string, TreeNode> selectedTreeNode in selectedTreeNodes) {
+					DefsItem defsItem = new DefsItem(selectedTreeNode.Key);
+					defsItems.Add(defsItem);
+				}
+
+				ExportSVGForm exportSvgForm = new ExportSVGForm(_loadedFilename, defsItems);
 				if (exportSvgForm.ShowDialog() == DialogResult.OK) {
 					DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, selectedTreeNodes.Keys, exportSvgForm.ResolveDefs);
 					exporter.Export(exportSvgForm.FileName);

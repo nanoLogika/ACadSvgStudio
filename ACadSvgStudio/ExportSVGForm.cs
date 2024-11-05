@@ -31,7 +31,7 @@ namespace ACadSvgStudio {
 		}
 
 
-		private IDictionary<string, TreeNode> _defsItems;
+		private List<DefsItem> _defsItems;
 
 
 		public ExportSVGForm() {
@@ -39,13 +39,13 @@ namespace ACadSvgStudio {
 		}
 
 
-		public ExportSVGForm(string filename, IDictionary<string, TreeNode> defsItems) : this() {
+		public ExportSVGForm(string filename, List<DefsItem> defsItems) : this() {
 			FileName = filename;
 
 			_defsItems = defsItems;
 
-			foreach (KeyValuePair<string, TreeNode> defsItem in defsItems) {
-				DefsListViewItem defsListViewItem = new DefsListViewItem(defsItem.Key, defsItem.Value);
+			foreach (DefsItem defsItem in defsItems) {
+				DefsListViewItem defsListViewItem = new DefsListViewItem(defsItem);
 				checkedListBox.Items.Add(defsListViewItem);
 			}
 

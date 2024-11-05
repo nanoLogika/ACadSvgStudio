@@ -9,19 +9,16 @@ namespace ACadSvgStudio.Defs {
 
     internal class DefsListViewItem : ListViewItem {
 
-        public string Key { get; }
-
-        public TreeNode TreeNode { get; }
+        public DefsItem DefsItem { get; }
 
 
-        public DefsListViewItem(string key, TreeNode treeNode) : base() {
-            Key = key;
-            TreeNode = treeNode;
+        public DefsListViewItem(DefsItem defsItem) : base() {
+            DefsItem = defsItem;
         }
 
 
 		public override string ToString() {
-			return Key;
+			return DefsItem.Id;
 		}
 	}
 }
