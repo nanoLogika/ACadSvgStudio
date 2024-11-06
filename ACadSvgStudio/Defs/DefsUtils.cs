@@ -28,7 +28,25 @@ namespace ACadSvgStudio.Defs {
             return list;
         }
 
-        internal static void CollectUsedDefsIds(XElement xElement, HashSet<string> defsIds, bool searchDefs = false) {
+
+		internal static void CollectUseElements(XElement xElement, HashSet<string> useElements) {
+			string name = xElement.Name.ToString().ToLower();
+
+			if (name == "use") {
+				XAttribute? href = xElement.Attribute("href");
+				if (href != null && !string.IsNullOrEmpty(href.Value)) {
+					useElements.Add(href.Value);
+				}
+			}
+			else {
+				foreach (XElement child in xElement.Elements()) {
+					CollectUseElements(child, useElements);
+				}
+			}
+		}
+
+
+		internal static void CollectUsedDefsIds(XElement xElement, HashSet<string> defsIds, bool searchDefs = false) {
 			string name = xElement.Name.ToString().ToLower();
 
 			if (name == "use" && xElement.Attribute("href") != null && !string.IsNullOrEmpty(xElement.Attribute("href")!.Value)) {
@@ -134,7 +152,44 @@ namespace ACadSvgStudio.Defs {
         }
 
 
-        internal static void RemoveUseElements(XElement xElement) {
+		internal static XElement? FindElementById(string elementName, string id, XElement xElement) {
+			string name = xElement.Name.ToString().ToLower();
+
+			if (name == "defs") {
+				foreach (XElement child in xElement.Elements()) {
+					XElement? elm = FindElementById(elementName, id, child);
+					if (elm != null) {
+						return elm;
+					}
+				}
+			}
+			else if (name == elementName) {
+				XAttribute? idXAttribute = xElement.Attribute("id");
+				if (idXAttribute != null && idXAttribute.Value == id) {
+					return xElement;
+				}
+
+				foreach (XElement child in xElement.Elements()) {
+					XElement? elm = FindElementById(elementName, id, child);
+					if (elm != null) {
+						return elm;
+					}
+				}
+			}
+
+			return null;
+		}
+
+		internal static XElement? FindGroupById(string id, XElement xElement) {
+			return FindElementById("g", id, xElement);
+		}
+
+		internal static XElement? FindPatternById(string id, XElement xElement) {
+			return FindElementById("pattern", id, xElement);
+		}
+
+
+		internal static void RemoveUseElements(XElement xElement) {
             xElement.Elements("use").Remove();
 
             foreach (XElement child in xElement.Elements()) {

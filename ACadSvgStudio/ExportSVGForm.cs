@@ -31,6 +31,21 @@ namespace ACadSvgStudio {
 		}
 
 
+		public string[] SelectedDefsIds {
+			get {
+				HashSet<string> result = new HashSet<string>();
+
+				foreach (DefsListViewItem item in checkedListBox.Items) {
+					if (item.Checked) {
+						result.Add(item.DefsId);
+					}
+				}
+
+				return result.ToArray();
+			}
+		}
+
+
 		private SortedSet<string> _defsIds;
 
 

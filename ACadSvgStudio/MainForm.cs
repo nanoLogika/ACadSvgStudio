@@ -976,7 +976,7 @@ namespace ACadSvgStudio {
 
 				ExportSVGForm exportSvgForm = new ExportSVGForm(_loadedFilename, defsIds);
 				if (exportSvgForm.ShowDialog() == DialogResult.OK) {
-					DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, selectedTreeNodes.Keys, exportSvgForm.ResolveDefs);
+					DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, exportSvgForm.SelectedDefsIds, exportSvgForm.ResolveDefs);
 					exporter.Export(exportSvgForm.FileName);
 				}
 			}

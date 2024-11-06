@@ -95,6 +95,7 @@
 			// checkedListBox
 			// 
 			checkedListBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			checkedListBox.CheckOnClick = true;
 			checkedListBox.FormattingEnabled = true;
 			checkedListBox.IntegralHeight = false;
 			checkedListBox.Location = new Point(12, 81);
