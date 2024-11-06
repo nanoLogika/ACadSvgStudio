@@ -168,12 +168,12 @@ namespace ACadSvgStudio.Defs {
 				if (idXAttribute != null && idXAttribute.Value == id) {
 					return xElement;
 				}
+			}
 
-				foreach (XElement child in xElement.Elements()) {
-					XElement? elm = FindElementById(elementName, id, child);
-					if (elm != null) {
-						return elm;
-					}
+			foreach (XElement child in xElement.Elements()) {
+				XElement? elm = FindElementById(elementName, id, child);
+				if (elm != null) {
+					return elm;
 				}
 			}
 
