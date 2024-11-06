@@ -31,7 +31,7 @@ namespace ACadSvgStudio {
 		}
 
 
-		private List<DefsItem> _defsItems;
+		private SortedSet<string> _defsIds;
 
 
 		public ExportSVGForm() {
@@ -39,13 +39,16 @@ namespace ACadSvgStudio {
 		}
 
 
-		public ExportSVGForm(string filename, List<DefsItem> defsItems) : this() {
+		public ExportSVGForm(string filename, HashSet<string> defsIds) : this() {
 			FileName = filename;
 
-			_defsItems = defsItems;
+			_defsIds = new SortedSet<string>();
+			foreach (string id in defsIds) {
+				_defsIds.Add(id);
+			}
 
-			foreach (DefsItem defsItem in defsItems) {
-				DefsListViewItem defsListViewItem = new DefsListViewItem(defsItem);
+			foreach (string defsId in _defsIds) {
+				DefsListViewItem defsListViewItem = new DefsListViewItem(defsId);
 				checkedListBox.Items.Add(defsListViewItem);
 			}
 

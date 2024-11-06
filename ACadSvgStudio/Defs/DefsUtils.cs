@@ -28,40 +28,80 @@ namespace ACadSvgStudio.Defs {
             return list;
         }
 
+        internal static void CollectUsedDefsIds(XElement xElement, HashSet<string> defsIds, bool searchDefs = false) {
+			string name = xElement.Name.ToString().ToLower();
+
+			if (name == "use" && xElement.Attribute("href") != null && !string.IsNullOrEmpty(xElement.Attribute("href")!.Value)) {
+				string id = xElement.Attribute("href")!.Value;
+				id = id.StartsWith("#") ? id.Substring(1) : id;
+				defsIds.Add(id);
+			}
+			else if (name == "defs" && searchDefs) {
+                foreach (XElement child in xElement.Elements()) {
+					CollectUsedDefsIds(child, defsIds, searchDefs);
+				}
+			}
+			else if (name != "defs") {
+                foreach (XElement child in xElement.Elements()) {
+					CollectUsedDefsIds(child, defsIds, searchDefs);
+				}
+			}
+        }
+
+        internal static void CollectUsedDefsIds(string id, XElement xElement, HashSet<string> defsIds) {
+            string name = xElement.Name.ToString().ToLower();
+
+			if (name == "g" && xElement.Attribute("id") != null && xElement.Attribute("id").Value == id) {
+				foreach (XElement child in xElement.Elements()) {
+					CollectUsedDefsIds(child, defsIds, true);
+				}
+			}
+
+			foreach (XElement child in xElement.Elements()) {
+                CollectUsedDefsIds(id, child, defsIds);
+            }
+        }
+
 
         internal static void FindAllDefs(XElement xElement, DefsItem parentDefsItem, List<DefsItem> defsItems) {
-            foreach (XElement child in xElement.Elements()) {
-                string childName = child.Name.ToString().ToLower();
-                if (childName == "defs") {
-                    FindAllDefsGroups(child, null, defsItems);
-                }
-                else {
-                    FindAllDefs(child, parentDefsItem, defsItems);
-                }
+			string name = xElement.Name.ToString().ToLower();
+
+            if (name == "defs") {
+                foreach (XElement child in xElement.Elements()) {
+					FindAllDefsGroups(child, null, defsItems);
+				}
+            }
+            else {
+                foreach (XElement child in xElement.Elements()) {
+					FindAllDefs(child, parentDefsItem, defsItems);
+				}
             }
         }
 
 
         internal static void FindAllDefsGroups(XElement xElement, DefsItem parentDefsItem, List<DefsItem> defsItems, int level = 1) {
-            foreach (XElement child in xElement.Elements()) {
-                string childName = child.Name.ToString().ToLower();
-                if (childName == "g" && child.Attribute("id") != null && (level > 1 || (level == 1 && child.Attribute("class") != null && child.Attribute("class")!.Value == "block-record"))) {
-                    string id = child.Attribute("id")!.Value;
-                    DefsItem defsItem = new DefsItem(id);
+			string name = xElement.Name.ToString().ToLower();
 
-                    if (parentDefsItem == null) {
-                        defsItems.Add(defsItem);
-                    }
-                    else {
-                        parentDefsItem.Children.Add(defsItem);
-                    }
+			if (name == "g" && xElement.Attribute("id") != null && (level > 1 || (level == 1 && xElement.Attribute("class") != null && xElement.Attribute("class")!.Value == "block-record"))) {
+				string id = xElement.Attribute("id")!.Value;
+				DefsItem defsItem = new DefsItem(id);
 
-                    FindAllDefsGroups(child, defsItem, defsItems, level + 1);
-                }
-                else {
-                    FindAllDefsGroups(child, parentDefsItem, defsItems, 1);
-                }
-            }
+				if (parentDefsItem == null) {
+					defsItems.Add(defsItem);
+				}
+				else {
+					parentDefsItem.Children.Add(defsItem);
+				}
+
+				foreach (XElement child in xElement.Elements()) {
+					FindAllDefsGroups(child, defsItem, defsItems, level + 1);
+				}
+			}
+			else {
+				foreach (XElement child in xElement.Elements()) {
+					FindAllDefsGroups(child, parentDefsItem, defsItems, 1);
+				}
+			}
         }
 
 

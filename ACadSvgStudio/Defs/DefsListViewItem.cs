@@ -9,16 +9,16 @@ namespace ACadSvgStudio.Defs {
 
     internal class DefsListViewItem : ListViewItem {
 
-        public DefsItem DefsItem { get; }
+        public string DefsId { get; }
 
 
-        public DefsListViewItem(DefsItem defsItem) : base() {
-            DefsItem = defsItem;
+        public DefsListViewItem(string defsId) : base() {
+            DefsId = defsId;
         }
 
 
 		public override string ToString() {
-			return DefsItem.Id;
+			return DefsId;
 		}
 	}
 }
