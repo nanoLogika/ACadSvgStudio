@@ -780,21 +780,43 @@ namespace ACadSvgStudio {
         }
 
 
+        [Category("Conversion Options")]
+        [DisplayName("Create debug elements")]
+        [Description("SVG elements are included that reperesent coordinates or definition points, e.g., in leaders or dimensions.")]
+        public bool CreateDebugElements {
+            get {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    return Settings.Default.CreateDebugElements;
+                }
+                else {
+                    return false;
+                }
+            }
+            set {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    Settings.Default.CreateDebugElements = value;
+                    Settings.Default.Save();
+                }
+            }
+        }
+
 
         public ConversionOptions GetConversionOptions() {
 			return new ConversionOptions() {
-                ExportHandleAsID = this.ExportHandleAsID,
-                ExportLayerAsClass = this.ExportLayerAsClass,
-                ExportObjectTypeAsClass = this.ExportObjectTypeAsClass,
-                ReverseY = this.ReverseY,
-                DefaultLineweight = (ACadSharp.LineweightType)this.DefaultLineweight,
-                CreateScaleFromModelSpaceExtent = this.CreateScaleFromModelSpaceExtent,
-                CreateViewboxFromModelSpaceExtent = this.CreateViewboxFromModelSpaceExtent,
-                LineweightScaleFactor = this.LineweightScaleFactor,
-                GroupFilterRegex = this.GroupFilterRegex,
-                GroupFilterMode = this.GroupFilterMode,
-                ConcentrateInserts = this.ConcentrateInserts,
-                CreateExtraGroupForFreeElements = this.CreateExtraGroupForFreeElements
+				ExportHandleAsID = this.ExportHandleAsID,
+				ExportLayerAsClass = this.ExportLayerAsClass,
+				ExportObjectTypeAsClass = this.ExportObjectTypeAsClass,
+				ReverseY = this.ReverseY,
+				DefaultLineweight = (ACadSharp.LineweightType)this.DefaultLineweight,
+				CreateScaleFromModelSpaceExtent = this.CreateScaleFromModelSpaceExtent,
+				CreateViewboxFromModelSpaceExtent = this.CreateViewboxFromModelSpaceExtent,
+				LineweightScaleFactor = this.LineweightScaleFactor,
+				GroupFilterRegex = this.GroupFilterRegex,
+				GroupFilterMode = this.GroupFilterMode,
+				ConcentrateInserts = this.ConcentrateInserts,
+				CreateExtraGroupForFreeElements = this.CreateExtraGroupForFreeElements,
+				BlockVisibilityParametersPrefix = "_",
+                CreateDebugElements = this.CreateDebugElements
             };
 		}
 
