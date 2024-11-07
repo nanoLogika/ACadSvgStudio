@@ -12,12 +12,14 @@ namespace ACadSvgStudio.Defs {
 	internal class DefsExporter {
 
 		private XDocument _doc;
-		private ICollection<string> _selectedDefsIds;
+		private string[] _selectedDefsIds;
+		private bool _resolveDefs;
 
 
-		public DefsExporter(string doc, ICollection<string> selectedDefsIds) {
+		public DefsExporter(string doc, string[] selectedDefsIds, bool resolveDefs) {
 			_doc = XDocument.Parse(doc);
 			_selectedDefsIds = selectedDefsIds;
+			_resolveDefs = resolveDefs;
 		}
 
 
@@ -30,75 +32,42 @@ namespace ACadSvgStudio.Defs {
 		}
 
 
-		private XElement? findGroupById(string id, XElement e) {
-			string elementName = e.Name.ToString().ToLower();
-			if (elementName == "defs") {
-				foreach (XElement xElement in e.Elements()) {
-					XElement? g = findGroupById(id, xElement);
-					if (g != null) {
-						return g;
-					}
-				}
-			}
-			else if (elementName == "g") {
-				XAttribute? idXAttribute = e.Attribute("id");
-				if (idXAttribute != null && idXAttribute.Value == id) {
-					return e;
-				}
-
-				foreach (XElement xElement in e.Elements()) {
-					XElement? g = findGroupById(id, xElement);
-					if (g != null) {
-						return g;
-					}
-				}
-			}
-
-			return null;
-		}
-
-
-		private void collectUseElements(XElement e, HashSet<string> useElements) {
-			string elementName = e.Name.ToString().ToLower();
-			if (elementName == "use") {
-				XAttribute? href = e.Attribute("href");
-				if (href != null && !string.IsNullOrEmpty(href.Value)) {
-					useElements.Add(href.Value);
-				}
-			}
-			else {
-				foreach (XElement child in e.Elements()) {
-					collectUseElements(child, useElements);
-				}
-			}
-		}
-
-
 		public void Export(string path) {
 			XDocument doc = new XDocument();
 
 			XElement root = createRootElement();
 
-			foreach (string defsId in _selectedDefsIds) {
-				XElement? g = findGroupById(defsId, _doc.Root!);
-				if (g != null) {
-					root.Add(g);
-				}
-			}
-
 			HashSet<string> useElements = new HashSet<string>();
-			collectUseElements(root, useElements);
+			DefsUtils.CollectUseElements(_doc.Root!, useElements);
 
 			XElement defs = new XElement("defs");
 			foreach (string useElement in useElements) {
 				string id = useElement.Substring(1);
-				XElement? def = findGroupById(id, _doc.Root!);
-				if (def != null) {
-					defs.Add(def);
+				if (_selectedDefsIds.Contains(id)) {
+					XElement? def = DefsUtils.FindGroupById(id, _doc.Root!);
+					if (def != null) {
+						defs.Add(def);
+					}
+					else {
+						def = DefsUtils.FindPatternById(id, _doc.Root!);
+						if (def != null) {
+							defs.Add(def);
+						}
+					}
 				}
 			}
+
 			if (defs.HasElements) {
-				root.Add(defs);
+				if (_resolveDefs) {
+					foreach (XElement defsElement in defs.Elements()) {
+						root.Add(defsElement);
+					}
+
+					DefsUtils.RemoveUseElements(root);
+				}
+				else {
+					root.Add(defs);
+				}
 			}
 
 			doc.Add(root);

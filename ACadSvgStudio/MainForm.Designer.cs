@@ -180,8 +180,8 @@
 			// 
 			// _rightTabControl
 			// 
-			_rightTabControl.Controls.Add(_defsTabPage);
 			_rightTabControl.Controls.Add(_propertiesTabPage);
+			_rightTabControl.Controls.Add(_defsTabPage);
 			_rightTabControl.Dock = DockStyle.Fill;
 			_rightTabControl.Location = new Point(0, 0);
 			_rightTabControl.Name = "_rightTabControl";
@@ -189,25 +189,6 @@
 			_rightTabControl.Size = new Size(285, 716);
 			_rightTabControl.TabIndex = 2;
 			// 
-            // _propertiesTabPage
-            // 
-            _propertiesTabPage.Controls.Add(_propertyGrid);
-            _propertiesTabPage.Location = new Point(4, 24);
-            _propertiesTabPage.Name = "_propertiesTabPage";
-            _propertiesTabPage.Padding = new Padding(3);
-            _propertiesTabPage.Size = new Size(277, 688);
-            _propertiesTabPage.TabIndex = 0;
-            _propertiesTabPage.Text = "Properties";
-            _propertiesTabPage.UseVisualStyleBackColor = true;
-            // 
-            // _propertyGrid
-            // 
-            _propertyGrid.Dock = DockStyle.Fill;
-            _propertyGrid.Location = new Point(3, 3);
-            _propertyGrid.Name = "_propertyGrid";
-            _propertyGrid.Size = new Size(271, 682);
-            _propertyGrid.TabIndex = 0;
-            // 
 			// _defsTabPage
 			// 
 			_defsTabPage.Controls.Add(_defsTreeView);
@@ -228,6 +209,25 @@
 			_defsTreeView.Size = new Size(271, 682);
 			_defsTreeView.TabIndex = 1;
 			_defsTreeView.AfterCheck += eventDefsTreeViewAfterCheck;
+			// 
+			// _propertiesTabPage
+			// 
+			_propertiesTabPage.Controls.Add(_propertyGrid);
+			_propertiesTabPage.Location = new Point(4, 24);
+			_propertiesTabPage.Name = "_propertiesTabPage";
+			_propertiesTabPage.Padding = new Padding(3);
+			_propertiesTabPage.Size = new Size(277, 688);
+			_propertiesTabPage.TabIndex = 0;
+			_propertiesTabPage.Text = "Properties";
+			_propertiesTabPage.UseVisualStyleBackColor = true;
+			// 
+			// _propertyGrid
+			// 
+			_propertyGrid.Dock = DockStyle.Fill;
+			_propertyGrid.Location = new Point(3, 3);
+			_propertyGrid.Name = "_propertyGrid";
+			_propertyGrid.Size = new Size(271, 682);
+			_propertyGrid.TabIndex = 0;
 			// 
 			// _menuStrip
 			// 
