@@ -203,6 +203,7 @@ namespace ACadSvgStudio {
 
             switch (ext) {
 				case ".svg":
+				case ".g.svg":
 					readSvgFile(filename);
 					break;
 
@@ -465,6 +466,8 @@ namespace ACadSvgStudio {
 
 			recentlyOpenedFilesManager.RegisterFile(filename);
 			updateRecentlyOpenedFiles();
+
+			_loadedFilename = null;
 		}
 
 
@@ -479,6 +482,8 @@ namespace ACadSvgStudio {
 
 			recentlyOpenedFilesManager.RegisterFile(filename);
 			updateRecentlyOpenedFiles();
+
+			_loadedFilename = null;
 		}
 
 
@@ -491,6 +496,8 @@ namespace ACadSvgStudio {
 
 			recentlyOpenedFilesManager.RegisterFile(filename);
 			updateRecentlyOpenedFiles();
+
+			_loadedFilename = filename;
 		}
 
 
@@ -726,6 +733,7 @@ namespace ACadSvgStudio {
 								File.WriteAllText(_loadedFilename, _scintillaSvgGroupEditor.Text);
 								return;
 							}
+							_saveFileDialog.FileName = _loadedFilename;
 							_saveFileDialog.FilterIndex = 1;
 							e.Cancel = _saveFileDialog.ShowDialog() == DialogResult.Cancel;
 							break;
@@ -934,29 +942,13 @@ namespace ACadSvgStudio {
 
         private void eventSaveSvgGroupAsClick(object sender, EventArgs e) {
             try {
-				_saveFileDialog.FilterIndex = 1;
-				_saveFileDialog.ShowDialog();
-			}
-            catch (Exception ex) {
-				_statusLabel.Text = ex.Message;
-			}
-		}
-
-
-        private void eventSaveSvgGroupFileAsDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e) {
-            try {
-				_saveFileDialog.FilterIndex = 2;
-				_saveFileDialog.ShowDialog();
-			}
-            catch (Exception ex) {
-				_statusLabel.Text = ex.Message;
-			}
-		}
-
-
-        private void eventSaveSvgFileClick(object sender, EventArgs e) {
-            try {
-				_saveFileDialog.FilterIndex = 1;
+				_saveFileDialog.FileName = _loadedFilename;
+				if (!string.IsNullOrEmpty(_loadedFilename) && _loadedFilename.EndsWith(".g.svg")) {
+					_saveFileDialog.FilterIndex = 2;
+				}
+				else {
+					_saveFileDialog.FilterIndex = 1;
+				}
 				_saveFileDialog.ShowDialog();
 			}
             catch (Exception ex) {
@@ -970,11 +962,22 @@ namespace ACadSvgStudio {
 				IDictionary<string, TreeNode> selectedTreeNodes = new Dictionary<string, TreeNode>();
 				collectFlatListOfTreeNodes(_defsTreeView.Nodes, selectedTreeNodes, true);
 
-				_saveFileDialog.FilterIndex = 2;
+				XElement xElement = XElement.Parse(_scintillaSvgGroupEditor.Text);
 
-				if (_saveFileDialog.ShowDialog() == DialogResult.OK) {
-					DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, selectedTreeNodes.Keys);
-					exporter.Export(_saveFileDialog.FileName);
+				HashSet<string> defsIds = new HashSet<string>();
+				foreach (KeyValuePair<string, TreeNode> selectedTreeNode in selectedTreeNodes) {
+					string id = selectedTreeNode.Key;
+					defsIds.Add(id);
+
+					DefsUtils.CollectUsedDefsIds(id, xElement, defsIds);
+				}
+
+				DefsUtils.CollectUsedDefsIds(xElement, defsIds, false);
+
+				ExportSVGForm exportSvgForm = new ExportSVGForm(_loadedFilename, defsIds);
+				if (exportSvgForm.ShowDialog() == DialogResult.OK) {
+					DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, exportSvgForm.SelectedDefsIds, exportSvgForm.ResolveDefs);
+					exporter.Export(exportSvgForm.FileName);
 				}
 			}
 			catch (Exception ex) {
@@ -1425,15 +1428,8 @@ namespace ACadSvgStudio {
 			sb.AppendLine(svgElement.ToString().Replace("&gt;", ">").Replace("&lt;", "<"));
 
 			bool hasDefs = updateDefs(svg.Value);
-			if (hasDefs) {
-				if (!_rightTabControl.TabPages.Contains(_defsTabPage)) {
-					_rightTabControl.TabPages.Add(_defsTabPage);
-				}
-			}
-			else {
-				if (_rightTabControl.TabPages.Contains(_defsTabPage)) {
-					_rightTabControl.TabPages.Remove(_defsTabPage);
-				}
+			if (!hasDefs) {
+				_defsTreeView.Nodes.Clear();
 			}
 
 			string svgText = sb.ToString();

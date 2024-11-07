@@ -5,19 +5,20 @@
 //  See LICENSE file in the project root for full license information.
 #endregion
 
-
 namespace ACadSvgStudio.Defs {
 
-    public class DefsItem {
+    internal class DefsListViewItem : ListViewItem {
 
-        public DefsItem(string id) {
-            Id = id;
+        public string DefsId { get; }
+
+
+        public DefsListViewItem(string defsId) : base() {
+            DefsId = defsId;
         }
 
 
-        public string Id { get; }
-
-
-        public List<DefsItem> Children { get; } = new List<DefsItem>();
-    }
+		public override string ToString() {
+			return DefsId;
+		}
+	}
 }
