@@ -1,4 +1,5 @@
 ﻿using Svg;
+using Svg.Transforms;
 
 namespace ACadSvgStudio {
 
@@ -8,6 +9,9 @@ namespace ACadSvgStudio {
 
 		private int _x = 0;
 		private int _y = 0;
+		private float _zoom = 1;
+
+		private SvgTransformCollection _svgTransformCollection;
 
 		private bool _mouseDown = false;
 		private Point _mousePos;
@@ -20,6 +24,8 @@ namespace ACadSvgStudio {
 			SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 			SetStyle(ControlStyles.UserPaint, true);
+
+			this.MouseWheel += OnMouseWheel;
 		}
 
 
@@ -28,9 +34,18 @@ namespace ACadSvgStudio {
 			try
 			{
 				_svgDocument = Svg.SvgDocument.FromSvg<SvgDocument>(content);
+				if (_svgDocument.Transforms == null)
+				{
+					_svgDocument.Transforms = new SvgTransformCollection();
+					_svgDocument.Transforms.Add(new SvgScale(1, 1));
+				}
+
+				_svgTransformCollection = (SvgTransformCollection)_svgDocument.Transforms.Clone();
 
 				_x = 0;
 				_y = 0;
+
+				_zoom = 1;
 
 				using (Bitmap bitmap = getBitmap())
 				{
@@ -61,6 +76,22 @@ namespace ACadSvgStudio {
 		private Bitmap getBitmap()
 		{
 			_svgDocument.ViewBox = new SvgViewBox(-500, -500, 1500, 1500);
+			if (_svgTransformCollection != null)
+			{
+				_svgDocument.Transforms = (SvgTransformCollection)_svgTransformCollection.Clone();
+
+				if (_svgDocument.Transforms != null)
+				{
+					foreach (SvgTransform transform in _svgDocument.Transforms)
+					{
+						if (transform is SvgScale scale)
+						{
+							scale.X = scale.X * _zoom;
+							scale.Y = scale.Y * _zoom;
+						}
+					}
+				}
+			}
 
 			Bitmap bitmap = _svgDocument.Draw();
 			return bitmap;
@@ -107,6 +138,7 @@ namespace ACadSvgStudio {
 			Invalidate();
 		}
 
+
 		private void SvgViewerUserControl_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left && !_mouseDown)
@@ -133,6 +165,16 @@ namespace ACadSvgStudio {
 			{
 				_mouseDown = false;
 			}
+		}
+
+
+		private void OnMouseWheel(object? sender, MouseEventArgs e)
+		{
+			float zoomFactor = 0.0001f;
+
+			_zoom += e.Delta * zoomFactor;
+
+			Invalidate();
 		}
 	}
 }
