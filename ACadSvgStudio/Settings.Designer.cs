@@ -517,6 +517,18 @@ namespace ACadSvgStudio {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CreateDebugElements {
+            get {
+                return ((bool)(this["CreateDebugElements"]));
+            }
+            set {
+                this["CreateDebugElements"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ResolveDefs {
             get {
                 return ((bool)(this["ResolveDefs"]));
