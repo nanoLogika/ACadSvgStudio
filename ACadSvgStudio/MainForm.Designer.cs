@@ -30,6 +30,12 @@
         /// </summary>
         private void InitializeComponent() {
             components = new System.ComponentModel.Container();
+            ToolStripSeparator _fileMenuSeparator2;
+            ToolStripSeparator _editMenuSeparator1;
+            ToolStripSeparator _viewMenuSeparator1;
+            ToolStripSeparator _exportMenuSeparator1;
+            ToolStripSeparator _exportMenuSeparator;
+            _fileMenuSeparator1 = new ToolStripSeparator();
             _splitContainer1 = new SplitContainer();
             _tabControl = new TabControl();
             _mainGroupTabPage = new TabPage();
@@ -48,32 +54,27 @@
             _openMenuItem = new ToolStripMenuItem();
             _saveMenuItem = new ToolStripMenuItem();
             _saveAsMenuItem = new ToolStripMenuItem();
-            exportSelectedDefsToolStripMenuItem = new ToolStripMenuItem();
-            _recentlyOpenedFilesToolStripSeparator = new ToolStripSeparator();
             _recentlyOpenedFilesToolStripMenuItem = new ToolStripMenuItem();
-            _toolStripSeparator1 = new ToolStripSeparator();
             _exitMenuItem = new ToolStripMenuItem();
             _editMenuItem = new ToolStripMenuItem();
             _undoMenuItem = new ToolStripMenuItem();
             _redoMenuItem = new ToolStripMenuItem();
-            _toolStripSeparator11 = new ToolStripSeparator();
             _cutMenuItem = new ToolStripMenuItem();
             _copyMenuItem = new ToolStripMenuItem();
             _pasteMenuItem = new ToolStripMenuItem();
             _deleteMenuItem = new ToolStripMenuItem();
-            _toolStripSeparator13 = new ToolStripSeparator();
+            _editMenuSeparator2 = new ToolStripSeparator();
             _selectAllMenuItem = new ToolStripMenuItem();
             _searchToolStripMenuItem = new ToolStripMenuItem();
             _quickFindMenuItem = new ToolStripMenuItem();
             _findAndReplaceMenuItem = new ToolStripMenuItem();
             _viewMenuItem = new ToolStripMenuItem();
             _centerToFitMenuItem = new ToolStripMenuItem();
-            _toolStripSeparator3 = new ToolStripSeparator();
             _propertyGridToolStripMenuItem = new ToolStripMenuItem();
-            _toolStripSeparator5 = new ToolStripSeparator();
+            _viewMenuSeparator2 = new ToolStripSeparator();
             _collapseAllMenuItem = new ToolStripMenuItem();
             _expandAllToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator1 = new ToolStripSeparator();
+            _viewMenuSeparator3 = new ToolStripSeparator();
             drawingComponentToolStripMenuItem = new ToolStripMenuItem();
             sVGViewerUserControlExperimentalToolStripMenuItem = new ToolStripMenuItem();
             webBrowserToolStripMenuItem = new ToolStripMenuItem();
@@ -81,11 +82,17 @@
             _restorePreviousMenuItem = new ToolStripMenuItem();
             _extrasMenuItem = new ToolStripMenuItem();
             _removeStylesMenuItem = new ToolStripMenuItem();
-            toolStripSeparator2 = new ToolStripSeparator();
+            _extrasMenuSeparator1 = new ToolStripSeparator();
             _showDeveloperToolsMenuItem = new ToolStripMenuItem();
             editorFontToolStripMenuItem = new ToolStripMenuItem();
             _converisonInfoMenuItem = new ToolStripMenuItem();
             _showConversionLogMenuItem = new ToolStripMenuItem();
+            _exportToolStripMenuItem = new ToolStripMenuItem();
+            exportSelectedDefsToolStripMenuItem = new ToolStripMenuItem();
+            _executeExportBatchToolStripMenuItem = new ToolStripMenuItem();
+            _loadExportBatchToolStripMenuItem = new ToolStripMenuItem();
+            _saveExportBatchToolStripMenuItem = new ToolStripMenuItem();
+            _editCommandFileToolStripMenuItem = new ToolStripMenuItem();
             _aboutACadSVGStudioMenuItem = new ToolStripMenuItem();
             _openFileDialog = new OpenFileDialog();
             _saveFileDialog = new SaveFileDialog();
@@ -98,6 +105,11 @@
             _textChangedTimer = new System.Windows.Forms.Timer(components);
             _fontDialog = new FontDialog();
             _loadAutoCadFileDialog = new OpenFileDialog();
+            _fileMenuSeparator2 = new ToolStripSeparator();
+            _editMenuSeparator1 = new ToolStripSeparator();
+            _viewMenuSeparator1 = new ToolStripSeparator();
+            _exportMenuSeparator1 = new ToolStripSeparator();
+            _exportMenuSeparator = new ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)_splitContainer1).BeginInit();
             _splitContainer1.Panel1.SuspendLayout();
             _splitContainer1.Panel2.SuspendLayout();
@@ -114,6 +126,36 @@
             _webBrowserContextMenuStrip.SuspendLayout();
             _statusStrip.SuspendLayout();
             SuspendLayout();
+            // 
+            // _fileMenuSeparator2
+            // 
+            _fileMenuSeparator2.Name = "_fileMenuSeparator2";
+            _fileMenuSeparator2.Size = new Size(246, 6);
+            // 
+            // _editMenuSeparator1
+            // 
+            _editMenuSeparator1.Name = "_editMenuSeparator1";
+            _editMenuSeparator1.Size = new Size(119, 6);
+            // 
+            // _viewMenuSeparator1
+            // 
+            _viewMenuSeparator1.Name = "_viewMenuSeparator1";
+            _viewMenuSeparator1.Size = new Size(178, 6);
+            // 
+            // _exportMenuSeparator1
+            // 
+            _exportMenuSeparator1.Name = "_exportMenuSeparator1";
+            _exportMenuSeparator1.Size = new Size(182, 6);
+            // 
+            // _exportMenuSeparator
+            // 
+            _exportMenuSeparator.Name = "_exportMenuSeparator";
+            _exportMenuSeparator.Size = new Size(182, 6);
+            // 
+            // _fileMenuSeparator1
+            // 
+            _fileMenuSeparator1.Name = "_fileMenuSeparator1";
+            _fileMenuSeparator1.Size = new Size(246, 6);
             // 
             // _splitContainer1
             // 
@@ -252,7 +294,7 @@
             // 
             // _menuStrip
             // 
-            _menuStrip.Items.AddRange(new ToolStripItem[] { _fileToolStripMenuItem, _editMenuItem, _searchToolStripMenuItem, _viewMenuItem, _contentMenuItem, _extrasMenuItem, _converisonInfoMenuItem, _aboutACadSVGStudioMenuItem });
+            _menuStrip.Items.AddRange(new ToolStripItem[] { _fileToolStripMenuItem, _editMenuItem, _searchToolStripMenuItem, _viewMenuItem, _contentMenuItem, _extrasMenuItem, _converisonInfoMenuItem, _exportToolStripMenuItem, _aboutACadSVGStudioMenuItem });
             _menuStrip.Location = new Point(0, 0);
             _menuStrip.Name = "_menuStrip";
             _menuStrip.Size = new Size(1204, 24);
@@ -261,7 +303,7 @@
             // 
             // _fileToolStripMenuItem
             // 
-            _fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _loadDwgToolStripMenuItem, _openMenuItem, _saveMenuItem, _saveAsMenuItem, exportSelectedDefsToolStripMenuItem, _recentlyOpenedFilesToolStripSeparator, _recentlyOpenedFilesToolStripMenuItem, _toolStripSeparator1, _exitMenuItem });
+            _fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _loadDwgToolStripMenuItem, _openMenuItem, _saveMenuItem, _saveAsMenuItem, _fileMenuSeparator1, _recentlyOpenedFilesToolStripMenuItem, _fileMenuSeparator2, _exitMenuItem });
             _fileToolStripMenuItem.Name = "_fileToolStripMenuItem";
             _fileToolStripMenuItem.Size = new Size(37, 20);
             _fileToolStripMenuItem.Text = "File";
@@ -298,28 +340,11 @@
             _saveAsMenuItem.Text = "Save as ...";
             _saveAsMenuItem.Click += eventSaveSvgGroupAsClick;
             // 
-            // exportSelectedDefsToolStripMenuItem
-            // 
-            exportSelectedDefsToolStripMenuItem.Name = "exportSelectedDefsToolStripMenuItem";
-            exportSelectedDefsToolStripMenuItem.Size = new Size(249, 22);
-            exportSelectedDefsToolStripMenuItem.Text = "Export Selected Defs";
-            exportSelectedDefsToolStripMenuItem.Click += eventExportSelectedDefs_Click;
-            // 
-            // _recentlyOpenedFilesToolStripSeparator
-            // 
-            _recentlyOpenedFilesToolStripSeparator.Name = "_recentlyOpenedFilesToolStripSeparator";
-            _recentlyOpenedFilesToolStripSeparator.Size = new Size(246, 6);
-            // 
             // _recentlyOpenedFilesToolStripMenuItem
             // 
             _recentlyOpenedFilesToolStripMenuItem.Name = "_recentlyOpenedFilesToolStripMenuItem";
             _recentlyOpenedFilesToolStripMenuItem.Size = new Size(249, 22);
             _recentlyOpenedFilesToolStripMenuItem.Text = "Recently Opened Files";
-            // 
-            // _toolStripSeparator1
-            // 
-            _toolStripSeparator1.Name = "_toolStripSeparator1";
-            _toolStripSeparator1.Size = new Size(246, 6);
             // 
             // _exitMenuItem
             // 
@@ -331,7 +356,7 @@
             // 
             // _editMenuItem
             // 
-            _editMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _undoMenuItem, _redoMenuItem, _toolStripSeparator11, _cutMenuItem, _copyMenuItem, _pasteMenuItem, _deleteMenuItem, _toolStripSeparator13, _selectAllMenuItem });
+            _editMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _undoMenuItem, _redoMenuItem, _editMenuSeparator1, _cutMenuItem, _copyMenuItem, _pasteMenuItem, _deleteMenuItem, _editMenuSeparator2, _selectAllMenuItem });
             _editMenuItem.Name = "_editMenuItem";
             _editMenuItem.Size = new Size(39, 20);
             _editMenuItem.Text = "Edit";
@@ -350,11 +375,6 @@
             _redoMenuItem.Size = new Size(122, 22);
             _redoMenuItem.Text = "Redo";
             _redoMenuItem.Click += eventRedo_Click;
-            // 
-            // _toolStripSeparator11
-            // 
-            _toolStripSeparator11.Name = "_toolStripSeparator11";
-            _toolStripSeparator11.Size = new Size(119, 6);
             // 
             // _cutMenuItem
             // 
@@ -384,10 +404,10 @@
             _deleteMenuItem.Text = "Delete";
             _deleteMenuItem.Click += eventDelete_Click;
             // 
-            // _toolStripSeparator13
+            // _editMenuSeparator2
             // 
-            _toolStripSeparator13.Name = "_toolStripSeparator13";
-            _toolStripSeparator13.Size = new Size(119, 6);
+            _editMenuSeparator2.Name = "_editMenuSeparator2";
+            _editMenuSeparator2.Size = new Size(119, 6);
             // 
             // _selectAllMenuItem
             // 
@@ -421,7 +441,7 @@
             // 
             // _viewMenuItem
             // 
-            _viewMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _centerToFitMenuItem, _toolStripSeparator3, _propertyGridToolStripMenuItem, _toolStripSeparator5, _collapseAllMenuItem, _expandAllToolStripMenuItem, toolStripSeparator1, drawingComponentToolStripMenuItem });
+            _viewMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _centerToFitMenuItem, _viewMenuSeparator1, _propertyGridToolStripMenuItem, _viewMenuSeparator2, _collapseAllMenuItem, _expandAllToolStripMenuItem, _viewMenuSeparator3, drawingComponentToolStripMenuItem });
             _viewMenuItem.Name = "_viewMenuItem";
             _viewMenuItem.Size = new Size(44, 20);
             _viewMenuItem.Text = "View";
@@ -434,11 +454,6 @@
             _centerToFitMenuItem.Text = "Center to Fit";
             _centerToFitMenuItem.Click += eventCenterToFitMenuItem_Click;
             // 
-            // _toolStripSeparator3
-            // 
-            _toolStripSeparator3.Name = "_toolStripSeparator3";
-            _toolStripSeparator3.Size = new Size(178, 6);
-            // 
             // _propertyGridToolStripMenuItem
             // 
             _propertyGridToolStripMenuItem.Checked = true;
@@ -449,10 +464,10 @@
             _propertyGridToolStripMenuItem.Text = "Property Grid";
             _propertyGridToolStripMenuItem.CheckedChanged += eventPropertyGridMenuItem_CheckedChanged;
             // 
-            // _toolStripSeparator5
+            // _viewMenuSeparator2
             // 
-            _toolStripSeparator5.Name = "_toolStripSeparator5";
-            _toolStripSeparator5.Size = new Size(178, 6);
+            _viewMenuSeparator2.Name = "_viewMenuSeparator2";
+            _viewMenuSeparator2.Size = new Size(178, 6);
             // 
             // _collapseAllMenuItem
             // 
@@ -468,10 +483,10 @@
             _expandAllToolStripMenuItem.Text = "Expand All";
             _expandAllToolStripMenuItem.Click += eventExpandAllMenuItem_Click;
             // 
-            // toolStripSeparator1
+            // _viewMenuSeparator3
             // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(178, 6);
+            _viewMenuSeparator3.Name = "_viewMenuSeparator3";
+            _viewMenuSeparator3.Size = new Size(178, 6);
             // 
             // drawingComponentToolStripMenuItem
             // 
@@ -510,7 +525,7 @@
             // 
             // _extrasMenuItem
             // 
-            _extrasMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _removeStylesMenuItem, toolStripSeparator2, _showDeveloperToolsMenuItem, editorFontToolStripMenuItem });
+            _extrasMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _removeStylesMenuItem, _extrasMenuSeparator1, _showDeveloperToolsMenuItem, editorFontToolStripMenuItem });
             _extrasMenuItem.Name = "_extrasMenuItem";
             _extrasMenuItem.Size = new Size(50, 20);
             _extrasMenuItem.Text = "Extras";
@@ -522,10 +537,10 @@
             _removeStylesMenuItem.Text = "Remove Styles";
             _removeStylesMenuItem.Click += eventRemoveStyles_Click;
             // 
-            // toolStripSeparator2
+            // _extrasMenuSeparator1
             // 
-            toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(211, 6);
+            _extrasMenuSeparator1.Name = "_extrasMenuSeparator1";
+            _extrasMenuSeparator1.Size = new Size(211, 6);
             // 
             // _showDeveloperToolsMenuItem
             // 
@@ -556,6 +571,48 @@
             _showConversionLogMenuItem.Size = new Size(208, 22);
             _showConversionLogMenuItem.Text = "Show Conversion Log";
             _showConversionLogMenuItem.Click += showConversionLog_Click;
+            // 
+            // _exportToolStripMenuItem
+            // 
+            _exportToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportSelectedDefsToolStripMenuItem, _exportMenuSeparator1, _executeExportBatchToolStripMenuItem, _exportMenuSeparator, _loadExportBatchToolStripMenuItem, _saveExportBatchToolStripMenuItem, _editCommandFileToolStripMenuItem });
+            _exportToolStripMenuItem.Name = "_exportToolStripMenuItem";
+            _exportToolStripMenuItem.Size = new Size(53, 20);
+            _exportToolStripMenuItem.Text = "Export";
+            // 
+            // exportSelectedDefsToolStripMenuItem
+            // 
+            exportSelectedDefsToolStripMenuItem.Name = "exportSelectedDefsToolStripMenuItem";
+            exportSelectedDefsToolStripMenuItem.Size = new Size(185, 22);
+            exportSelectedDefsToolStripMenuItem.Text = "Export Selected Defs";
+            exportSelectedDefsToolStripMenuItem.Click += eventExportSelectedDefs_Click;
+            // 
+            // _executeExportBatchToolStripMenuItem
+            // 
+            _executeExportBatchToolStripMenuItem.Name = "_executeExportBatchToolStripMenuItem";
+            _executeExportBatchToolStripMenuItem.Size = new Size(185, 22);
+            _executeExportBatchToolStripMenuItem.Text = "Execute Export Batch";
+            _executeExportBatchToolStripMenuItem.Click += eventExecuteExportBatch_Click;
+            // 
+            // _loadExportBatchToolStripMenuItem
+            // 
+            _loadExportBatchToolStripMenuItem.Name = "_loadExportBatchToolStripMenuItem";
+            _loadExportBatchToolStripMenuItem.Size = new Size(185, 22);
+            _loadExportBatchToolStripMenuItem.Text = "Load Export Batch";
+            _loadExportBatchToolStripMenuItem.Click += eventLoadExportBatch_Click;
+            // 
+            // _saveExportBatchToolStripMenuItem
+            // 
+            _saveExportBatchToolStripMenuItem.Name = "_saveExportBatchToolStripMenuItem";
+            _saveExportBatchToolStripMenuItem.Size = new Size(185, 22);
+            _saveExportBatchToolStripMenuItem.Text = "Save Export Batch";
+            _saveExportBatchToolStripMenuItem.Click += eventSaveExportBatch_Click;
+            // 
+            // _editCommandFileToolStripMenuItem
+            // 
+            _editCommandFileToolStripMenuItem.Name = "_editCommandFileToolStripMenuItem";
+            _editCommandFileToolStripMenuItem.Size = new Size(185, 22);
+            _editCommandFileToolStripMenuItem.Text = "Edit Export Batch";
+            _editCommandFileToolStripMenuItem.Click += eventEditExportBatch_Click;
             // 
             // _aboutACadSVGStudioMenuItem
             // 
@@ -667,7 +724,7 @@
 		private ToolStripMenuItem _exitToolStripMenuItem;
 		private SplitContainer _splitContainer2;
 		private PropertyGrid _propertyGrid;
-		private ToolStripSeparator _toolStripSeparator1;
+		private ToolStripSeparator _fileMenuSeparator2;
 		private TabControl _tabControl;
 		private TabPage _mainGroupTabPage;
 		private TabPage _cssTabPage;
@@ -685,18 +742,18 @@
 		private ToolStripMenuItem _removeStylesToolStripMenuItem;
 		private ToolStripMenuItem _searchToolStripMenuItem;
 		private ToolStripMenuItem _findToolStripMenuItem;
-		private ToolStripSeparator toolStripSeparator2;
+		private ToolStripSeparator _extrasMenuSeparator1;
 		private ToolStripMenuItem _showDeveloperToolsMenuItem;
 		private OpenFileDialog _openFileDialog;
 		private SaveFileDialog _saveFileDialog;
 		private ToolStripMenuItem _propertyGridToolStripMenuItem;
-		private ToolStripSeparator _toolStripSeparator3;
+		private ToolStripSeparator _viewMenuSeparator1;
 		private ContextMenuStrip _webBrowserContextMenuStrip;
 		private ToolStripMenuItem _centerToFitContextMenuItem;
 		private ToolStripSeparator _toolStripSeparator4;
 		private ToolStripMenuItem _showDeveloperToolsContextMenuItem;
 		private ToolStripMenuItem _collapseAllMenuItem;
-		private ToolStripSeparator _toolStripSeparator5;
+		private ToolStripSeparator _viewMenuSeparator2;
 		private ToolStripMenuItem _expandAllToolStripMenuItem;
 		private ToolStripMenuItem _aboutACadSVGStudioMenuItem;
 		private ToolStripMenuItem _findAndReplaceToolStripMenuItem;
@@ -716,11 +773,11 @@
 		private ToolStripMenuItem _showConversionLogMenuItem;
 		private ToolStripMenuItem _editMenuItem;
 		private ToolStripMenuItem _undoMenuItem;
-		private ToolStripSeparator _toolStripSeparator11;
+		private ToolStripSeparator _editMenuSeparator1;
 		private ToolStripMenuItem _cutMenuItem;
 		private ToolStripMenuItem _copyMenuItem;
 		private ToolStripMenuItem _pasteMenuItem;
-		private ToolStripSeparator _toolStripSeparator13;
+		private ToolStripSeparator _editMenuSeparator2;
 		private ToolStripMenuItem _selectAllMenuItem;
 		private ToolStripMenuItem _redoMenuItem;
 		private ToolStripMenuItem _deleteMenuItem;
@@ -729,19 +786,24 @@
 		private System.Windows.Forms.Timer _textChangedTimer;
 		private FontDialog _fontDialog;
 		private ToolStripMenuItem editorFontToolStripMenuItem;
-		private ToolStripSeparator _recentlyOpenedFilesToolStripSeparator;
+		private ToolStripSeparator _fileMenuSeparator1;
 		private ToolStripMenuItem _recentlyOpenedFilesToolStripMenuItem;
 		private TabControl _rightTabControl;
 		private TabPage _propertiesTabPage;
 		private TabPage _defsTabPage;
 		private TreeView _defsTreeView;
-		private ToolStripMenuItem exportSelectedDefsToolStripMenuItem;
 		private SvgViewerUserControl svgViewerUserControl;
-		private ToolStripSeparator toolStripSeparator1;
+		private ToolStripSeparator _viewMenuSeparator3;
 		private ToolStripMenuItem drawingComponentToolStripMenuItem;
 		private ToolStripMenuItem sVGViewerUserControlExperimentalToolStripMenuItem;
 		private ToolStripMenuItem webBrowserToolStripMenuItem;
         private ToolStripMenuItem _loadDwgToolStripMenuItem;
         private OpenFileDialog _loadAutoCadFileDialog;
+        private ToolStripMenuItem _exportToolStripMenuItem;
+        private ToolStripMenuItem exportSelectedDefsToolStripMenuItem;
+        private ToolStripMenuItem _loadExportBatchToolStripMenuItem;
+        private ToolStripMenuItem _saveExportBatchToolStripMenuItem;
+        private ToolStripMenuItem _editCommandFileToolStripMenuItem;
+        private ToolStripMenuItem _executeExportBatchToolStripMenuItem;
     }
 }

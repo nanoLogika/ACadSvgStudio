@@ -32,10 +32,12 @@ namespace ACadSvgStudio {
             _browseButton = new Button();
             _saveFileDialog = new SaveFileDialog();
             _exportButton = new Button();
-            _checkedListBox = new CheckedListBox();
+            _defsCheckedListBox = new CheckedListBox();
             _cancelButton = new Button();
             _directoryLabel = new Label();
             _directoryTextBox = new TextBox();
+            _addExportToCurrentBatchCheckBox = new CheckBox();
+            _exportAndOpenButton = new Button();
             SuspendLayout();
             // 
             // _resolveDefsCheckBox
@@ -93,19 +95,20 @@ namespace ACadSvgStudio {
             _exportButton.Name = "_exportButton";
             _exportButton.Size = new Size(75, 23);
             _exportButton.TabIndex = 4;
-            _exportButton.Text = "Export";
+            _exportButton.Text = "E&xport";
             _exportButton.UseVisualStyleBackColor = true;
+            _exportButton.Click += eventExport_Click;
             // 
-            // _checkedListBox
+            // _defsCheckedListBox
             // 
-            _checkedListBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            _checkedListBox.CheckOnClick = true;
-            _checkedListBox.FormattingEnabled = true;
-            _checkedListBox.IntegralHeight = false;
-            _checkedListBox.Location = new Point(12, 151);
-            _checkedListBox.Name = "_checkedListBox";
-            _checkedListBox.Size = new Size(562, 315);
-            _checkedListBox.TabIndex = 5;
+            _defsCheckedListBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            _defsCheckedListBox.CheckOnClick = true;
+            _defsCheckedListBox.FormattingEnabled = true;
+            _defsCheckedListBox.IntegralHeight = false;
+            _defsCheckedListBox.Location = new Point(12, 151);
+            _defsCheckedListBox.Name = "_defsCheckedListBox";
+            _defsCheckedListBox.Size = new Size(562, 315);
+            _defsCheckedListBox.TabIndex = 5;
             // 
             // _cancelButton
             // 
@@ -137,6 +140,27 @@ namespace ACadSvgStudio {
             _directoryTextBox.TabIndex = 2;
             _directoryTextBox.TextChanged += eventFilenameTextBox_TextChanged;
             // 
+            // _addExportToCurrentBatchCheckBox
+            // 
+            _addExportToCurrentBatchCheckBox.AutoSize = true;
+            _addExportToCurrentBatchCheckBox.Location = new Point(12, 476);
+            _addExportToCurrentBatchCheckBox.Name = "_addExportToCurrentBatchCheckBox";
+            _addExportToCurrentBatchCheckBox.Size = new Size(178, 19);
+            _addExportToCurrentBatchCheckBox.TabIndex = 7;
+            _addExportToCurrentBatchCheckBox.Text = "Add Export to Current Batch ";
+            _addExportToCurrentBatchCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // _exportAndOpenButton
+            // 
+            _exportAndOpenButton.DialogResult = DialogResult.OK;
+            _exportAndOpenButton.Location = new Point(298, 472);
+            _exportAndOpenButton.Name = "_exportAndOpenButton";
+            _exportAndOpenButton.Size = new Size(114, 23);
+            _exportAndOpenButton.TabIndex = 8;
+            _exportAndOpenButton.Text = "Export and &Open";
+            _exportAndOpenButton.UseVisualStyleBackColor = true;
+            _exportAndOpenButton.Click += eventExportAndOpen_Click;
+            // 
             // ExportSVGForm
             // 
             AcceptButton = _exportButton;
@@ -144,8 +168,10 @@ namespace ACadSvgStudio {
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = _cancelButton;
             ClientSize = new Size(586, 507);
+            Controls.Add(_exportAndOpenButton);
+            Controls.Add(_addExportToCurrentBatchCheckBox);
             Controls.Add(_cancelButton);
-            Controls.Add(_checkedListBox);
+            Controls.Add(_defsCheckedListBox);
             Controls.Add(_exportButton);
             Controls.Add(_browseButton);
             Controls.Add(_directoryTextBox);
@@ -173,9 +199,11 @@ namespace ACadSvgStudio {
 		private Button _browseButton;
 		private SaveFileDialog _saveFileDialog;
 		private Button _exportButton;
-		private CheckedListBox _checkedListBox;
+		private CheckedListBox _defsCheckedListBox;
 		private Button _cancelButton;
         private Label _directoryLabel;
         private TextBox _directoryTextBox;
+        private CheckBox _addExportToCurrentBatchCheckBox;
+        private Button _exportAndOpenButton;
     }
 }
