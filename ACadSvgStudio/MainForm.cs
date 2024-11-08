@@ -601,6 +601,9 @@ namespace ACadSvgStudio {
 			_scintillaSvgGroupEditor.AllowDrop = true;
 			_scintillaSvgGroupEditor.DragEnter += (s, e) => eventEditorDragEnter(s, e);
 			_scintillaSvgGroupEditor.DragDrop += (s, e) => eventEditorDragDrop(s, e);
+			svgViewerUserControl.AllowDrop = true;
+			svgViewerUserControl.DragEnter += (s, e) => eventEditorDragEnter(s, e);
+			svgViewerUserControl.DragDrop += (s, e) => eventEditorDragDrop(s, e);
 
 
 			// Recipe for XML
