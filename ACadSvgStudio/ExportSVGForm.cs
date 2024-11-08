@@ -52,7 +52,7 @@ namespace ACadSvgStudio {
 		}
 
 
-		public ExportSVGForm(string filename, HashSet<string> defsIds) : this() {
+		public ExportSVGForm(string initialDirectory, string filename, HashSet<string> defsIds) : this() {
 			FileName = filename;
 
 			_defsIds = new SortedSet<string>();
