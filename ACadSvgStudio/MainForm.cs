@@ -63,7 +63,8 @@ namespace ACadSvgStudio {
 		private bool _flippedContentChanged;
 
 
-        public MainForm() {
+		public MainForm()
+		{
 			InitializeComponent();
 
 			this.Text = AppName;
@@ -83,7 +84,8 @@ namespace ACadSvgStudio {
 		}
 
 
-		private bool isFileSupported(string filename) {
+		private bool isFileSupported(string filename)
+		{
 			string[] supportedFiles = new string[] {
 				"dwg",
 				"dxf",
@@ -93,8 +95,10 @@ namespace ACadSvgStudio {
 
 			string filenameLower = filename.ToLower();
 
-			foreach (string supportedFile in supportedFiles) {
-				if (filenameLower.EndsWith($".{supportedFile}")) {
+			foreach (string supportedFile in supportedFiles)
+			{
+				if (filenameLower.EndsWith($".{supportedFile}"))
+				{
 					return true;
 				}
 			}
@@ -103,20 +107,24 @@ namespace ACadSvgStudio {
 		}
 
 
-        private void updateRecentlyOpenedFiles() {
+		private void updateRecentlyOpenedFiles()
+		{
 			bool hasRecentlyOpenedFiles = recentlyOpenedFilesManager.HasRecentlyOpenedFiles();
 			_recentlyOpenedFilesToolStripSeparator.Visible = hasRecentlyOpenedFiles;
 			_recentlyOpenedFilesToolStripMenuItem.Visible = hasRecentlyOpenedFiles;
 
 			_recentlyOpenedFilesToolStripMenuItem.DropDownItems.Clear();
 
-            if (hasRecentlyOpenedFiles) {
+			if (hasRecentlyOpenedFiles)
+			{
 				List<string> recentlyOpenedFiles = recentlyOpenedFilesManager.RecentlyOpenedFiles();
 				int counter = 1;
-                foreach (string file in recentlyOpenedFiles) {
+				foreach (string file in recentlyOpenedFiles)
+				{
 					ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
 					toolStripMenuItem.Text = $"{counter} {file}";
-                    toolStripMenuItem.Click += (s, e) => {
+					toolStripMenuItem.Click += (s, e) =>
+					{
 						LoadFile(file);
 					};
 					_recentlyOpenedFilesToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
@@ -126,7 +134,8 @@ namespace ACadSvgStudio {
 		}
 
 
-        private void initFindReplace() {
+		private void initFindReplace()
+		{
 			_findReplace = new FindReplace();
 			_findReplace.Scintilla = _scintillaSvgGroupEditor;
 			_findReplace.Window.FormClosing += (s, e) => enableUpdatingHTML(s, e);
@@ -153,7 +162,8 @@ namespace ACadSvgStudio {
 		}
 
 
-        private void initPropertyGrid() {
+		private void initPropertyGrid()
+		{
 			_svgProperties = new SvgProperties(this);
 			_propertyGrid.SelectedObject = _svgProperties;
 		}
@@ -165,13 +175,18 @@ namespace ACadSvgStudio {
 		/// the find/replace process.
 		/// </summary>
 		/// <returns></returns>
-        private Button findReplaceAllButton() {
-            foreach (Control control in _findReplace.Window.Controls) {
-                if (control is TabControl tabControl) {
+		private Button findReplaceAllButton()
+		{
+			foreach (Control control in _findReplace.Window.Controls)
+			{
+				if (control is TabControl tabControl)
+				{
 					// Tab page with index 1 is replace tab
 					Control.ControlCollection replaceTabPageControls = tabControl.TabPages[1].Controls;
-                    foreach (Control ctl in replaceTabPageControls) {
-                        if (ctl is Button btn && btn.Name == "btnReplaceAll") {
+					foreach (Control ctl in replaceTabPageControls)
+					{
+						if (ctl is Button btn && btn.Name == "btnReplaceAll")
+						{
 							return btn;
 						}
 					}
@@ -187,9 +202,12 @@ namespace ACadSvgStudio {
 		/// We need the button to hide the dialog.
 		/// </summary>
 		/// <returns></returns>
-        private FlowLayoutPanel findIncrementalSearchFlowLayoutPanel() {
-            foreach (Control control in _incrementalSearcher.Controls) {
-                if (control is FlowLayoutPanel flowLayoutPanel) {
+		private FlowLayoutPanel findIncrementalSearchFlowLayoutPanel()
+		{
+			foreach (Control control in _incrementalSearcher.Controls)
+			{
+				if (control is FlowLayoutPanel flowLayoutPanel)
+				{
 					return flowLayoutPanel;
 				}
 			}
@@ -198,10 +216,12 @@ namespace ACadSvgStudio {
 		}
 
 
-        internal void LoadFile(string filename) {
+		internal void LoadFile(string filename)
+		{
 			string ext = Path.GetExtension(filename).ToLower();
 
-            switch (ext) {
+			switch (ext)
+			{
 				case ".svg":
 				case ".g.svg":
 					readSvgFile(filename);
@@ -220,8 +240,10 @@ namespace ACadSvgStudio {
 		}
 
 
-        private void createConversionContext() {
-            _conversionContext = new ConversionContext() {
+		private void createConversionContext()
+		{
+			_conversionContext = new ConversionContext()
+			{
 				ConversionOptions = _svgProperties.GetConversionOptions(),
 				ViewboxData = _svgProperties.GetViewbox(),
 				GlobalAttributeData = _svgProperties.GetGlobalAttributeData()
@@ -229,7 +251,8 @@ namespace ACadSvgStudio {
 		}
 
 
-        private void updateConversionInfo(string filename, string fileFormat, string svgText, string scalesSvgText) {
+		private void updateConversionInfo(string filename, string fileFormat, string svgText, string scalesSvgText)
+		{
 			_flippedFilename = _loadedDwgFilename;
 			_flippedSvg = _scintillaSvgGroupEditor.Text;
 			_flippedConversionLog = _conversionLog;
@@ -242,7 +265,8 @@ namespace ACadSvgStudio {
 
 			_centerToFitOnLoad = true;
 			_scintillaSvgGroupEditor.Text = svgText;
-            if (_conversionContext.ConversionOptions.CreateScaleFromModelSpaceExtent) {
+			if (_conversionContext.ConversionOptions.CreateScaleFromModelSpaceExtent)
+			{
 				_scintillaScales.Text = scalesSvgText;
 			}
 
@@ -252,15 +276,18 @@ namespace ACadSvgStudio {
 
 		#region -  Devs tree view																	-
 
-		private void eventDefsTreeViewAfterCheck(object sender, TreeViewEventArgs e) {
-			if (_suppressOnChecked) {
+		private void eventDefsTreeViewAfterCheck(object sender, TreeViewEventArgs e)
+		{
+			if (_suppressOnChecked)
+			{
 				return;
 			}
 
 
 			// Save collapsed/expanded states
 			List<int> prevFolderExpanded = new List<int>();
-			for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++) {
+			for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++)
+			{
 				prevFolderExpanded.Add(_scintillaSvgGroupEditor.GetFoldExpanded(x));
 			}
 
@@ -269,21 +296,27 @@ namespace ACadSvgStudio {
 
 			XDocument xDocument = XDocument.Parse(_scintillaSvgGroupEditor.Text);
 
-			if (treeNode.Checked) {
-				if (treeNode.Tag is UseElement useElement) {
+			if (treeNode.Checked)
+			{
+				if (treeNode.Tag is UseElement useElement)
+				{
 					xDocument.Root!.AddFirst(useElement.GetXml());
 					prevFolderExpanded.Insert(1, 1);
 				}
-                else if (treeNode.Tag is IList<UseElement> useElements) {
-                    foreach (UseElement ue in useElements) {
+				else if (treeNode.Tag is IList<UseElement> useElements)
+				{
+					foreach (UseElement ue in useElements)
+					{
 						xDocument.Root!.AddFirst(ue.GetXml());
 						prevFolderExpanded.Insert(1, 1);
 					}
 				}
 			}
-            else {
+			else
+			{
 				List<XElement> useElements = DefsUtils.FindUseElements(treeNode.Name, xDocument.Root!);
-                foreach (XElement useElement in useElements) {
+				foreach (XElement useElement in useElements)
+				{
 					useElement.Remove();
 					prevFolderExpanded.RemoveAt(1);
 				}
@@ -295,38 +328,50 @@ namespace ACadSvgStudio {
 
 
 			// Restore collapsed/expanded states
-			for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++) {
-				if (prevFolderExpanded[x] == 1) {
+			for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++)
+			{
+				if (prevFolderExpanded[x] == 1)
+				{
 					_scintillaSvgGroupEditor.SetFoldExpanded(x, prevFolderExpanded[x]);
 				}
 			}
-			for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++) {
-				if (prevFolderExpanded[x] == 0) {
+			for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++)
+			{
+				if (prevFolderExpanded[x] == 0)
+				{
 					_scintillaSvgGroupEditor.SetFoldExpanded(x, prevFolderExpanded[x]);
 				}
 			}
 
 
 			TreeNode parent = treeNode.Parent;
-            if (treeNode.Checked) {
-                if (parent != null) {
+			if (treeNode.Checked)
+			{
+				if (parent != null)
+				{
 					parent.Checked = false;
 				}
-                foreach (TreeNode childTreeNode in treeNode.Nodes) {
+				foreach (TreeNode childTreeNode in treeNode.Nodes)
+				{
 					childTreeNode.Checked = false;
 				}
 			}
 		}
 
 
-		private void collectFlatListOfTreeNodes(TreeNodeCollection nodes, IDictionary<string, TreeNode> flatListOfTreeNodes, bool selectedOnly = false) {
-            foreach (TreeNode node in nodes) {
-				if (selectedOnly) {
-					if (node.Checked) {
+		private void collectFlatListOfTreeNodes(TreeNodeCollection nodes, IDictionary<string, TreeNode> flatListOfTreeNodes, bool selectedOnly = false)
+		{
+			foreach (TreeNode node in nodes)
+			{
+				if (selectedOnly)
+				{
+					if (node.Checked)
+					{
 						flatListOfTreeNodes.Add(node.Name, node);
 					}
 				}
-				else {
+				else
+				{
 					flatListOfTreeNodes.Add(node.Name, node);
 				}
 
@@ -334,12 +379,16 @@ namespace ACadSvgStudio {
 			}
 		}
 
-        private void applyFlatListOfTreeNodes(TreeNode newTreeNode, IDictionary<string, TreeNode> prevTreeNodes) {
-			if (prevTreeNodes.TryGetValue(newTreeNode.Name, out TreeNode prevNode)) {
-				if (prevNode.IsExpanded) {
+		private void applyFlatListOfTreeNodes(TreeNode newTreeNode, IDictionary<string, TreeNode> prevTreeNodes)
+		{
+			if (prevTreeNodes.TryGetValue(newTreeNode.Name, out TreeNode prevNode))
+			{
+				if (prevNode.IsExpanded)
+				{
 					newTreeNode.Expand();
 				}
-				else {
+				else
+				{
 					newTreeNode.Collapse();
 				}
 				//	Extended Text and UseElements may be present at previous tree node
@@ -347,14 +396,17 @@ namespace ACadSvgStudio {
 				newTreeNode.Tag = prevNode.Tag;
 			}
 
-			foreach (TreeNode node in newTreeNode.Nodes) {
+			foreach (TreeNode node in newTreeNode.Nodes)
+			{
 				applyFlatListOfTreeNodes(node, prevTreeNodes);
 			}
 		}
 
 
-        private bool updateDefs(string xmlValue) {
-            if (string.IsNullOrWhiteSpace(xmlValue)) {
+		private bool updateDefs(string xmlValue)
+		{
+			if (string.IsNullOrWhiteSpace(xmlValue))
+			{
 				return false;
 			}
 
@@ -363,7 +415,8 @@ namespace ACadSvgStudio {
 			List<DefsItem> defsItems = new List<DefsItem>();
 			DefsUtils.FindAllDefs(xElement, null, defsItems);
 
-            if (defsItems.Count == 0) {
+			if (defsItems.Count == 0)
+			{
 				return false;
 			}
 
@@ -372,7 +425,8 @@ namespace ACadSvgStudio {
 
 			List<TreeNode> newTreeNodes = new List<TreeNode>();
 
-            foreach (DefsItem defsItem in defsItems) {
+			foreach (DefsItem defsItem in defsItems)
+			{
 				TreeNode node = createDefsTreeNode(defsItem);
 				newTreeNodes.Add(node);
 			}
@@ -380,7 +434,8 @@ namespace ACadSvgStudio {
 			//	Build new tree but restore tags and expanded/collapsed from previous
 			//	all nodes are unchecked.
 			_defsTreeView.Nodes.Clear();
-            foreach (TreeNode node in newTreeNodes) {
+			foreach (TreeNode node in newTreeNodes)
+			{
 				_defsTreeView.Nodes.Add(node);
 				applyFlatListOfTreeNodes(node, prevTreeNodes);
 			}
@@ -388,25 +443,32 @@ namespace ACadSvgStudio {
 			//	Scan list of <use> tags
 			IList<UseElement> usedDefsItems = DefsUtils.FindAllUsedDefs(xElement);
 			IList<string> assignedDefIds = new List<string>();
-            foreach (UseElement useElement in usedDefsItems) {
+			foreach (UseElement useElement in usedDefsItems)
+			{
 				string id = useElement.GroupId.Substring(1);
 
 				TreeNode node = findNode(_defsTreeView.Nodes, id);
-                if (node != null) {
-                    if (useElement.X != 0 || useElement.Y != 0) {
+				if (node != null)
+				{
+					if (useElement.X != 0 || useElement.Y != 0)
+					{
 						node.Text = $"{id} ({useElement.X}, {useElement.Y})";
 					}
 					//	Only expand to List of UseElement when Tag was set here before
-                    if (assignedDefIds.Contains(id)) {
-                        if (node.Tag is UseElement tagUseElement) {
+					if (assignedDefIds.Contains(id))
+					{
+						if (node.Tag is UseElement tagUseElement)
+						{
 							node.Tag = new List<UseElement>() { tagUseElement, useElement };
 						}
-                        else if (node.Tag is IList<UseElement>) {
+						else if (node.Tag is IList<UseElement>)
+						{
 							((List<UseElement>)node.Tag).Add(useElement);
 						}
 						node.Text = $"{id} (multiple pos)";
 					}
-                    else {
+					else
+					{
 						//	This may override a tag from the previous tree vie
 						node.Tag = useElement;
 						assignedDefIds.Add(id);
@@ -422,14 +484,19 @@ namespace ACadSvgStudio {
 		}
 
 
-        private TreeNode findNode(TreeNodeCollection nodes, string id) {
-            foreach (TreeNode node in nodes) {
-                if (node.Name == id) {
+		private TreeNode findNode(TreeNodeCollection nodes, string id)
+		{
+			foreach (TreeNode node in nodes)
+			{
+				if (node.Name == id)
+				{
 					return node;
 				}
-                else {
+				else
+				{
 					TreeNode foundNode = findNode(node.Nodes, id);
-                    if (foundNode != null) {
+					if (foundNode != null)
+					{
 						return foundNode;
 					}
 				}
@@ -438,14 +505,17 @@ namespace ACadSvgStudio {
 		}
 
 
-        private TreeNode createDefsTreeNode(DefsItem defsItem) {
-            TreeNode treeNode = new TreeNode() {
+		private TreeNode createDefsTreeNode(DefsItem defsItem)
+		{
+			TreeNode treeNode = new TreeNode()
+			{
 				Name = defsItem.Id,
 				Text = defsItem.Id,
 				Tag = new UseElement().WithGroupId(defsItem.Id)
 			};
 
-            foreach (DefsItem childDefsItem in defsItem.Children) {
+			foreach (DefsItem childDefsItem in defsItem.Children)
+			{
 				TreeNode childTreeNode = createDefsTreeNode(childDefsItem);
 				treeNode.Nodes.Add(childTreeNode);
 			}
@@ -455,7 +525,8 @@ namespace ACadSvgStudio {
 
 		#endregion
 
-        private void readDwgFile(string filename) {
+		private void readDwgFile(string filename)
+		{
 			createConversionContext();
 
 			DocumentSvg docSvg = ACadLoader.LoadDwg(filename, _conversionContext);
@@ -471,7 +542,8 @@ namespace ACadSvgStudio {
 		}
 
 
-        private void readDxfFile(string filename) {
+		private void readDxfFile(string filename)
+		{
 			createConversionContext();
 
 			DocumentSvg docSvg = ACadLoader.LoadDxf(filename, _conversionContext);
@@ -487,7 +559,8 @@ namespace ACadSvgStudio {
 		}
 
 
-        private void readSvgFile(string filename) {
+		private void readSvgFile(string filename)
+		{
 			createConversionContext();
 
 			string svgText = System.IO.File.ReadAllText(filename);
@@ -501,8 +574,10 @@ namespace ACadSvgStudio {
 		}
 
 
-        internal void SetSelection(bool clear, int index, int length) {
-            if (clear) {
+		internal void SetSelection(bool clear, int index, int length)
+		{
+			if (clear)
+			{
 				_scintillaSvgGroupEditor.ClearSelections();
 			}
 			_scintillaSvgGroupEditor.SetSelection(index, index + length);
@@ -511,7 +586,8 @@ namespace ACadSvgStudio {
 
 		#region -  Init Scintilla editors and Web Browser                                           -
 
-        private void initScintillaSVGGroupEditor() {
+		private void initScintillaSVGGroupEditor()
+		{
 			_scintillaSvgGroupEditor = new ScintillaNET.Scintilla();
 			_scintillaSvgGroupEditor.Dock = DockStyle.Fill;
 			_scintillaSvgGroupEditor.BorderStyle = ScintillaNET.BorderStyle.FixedSingle;
@@ -525,6 +601,9 @@ namespace ACadSvgStudio {
 			_scintillaSvgGroupEditor.AllowDrop = true;
 			_scintillaSvgGroupEditor.DragEnter += (s, e) => eventEditorDragEnter(s, e);
 			_scintillaSvgGroupEditor.DragDrop += (s, e) => eventEditorDragDrop(s, e);
+			svgViewerUserControl.AllowDrop = true;
+			svgViewerUserControl.DragEnter += (s, e) => eventEditorDragEnter(s, e);
+			svgViewerUserControl.DragDrop += (s, e) => eventEditorDragDrop(s, e);
 
 
 			// Recipe for XML
@@ -545,7 +624,8 @@ namespace ACadSvgStudio {
 			_scintillaSvgGroupEditor.Margins[2].Width = 20;
 
 			// Reset folder markers
-            for (int i = Marker.FolderEnd; i <= Marker.FolderOpen; i++) {
+			for (int i = Marker.FolderEnd; i <= Marker.FolderOpen; i++)
+			{
 				_scintillaSvgGroupEditor.Markers[i].SetForeColor(SystemColors.ControlLightLight);
 				_scintillaSvgGroupEditor.Markers[i].SetBackColor(SystemColors.ControlDark);
 			}
@@ -573,7 +653,8 @@ namespace ACadSvgStudio {
 		}
 
 
-        private void initScintillaScales() {
+		private void initScintillaScales()
+		{
 			_scintillaScales = new ScintillaNET.Scintilla();
 			_scintillaScales.Dock = DockStyle.Fill;
 			_scintillaScales.BorderStyle = ScintillaNET.BorderStyle.FixedSingle;
@@ -592,7 +673,8 @@ namespace ACadSvgStudio {
 		}
 
 
-        private void initScintillaCss() {
+		private void initScintillaCss()
+		{
 			_scintillaCss = new ScintillaNET.Scintilla();
 			_scintillaCss.Dock = DockStyle.Fill;
 			_scintillaCss.BorderStyle = ScintillaNET.BorderStyle.FixedSingle;
@@ -621,7 +703,8 @@ namespace ACadSvgStudio {
 		}
 
 
-        private void initWebBrowser() {
+		private void initWebBrowser()
+		{
 			_webBrowser = new ChromiumWebBrowser();
 			_webBrowser.Dock = DockStyle.Fill;
 			_splitContainer2.Panel1.Controls.Add(_webBrowser);
@@ -629,8 +712,10 @@ namespace ACadSvgStudio {
 			_webBrowser.MenuHandler = new MyContextMenuHandler(this);
 
 
-            _webBrowser.LoadingStateChanged += (s, e) => {
-                if (!e.IsLoading && _centerToFitOnLoad) {
+			_webBrowser.LoadingStateChanged += (s, e) =>
+			{
+				if (!e.IsLoading && _centerToFitOnLoad)
+				{
 					centerToFit();
 					//_centerToFitOnLoad = false;
 				}
@@ -638,21 +723,25 @@ namespace ACadSvgStudio {
 		}
 
 
-        private void updateLineMargin(object? sender) {
-            if (sender == null) {
+		private void updateLineMargin(object? sender)
+		{
+			if (sender == null)
+			{
 				return;
 			}
 
 			Scintilla scintilla = (Scintilla)sender;
 
 			var lineMarginChars = scintilla.Lines.Count.ToString().Length;
-            if (lineMarginChars != this._maxLineNumberCharLength) {
+			if (lineMarginChars != this._maxLineNumberCharLength)
+			{
 				doUpdateLineMargin(scintilla, lineMarginChars);
 			}
 		}
 
 
-        private void doUpdateLineMargin(ScintillaNET.Scintilla scintilla, int lineMarginChars) {
+		private void doUpdateLineMargin(ScintillaNET.Scintilla scintilla, int lineMarginChars)
+		{
 			const int padding = 2;
 			scintilla.Margins[0].Width = scintilla.TextWidth(Style.LineNumber, new string('9', lineMarginChars + 1)) + padding;
 			_maxLineNumberCharLength = lineMarginChars;
@@ -661,24 +750,29 @@ namespace ACadSvgStudio {
 		#endregion
 		#region -  Events MainForm
 
-        protected override void OnLoad(EventArgs e) {
+		protected override void OnLoad(EventArgs e)
+		{
 			base.OnLoad(e);
-            try {
+			try
+			{
 				_propertyGridToolStripMenuItem.Checked = Settings.Default.ViewPropertyGrid;
 				_splitContainer2.Panel2Collapsed = !_propertyGridToolStripMenuItem.Checked;
 
 
-                if (Settings.Default.WindowPositionInitialized) {
+				if (Settings.Default.WindowPositionInitialized)
+				{
 					Point loc = Settings.Default.WindowPosition;
 					Size size = Settings.Default.WindowSize;
 					bool mustUseDefault = true;
 					Rectangle windowRect = new Rectangle(loc, size);
-                    if (size.Width > 0 && size.Height > 0) {
+					if (size.Width > 0 && size.Height > 0)
+					{
 						Screen targetScreen = findScreen(windowRect);
 						mustUseDefault = targetScreen == null;
 					}
 
-                    if (mustUseDefault) {
+					if (mustUseDefault)
+					{
 						return;
 					}
 
@@ -688,15 +782,18 @@ namespace ACadSvgStudio {
 					int splitter1Dist = Settings.Default.SplitContainer1Distance;
 					int splitter2Dist = Settings.Default.SplitContainer2Distance;
 					if (splitter1Dist > _splitContainer1.Panel1MinSize &&
-                        splitter1Dist < _splitContainer1.Width - _splitContainer1.Panel2MinSize) {
+						splitter1Dist < _splitContainer1.Width - _splitContainer1.Panel2MinSize)
+					{
 						_splitContainer1.SplitterDistance = splitter1Dist;
 					}
 					if (splitter2Dist > _splitContainer2.Panel1MinSize &&
-                        splitter2Dist < _splitContainer2.Width - _splitContainer2.Panel2MinSize) {
+						splitter2Dist < _splitContainer2.Width - _splitContainer2.Panel2MinSize)
+					{
 						_splitContainer2.SplitterDistance = splitter2Dist;
 					}
 				}
-                else {
+				else
+				{
 					Settings.Default.WindowPositionInitialized = true;
 					saveWindowState();
 				}
@@ -707,16 +804,20 @@ namespace ACadSvgStudio {
 
 				CreateHTML();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private Screen findScreen(Rectangle windowRect) {
-            foreach (Screen screen in Screen.AllScreens) {
+		private Screen findScreen(Rectangle windowRect)
+		{
+			foreach (Screen screen in Screen.AllScreens)
+			{
 				Rectangle screenRectangle = screen.Bounds;
-                if (screenRectangle.IntersectsWith(windowRect) && windowRect.Top + 8 >= screen.Bounds.Top) {
+				if (screenRectangle.IntersectsWith(windowRect) && windowRect.Top + 8 >= screen.Bounds.Top)
+				{
 					return screen;
 				}
 			}
@@ -724,12 +825,17 @@ namespace ACadSvgStudio {
 		}
 
 
-        protected override void OnFormClosing(FormClosingEventArgs e) {
-            try {
-                if (_contentChanged) {
-                    switch (MessageBox.Show("Content has been changed, save changes?", "Close", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning)) {
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			try
+			{
+				if (_contentChanged)
+				{
+					switch (MessageBox.Show("Content has been changed, save changes?", "Close", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning))
+					{
 						case DialogResult.Yes:
-                        if (!string.IsNullOrEmpty(_loadedFilename)) {
+							if (!string.IsNullOrEmpty(_loadedFilename))
+							{
 								File.WriteAllText(_loadedFilename, _scintillaSvgGroupEditor.Text);
 								return;
 							}
@@ -743,29 +849,36 @@ namespace ACadSvgStudio {
 					}
 				}
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        protected override void OnClosed(EventArgs e) {
-            try {
+		protected override void OnClosed(EventArgs e)
+		{
+			try
+			{
 				saveWindowState();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void saveWindowState() {
+		private void saveWindowState()
+		{
 			Settings.Default.WindowPosition = Location;
 
-            if (WindowState == FormWindowState.Normal) {
+			if (WindowState == FormWindowState.Normal)
+			{
 				Settings.Default.WindowSize = Size;
 			}
-            else {
+			else
+			{
 				Settings.Default.WindowSize = RestoreBounds.Size;
 			}
 
@@ -779,116 +892,146 @@ namespace ACadSvgStudio {
 		#region -  Events Scinlilla
 
 
-        private void eventTextChangedTimer_Tick(object sender, EventArgs e) {
-            try {
-                if (_updatingHTMLEnabled) {
+		private void eventTextChangedTimer_Tick(object sender, EventArgs e)
+		{
+			try
+			{
+				if (_updatingHTMLEnabled)
+				{
 					UpdateHTML();
 				}
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
-            finally {
+			finally
+			{
 				_textChangedTimer.Stop();
 			}
 		}
 
 
-        private void eventScintilla_TextChanged(object? sender, EventArgs e) {
-            try {
+		private void eventScintilla_TextChanged(object? sender, EventArgs e)
+		{
+			try
+			{
 				clearStatusLabel();
 				updateLineMargin(sender);
 				_contentChanged = true;
 
-                if (_updatingHTMLEnabled) {
+				if (_updatingHTMLEnabled)
+				{
 					_textChangedTimer.Restart();
 				}
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventScintillaScales_TextChanged(object? sender, EventArgs e) {
-            try {
+		private void eventScintillaScales_TextChanged(object? sender, EventArgs e)
+		{
+			try
+			{
 				clearStatusLabel();
 				Settings.Default.ScalesSvg = _scintillaScales.Text;
 				Settings.Default.Save();
 
 				updateLineMargin(sender);
 
-                if (_updatingHTMLEnabled) {
+				if (_updatingHTMLEnabled)
+				{
 					_textChangedTimer.Restart();
 				}
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventScintillaCss_TextChanged(object? sender, EventArgs e) {
-            try {
+		private void eventScintillaCss_TextChanged(object? sender, EventArgs e)
+		{
+			try
+			{
 				clearStatusLabel();
 				Settings.Default.CSSPreview = _scintillaCss.Text;
 				Settings.Default.Save();
 
 				updateLineMargin(sender);
 
-                if (_updatingHTMLEnabled) {
+				if (_updatingHTMLEnabled)
+				{
 					_textChangedTimer.Restart();
 				}
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventEditorDragEnter(object sender, DragEventArgs e) {
-            try {
-                if (e.Data == null) {
+		private void eventEditorDragEnter(object sender, DragEventArgs e)
+		{
+			try
+			{
+				if (e.Data == null)
+				{
 					return;
 				}
 
 				object fileDropData = e.Data.GetData(DataFormats.FileDrop);
-                if (fileDropData == null) {
+				if (fileDropData == null)
+				{
 					return;
 				}
 
 				string[] files = (string[])fileDropData;
 
 				// Check for unsupported files
-                foreach (string file in files) {
-					if (!isFileSupported(file)) {
+				foreach (string file in files)
+				{
+					if (!isFileSupported(file))
+					{
 						return;
 					}
 				}
 
-                if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+				if (e.Data.GetDataPresent(DataFormats.FileDrop))
+				{
 					e.Effect = DragDropEffects.Copy;
 				}
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventEditorDragDrop(object sender, DragEventArgs e) {
-            try {
-                if (e.Data == null) {
+		private void eventEditorDragDrop(object sender, DragEventArgs e)
+		{
+			try
+			{
+				if (e.Data == null)
+				{
 					return;
 				}
 
 				object fileDropData = e.Data.GetData(DataFormats.FileDrop);
-                if (fileDropData == null) {
+				if (fileDropData == null)
+				{
 					return;
 				}
 
 				string[] files = (string[])fileDropData;
-                if (files.Length != 1) {
+				if (files.Length != 1)
+				{
 					return;
 				}
 
@@ -897,16 +1040,19 @@ namespace ACadSvgStudio {
 
 				UpdateHTML();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
-            finally {
+			finally
+			{
 				_updatingHTMLEnabled = true;
 			}
 		}
 
 
-        private void clearStatusLabel() {
+		private void clearStatusLabel()
+		{
 			_statusLabel.Text = string.Empty;
 		}
 
@@ -914,19 +1060,25 @@ namespace ACadSvgStudio {
 
 		#region -  Events File Menu + Open, Save Dialog 
 
-        private void eventOpenClick(object sender, EventArgs e) {
-            try {
+		private void eventOpenClick(object sender, EventArgs e)
+		{
+			try
+			{
 				_openFileDialog.ShowDialog();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventSaveSvgGroupClick(object sender, EventArgs e) {
-            try {
-                if (!string.IsNullOrEmpty(_loadedFilename)) {
+		private void eventSaveSvgGroupClick(object sender, EventArgs e)
+		{
+			try
+			{
+				if (!string.IsNullOrEmpty(_loadedFilename))
+				{
 					File.WriteAllText(_loadedFilename, _scintillaSvgGroupEditor.Text);
 					_contentChanged = false;
 					return;
@@ -934,38 +1086,47 @@ namespace ACadSvgStudio {
 
 				eventSaveSvgGroupAsClick(sender, e);
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventSaveSvgGroupAsClick(object sender, EventArgs e) {
-            try {
+		private void eventSaveSvgGroupAsClick(object sender, EventArgs e)
+		{
+			try
+			{
 				_saveFileDialog.FileName = _loadedFilename;
-				if (!string.IsNullOrEmpty(_loadedFilename) && _loadedFilename.EndsWith(".g.svg")) {
+				if (!string.IsNullOrEmpty(_loadedFilename) && _loadedFilename.EndsWith(".g.svg"))
+				{
 					_saveFileDialog.FilterIndex = 2;
 				}
-				else {
+				else
+				{
 					_saveFileDialog.FilterIndex = 1;
 				}
 				_saveFileDialog.ShowDialog();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-		private void eventExportSelectedDefs_Click(object sender, EventArgs e) {
-			try {
+		private void eventExportSelectedDefs_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				IDictionary<string, TreeNode> selectedTreeNodes = new Dictionary<string, TreeNode>();
 				collectFlatListOfTreeNodes(_defsTreeView.Nodes, selectedTreeNodes, true);
 
 				XElement xElement = XElement.Parse(_scintillaSvgGroupEditor.Text);
 
 				HashSet<string> defsIds = new HashSet<string>();
-				foreach (KeyValuePair<string, TreeNode> selectedTreeNode in selectedTreeNodes) {
+				foreach (KeyValuePair<string, TreeNode> selectedTreeNode in selectedTreeNodes)
+				{
 					string id = selectedTreeNode.Key;
 					defsIds.Add(id);
 
@@ -975,29 +1136,36 @@ namespace ACadSvgStudio {
 				DefsUtils.CollectUsedDefsIds(xElement, defsIds, false);
 
 				ExportSVGForm exportSvgForm = new ExportSVGForm(_loadedFilename, defsIds);
-				if (exportSvgForm.ShowDialog() == DialogResult.OK) {
+				if (exportSvgForm.ShowDialog() == DialogResult.OK)
+				{
 					DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, exportSvgForm.SelectedDefsIds, exportSvgForm.ResolveDefs);
 					exporter.Export(exportSvgForm.FileName);
 				}
 			}
-			catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-		private void eventExit_Click(object sender, EventArgs e) {
-            try {
+		private void eventExit_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				Close();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventOpenFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e) {
-            try {
+		private void eventOpenFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			try
+			{
 				string filename = _openFileDialog.FileName;
 
 				_updatingHTMLEnabled = false;
@@ -1005,21 +1173,26 @@ namespace ACadSvgStudio {
 
 				UpdateHTML();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
-            finally {
+			finally
+			{
 				_updatingHTMLEnabled = true;
 			}
 		}
 
 
-        private void eventSaveFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e) {
-            try {
+		private void eventSaveFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			try
+			{
 				int filterIndex = _saveFileDialog.FilterIndex;
 				string filename = _saveFileDialog.FileName;
 
-                switch (filterIndex) {
+				switch (filterIndex)
+				{
 					case 1:
 						File.WriteAllText(filename, buildSVG(false, false, out _, true));
 						_loadedFilename = filename;
@@ -1042,7 +1215,8 @@ namespace ACadSvgStudio {
 						break;
 				}
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
@@ -1050,8 +1224,10 @@ namespace ACadSvgStudio {
 		#endregion
 		#region -  Events Edit Menu
 
-        private void eventEdit_DropDownOpening(object sender, EventArgs e) {
-            try {
+		private void eventEdit_DropDownOpening(object sender, EventArgs e)
+		{
+			try
+			{
 				bool hasSelection = !string.IsNullOrEmpty(_scintillaSvgGroupEditor.SelectedText);
 
 				_undoMenuItem.Enabled = _scintillaSvgGroupEditor.CanUndo;
@@ -1061,183 +1237,231 @@ namespace ACadSvgStudio {
 				_pasteMenuItem.Enabled = _scintillaSvgGroupEditor.CanPaste;
 				_deleteMenuItem.Enabled = hasSelection;
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventUndo_Click(object sender, EventArgs e) {
-            try {
+		private void eventUndo_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				Scintilla editor = getCurrentEditor();
 				editor.Undo();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventRedo_Click(object sender, EventArgs e) {
-            try {
+		private void eventRedo_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				Scintilla editor = getCurrentEditor();
 				editor.Redo();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventCut_Click(object sender, EventArgs e) {
-            try {
+		private void eventCut_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				Scintilla editor = getCurrentEditor();
 				editor.Cut();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventCopy_Click(object sender, EventArgs e) {
-            try {
+		private void eventCopy_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				Scintilla editor = getCurrentEditor();
 				editor.Copy();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventPaste_Click(object sender, EventArgs e) {
-            try {
+		private void eventPaste_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				Scintilla editor = getCurrentEditor();
 				editor.Paste();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventDelete_Click(object sender, EventArgs e) {
-            try {
+		private void eventDelete_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				Scintilla editor = getCurrentEditor();
 				//editor.SelectedText = string.Empty;
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventSelectAll_Click(object sender, EventArgs e) {
-            try {
+		private void eventSelectAll_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				Scintilla editor = getCurrentEditor();
 				editor.SelectAll();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private Scintilla getCurrentEditor() {
+		private Scintilla getCurrentEditor()
+		{
 			return (Scintilla)_tabControl.SelectedTab.Controls[0];
 		}
 
 		#endregion
 		#region -  Events Search Menu and Search Dialog
 
-        private void eventQuickFind_Click(object sender, EventArgs e) {
-            try {
+		private void eventQuickFind_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				_incrementalSearcher.Visible = true;
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventQuickFindClose_Click(object sender, EventArgs e) {
-            try {
+		private void eventQuickFindClose_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				_incrementalSearcher.Visible = false;
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventFindAndReplace_Click(object sender, EventArgs e) {
-            try {
+		private void eventFindAndReplace_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				_findReplace.Scintilla = _scintillaSvgGroupEditor;
 				_findReplace.ShowFind();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void enableUpdatingHTML(object sender, EventArgs e) {
-            try {
+		private void enableUpdatingHTML(object sender, EventArgs e)
+		{
+			try
+			{
 				_updatingHTMLEnabled = true;
 				UpdateHTML();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void disableUpdatingHTML(object sender, EventArgs e) {
+		private void disableUpdatingHTML(object sender, EventArgs e)
+		{
 			_updatingHTMLEnabled = false;
 		}
 
 		#endregion
 		#region -  Events View Menu
 
-        private void eventPropertyGridMenuItem_CheckedChanged(object sender, EventArgs e) {
-            try {
+		private void eventPropertyGridMenuItem_CheckedChanged(object sender, EventArgs e)
+		{
+			try
+			{
 				_splitContainer2.Panel2Collapsed = !_propertyGridToolStripMenuItem.Checked;
 
 				Settings.Default.ViewPropertyGrid = _propertyGridToolStripMenuItem.Checked;
 				Settings.Default.Save();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventCenterToFitMenuItem_Click(object sender, EventArgs e) {
-            try {
+		private void eventCenterToFitMenuItem_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				centerToFit();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventCollapseAllMenuItem_Click(object sender, EventArgs e) {
-            try {
+		private void eventCollapseAllMenuItem_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				_scintillaSvgGroupEditor.CollapseChildren();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventExpandAllMenuItem_Click(object sender, EventArgs e) {
-            try {
+		private void eventExpandAllMenuItem_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				_scintillaSvgGroupEditor.ExpandChildren();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
@@ -1245,8 +1469,10 @@ namespace ACadSvgStudio {
 		#endregion
 		#region -  Events Content
 
-        private void eventFlipContent_Click(object sender, EventArgs e) {
-            try {
+		private void eventFlipContent_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				string flipFilename = _loadedDwgFilename;
 				_loadedDwgFilename = _flippedFilename;
 				_flippedFilename = flipFilename;
@@ -1267,7 +1493,8 @@ namespace ACadSvgStudio {
 				_contentChanged = _flippedContentChanged;
 				_flippedContentChanged = flipContentChanged;
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
@@ -1275,54 +1502,68 @@ namespace ACadSvgStudio {
 		#endregion
 		#region -  Events Extras Menu
 
-        private void eventRemoveStyles_Click(object sender, EventArgs e) {
-            try {
+		private void eventRemoveStyles_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				XElement doc = XElement.Parse("<root>" + _scintillaSvgGroupEditor.Text + "</root>", LoadOptions.PreserveWhitespace);
-                foreach (XElement el in doc.Elements()) {
+				foreach (XElement el in doc.Elements())
+				{
 					removeStyles(el);
 				}
 
 				StringBuilder sb = new StringBuilder();
 
-                foreach (XElement el in doc.Elements()) {
+				foreach (XElement el in doc.Elements())
+				{
 					sb.Append(el.ToString());
 				}
 
 				_scintillaSvgGroupEditor.Text = sb.ToString();
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void removeStyles(XElement element) {
-            try {
+		private void removeStyles(XElement element)
+		{
+			try
+			{
 				XAttribute? styleAttribute = element.Attribute("style");
-                if (styleAttribute != null) {
+				if (styleAttribute != null)
+				{
 					styleAttribute.Remove();
 				}
 
-                foreach (XElement el in element.Elements()) {
+				foreach (XElement el in element.Elements())
+				{
 					removeStyles(el);
 				}
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void eventShowDeveloperToolsMenuItem_Click(object sender, EventArgs e) {
+		private void eventShowDeveloperToolsMenuItem_Click(object sender, EventArgs e)
+		{
 			_webBrowser.ShowDevTools();
 		}
 
 
-        private void eventEditorFontToolStripMenuItem_Click(object sender, EventArgs e) {
-            try {
+		private void eventEditorFontToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				_fontDialog.Font = Settings.Default.EditorFont;
 
-                if (_fontDialog.ShowDialog() == DialogResult.OK) {
+				if (_fontDialog.ShowDialog() == DialogResult.OK)
+				{
 					Font font = _fontDialog.Font;
 					setEditorFont(font);
 
@@ -1330,13 +1571,15 @@ namespace ACadSvgStudio {
 					Settings.Default.Save();
 				}
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        private void setEditorFont(Font font) {
+		private void setEditorFont(Font font)
+		{
 			_scintillaSvgGroupEditor.Font = font;
 			_scintillaScales.Font = font;
 			_scintillaCss.Font = font;
@@ -1345,12 +1588,15 @@ namespace ACadSvgStudio {
 		#endregion
 		#region -  Events Conversion Info Menu
 
-        private void showConversionLog_Click(object sender, EventArgs e) {
-            try {
+		private void showConversionLog_Click(object sender, EventArgs e)
+		{
+			try
+			{
 				var conversionLogForm = new ConversionInfoForm();
 				conversionLogForm.Open(_loadedDwgFilename, _conversionLog, _occurringEntities);
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
@@ -1358,13 +1604,17 @@ namespace ACadSvgStudio {
 		#endregion
 		#region -  Events About Menu
 
-        private void eventAbout_Click(object sender, EventArgs e) {
-            try {
-                using (AboutForm aboutForm = new AboutForm()) {
+		private void eventAbout_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				using (AboutForm aboutForm = new AboutForm())
+				{
 					aboutForm.ShowDialog();
 				}
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
@@ -1373,10 +1623,12 @@ namespace ACadSvgStudio {
 
 		#region -  SVG and HTML
 
-        private string buildSVG(bool showScales, bool addCss, out bool isSvgEmpty, bool createFile = false) {
+		private string buildSVG(bool showScales, bool addCss, out bool isSvgEmpty, bool createFile = false)
+		{
 			isSvgEmpty = true;
 
-            if (_conversionContext == null) {
+			if (_conversionContext == null)
+			{
 				_conversionContext = new ConversionContext();
 			}
 
@@ -1387,7 +1639,8 @@ namespace ACadSvgStudio {
 
 			SvgElement svgElement = DocumentSvg.CreateSVG(_conversionContext);
 
-            if (createFile) {
+			if (createFile)
+			{
 				svgElement.Style = "background-color:black;";
 				svgElement.Width = _svgProperties.ViewBoxWidth.ToString();
 				svgElement.Height = _svgProperties.ViewBoxHeight.ToString();
@@ -1398,15 +1651,19 @@ namespace ACadSvgStudio {
 			svgElement.AddValue(_scintillaScales.Text, showScales);
 
 			string editorText = _scintillaSvgGroupEditor.Text;
-            if (!string.IsNullOrEmpty(editorText)) {
-                if (createFile) {
-                    try {
+			if (!string.IsNullOrEmpty(editorText))
+			{
+				if (createFile)
+				{
+					try
+					{
 						XElement xElement = XElement.Parse(editorText);
 						int factor = _svgProperties.ReverseY ? -1 : 1;
 						xElement.SetAttributeValue("transform", $"scale(1, {factor}) translate({_svgProperties.ViewBoxMinX}, {factor * _svgProperties.ViewBoxMinY})");
 						editorText = xElement.ToString();
 					}
-                    catch (Exception e) {
+					catch (Exception e)
+					{
 						_statusLabel.Text = e.Message;
 						throw;
 					}
@@ -1417,7 +1674,8 @@ namespace ACadSvgStudio {
 			isSvgEmpty = string.IsNullOrEmpty(editorText);
 
 			StringBuilder sb = new StringBuilder();
-            if (createFile) {
+			if (createFile)
+			{
 				var declaration = new XDeclaration("1.0", null, null);
 				var doctype = new XDocumentType("svg", " -//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd", string.Empty).ToString();
 				sb.AppendLine(declaration.ToString());
@@ -1428,7 +1686,8 @@ namespace ACadSvgStudio {
 			sb.AppendLine(svgElement.ToString().Replace("&gt;", ">").Replace("&lt;", "<"));
 
 			bool hasDefs = updateDefs(svg.Value);
-			if (!hasDefs) {
+			if (!hasDefs)
+			{
 				_defsTreeView.Nodes.Clear();
 			}
 
@@ -1437,30 +1696,40 @@ namespace ACadSvgStudio {
 		}
 
 
-        internal void ProposeUpdateHTML() {
-            try {
-                if (_updatingHTMLEnabled) {
+		internal void ProposeUpdateHTML()
+		{
+			try
+			{
+				if (_updatingHTMLEnabled)
+				{
 					UpdateHTML();
 				}
 			}
-            catch (Exception ex) {
+			catch (Exception ex)
+			{
 				_statusLabel.Text = ex.Message;
 			}
 		}
 
 
-        public void CreateHTML() {
+		public void CreateHTML()
+		{
 			string backgroundColor = ColorTranslator.ToHtml(Settings.Default.BackgroundColor);
 			var svg = buildSVG(Settings.Default.ScalesEnabled, Settings.Default.CSSPreviewEnabled, out bool isSvgEmpty, false);
 			string html = HTMLBuilder.Build(svg, backgroundColor);
 			CefSharp.WebBrowserExtensions.LoadHtml(_webBrowser, html);
 			updateBrowserContent(svg, isSvgEmpty, backgroundColor);
 			centerToFit();
+
+			svgViewerUserControl.BackColor = Settings.Default.BackgroundColor;
+			svgViewerUserControl.LoadSvgContent(svg);
 		}
 
 
-        public void UpdateHTML() {
-            if (_centerToFitOnLoad || _executingPanScriptFailed) {
+		public void UpdateHTML()
+		{
+			if (_centerToFitOnLoad || _executingPanScriptFailed)
+			{
 				CreateHTML();
 				_executingPanScriptFailed = false;
 				_centerToFitOnLoad = false;
@@ -1471,13 +1740,18 @@ namespace ACadSvgStudio {
 			var svg = buildSVG(Settings.Default.ScalesEnabled, Settings.Default.CSSPreviewEnabled, out bool isSvgEmpty, false);
 
 			updateBrowserContent(svg, isSvgEmpty, backgroundColor);
+
+			svgViewerUserControl.BackColor = Settings.Default.BackgroundColor;
+			svgViewerUserControl.LoadSvgContent(svg);
 		}
 
 
-        private void updateBrowserContent(string svg, bool isSvgEmpty, string backgroundColor) {
+		private void updateBrowserContent(string svg, bool isSvgEmpty, string backgroundColor)
+		{
 			_webBrowser.WaitForInitialLoadAsync().Wait();
 
-            if (_devToolsContext == null) {
+			if (_devToolsContext == null)
+			{
 				Task<DevToolsContext> t = _webBrowser.CreateDevToolsContextAsync();
 				t.Wait();
 
@@ -1486,10 +1760,12 @@ namespace ACadSvgStudio {
 
 			_devToolsContext.QuerySelectorAsync<HtmlBodyElement>("body")
 				.Result.SetAttributeAsync("style", $"background-color:{backgroundColor};")
-                .ContinueWith(t => {
+				.ContinueWith(t =>
+				{
 					_devToolsContext.QuerySelectorAsync<HtmlDivElement>("#svg-viewer")
 						.Result.SetInnerHtmlAsync(svg)
-                        .ContinueWith(t => {
+						.ContinueWith(t =>
+						{
 							runPanZoomScript(isSvgEmpty);
 						});
 				});
@@ -1498,8 +1774,10 @@ namespace ACadSvgStudio {
 		}
 
 
-        private void runPanZoomScript(bool isSvgEmpty) {
-            if (!_webBrowser.CanExecuteJavascriptInMainFrame || isSvgEmpty) {
+		private void runPanZoomScript(bool isSvgEmpty)
+		{
+			if (!_webBrowser.CanExecuteJavascriptInMainFrame || isSvgEmpty)
+			{
 				return;
 			}
 
@@ -1509,8 +1787,10 @@ namespace ACadSvgStudio {
 		#endregion
 		#region -  WebBrowser functions
 
-        public void centerToFit() {
-            if (!_webBrowser.CanExecuteJavascriptInMainFrame) {
+		public void centerToFit()
+		{
+			if (!_webBrowser.CanExecuteJavascriptInMainFrame)
+			{
 				return;
 			}
 
@@ -1519,5 +1799,23 @@ namespace ACadSvgStudio {
 		}
 
 		#endregion
+
+		private void sVGViewerUserControlExperimentalToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			svgViewerUserControl.Show();
+			_webBrowser.Hide();
+		}
+
+		private void webBrowserToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			svgViewerUserControl.Hide();
+			_webBrowser.Show();
+		}
+
+		private void MainForm_Load(object sender, EventArgs e)
+		{
+			svgViewerUserControl.Show();
+			_webBrowser.Hide();
+		}
 	}
 }
