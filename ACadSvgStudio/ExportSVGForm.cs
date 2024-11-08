@@ -11,22 +11,16 @@ namespace ACadSvgStudio {
 
 	public partial class ExportSVGForm : Form {
 
-		public string FileName {
+		public string SelectedPath {
 			get {
-				return filenameTextBox.Text;
-			}
-			set {
-				filenameTextBox.Text = value;
+				return Path.Combine(_directoryTextBox.Text, _filenameTextBox.Text);
 			}
 		}
 
 
 		public bool ResolveDefs {
 			get {
-				return resolveDefsCheckBox.Checked;
-			}
-			set {
-				resolveDefsCheckBox.Checked = value;
+				return _resolveDefsCheckBox.Checked;
 			}
 		}
 
@@ -35,7 +29,7 @@ namespace ACadSvgStudio {
 			get {
 				HashSet<string> result = new HashSet<string>();
 
-				foreach (DefsListViewItem item in checkedListBox.CheckedItems) {
+				foreach (DefsListViewItem item in _checkedListBox.CheckedItems) {
 					result.Add(item.DefsId);
 				}
 
@@ -52,52 +46,62 @@ namespace ACadSvgStudio {
 		}
 
 
-		public ExportSVGForm(string initialDirectory, string filename, HashSet<string> defsIds) : this() {
-			FileName = filename;
-
+		public ExportSVGForm(HashSet<string> defsIds) : this() {
+            _directoryTextBox.Text = Settings.Default.SvgDirectory;
+            
 			_defsIds = new SortedSet<string>();
 			foreach (string id in defsIds) {
 				_defsIds.Add(id);
+				if (!id.StartsWith("_")) {
+					_filenameTextBox.Text = id + ".g.svg";
+				}
 			}
 
 			foreach (string defsId in _defsIds) {
 				DefsListViewItem defsListViewItem = new DefsListViewItem(defsId);
-				checkedListBox.Items.Add(defsListViewItem);
+				_checkedListBox.Items.Add(defsListViewItem);
 			}
 
-			for (int x = 0; x < checkedListBox.Items.Count; x++) {
-				checkedListBox.SetItemChecked(x, true);
+			for (int x = 0; x < _checkedListBox.Items.Count; x++) {
+				_checkedListBox.SetItemChecked(x, true);
 			}
-		}
+            _exportButton.Enabled = Directory.Exists(_directoryTextBox.Text) && !string.IsNullOrWhiteSpace(_filenameTextBox.Text);
+        }
 
 
-		private void ExportSVGForm_Load(object sender, EventArgs e) {
-			resolveDefsCheckBox.Checked = Settings.Default.ResolveDefs;
-		}
+        private void ExportSVGForm_Load(object sender, EventArgs e) {
+			_resolveDefsCheckBox.Checked = Settings.Default.ResolveDefs;
+			_exportButton.Enabled = File.Exists(SelectedPath);
+        }
 
 
-		private void filenameTextBox_TextChanged(object sender, EventArgs e) {
-			FileName = filenameTextBox.Text;
-		}
-
-		private void browseButton_Click(object sender, EventArgs e) {
-			_saveFileDialog.FileName = FileName;
-
-			if (!string.IsNullOrEmpty(FileName) && FileName.ToLower().EndsWith(".g.svg")) {
-				_saveFileDialog.FilterIndex = 2;
-			}
-			else {
-				_saveFileDialog.FilterIndex = 1;
-			}
+        private void browseButton_Click(object sender, EventArgs e) {
+			_saveFileDialog.InitialDirectory = Settings.Default.SvgDirectory;
+			_saveFileDialog.FileName = string.Empty;
 
 			if (_saveFileDialog.ShowDialog() == DialogResult.OK) {
-				FileName = _saveFileDialog.FileName;
-			}
-		}
+                _filenameTextBox.Text = Path.GetFileName(_saveFileDialog.FileName);
+				_directoryTextBox.Text = Path.GetDirectoryName(_saveFileDialog.FileName);
+                Settings.Default.SvgDirectory = _directoryTextBox.Text;
+				Settings.Default.Save();
+                _exportButton.Enabled = Directory.Exists(_directoryTextBox.Text) && !string.IsNullOrWhiteSpace(_filenameTextBox.Text);
+            }
+        }
 
-		private void resolveDefsCheckBox_CheckedChanged(object sender, EventArgs e) {
-			Settings.Default.ResolveDefs = resolveDefsCheckBox.Checked;
+
+		private void eventResolveDefsCheckBox_CheckedChanged(object sender, EventArgs e) {
+			Settings.Default.ResolveDefs = _resolveDefsCheckBox.Checked;
 			Settings.Default.Save();
 		}
-	}
+
+
+        private void eventFilenameTextBox_TextChanged(object sender, EventArgs e) {
+			try {
+				_exportButton.Enabled = Directory.Exists(_directoryTextBox.Text) && !string.IsNullOrWhiteSpace(_filenameTextBox.Text);
+			}
+			catch {
+				_exportButton.Enabled = false;
+			}
+        }
+    }
 }

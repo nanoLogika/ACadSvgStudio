@@ -45,8 +45,6 @@ namespace ACadSvgStudio {
         private bool _executingPanScriptFailed;
         private bool _updatingHTMLEnabled = false;
 
-        private string? _svgDirectory;
-        private string? _autoCadDirectory;
         private string? _loadedFilename;
         private string? _loadedDwgFilename;
 
@@ -920,7 +918,7 @@ namespace ACadSvgStudio {
 
         private void eventLoadAutoCadFile_Click(object sender, EventArgs e) {
             try {
-                _loadAutoCadFileDialog.InitialDirectory = _autoCadDirectory;
+                _loadAutoCadFileDialog.InitialDirectory = Settings.Default.AutoCadDirectory;
                 _loadAutoCadFileDialog.ShowDialog();
             }
             catch (Exception ex) {
@@ -931,7 +929,7 @@ namespace ACadSvgStudio {
 
         private void eventOpenClick(object sender, EventArgs e) {
             try {
-                _openFileDialog.InitialDirectory = _svgDirectory;
+                _openFileDialog.InitialDirectory = Settings.Default.SvgDirectory;
                 _openFileDialog.ShowDialog();
             }
             catch (Exception ex) {
@@ -965,7 +963,7 @@ namespace ACadSvgStudio {
                 else {
                     _saveFileDialog.FilterIndex = 1;
                 }
-                _saveFileDialog.InitialDirectory = _svgDirectory;
+                _saveFileDialog.InitialDirectory = Settings.Default.SvgDirectory;
                 _saveFileDialog.ShowDialog();
             }
             catch (Exception ex) {
@@ -991,10 +989,17 @@ namespace ACadSvgStudio {
 
                 DefsUtils.CollectUsedDefsIds(xElement, defsIds, false);
 
-                ExportSVGForm exportSvgForm = new ExportSVGForm(_svgDirectory, _loadedFilename, defsIds);
+                ExportSVGForm exportSvgForm = new ExportSVGForm(defsIds);
                 if (exportSvgForm.ShowDialog() == DialogResult.OK) {
+                    string outputPath = exportSvgForm.SelectedPath;
+                    if (File.Exists(outputPath)) {
+                        if (MessageBox.Show("File exists, overwite?", "Export Selected Defs", MessageBoxButtons.OKCancel) == DialogResult.Cancel) {
+                            return;
+                        }
+                    }
+
                     DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, exportSvgForm.SelectedDefsIds, exportSvgForm.ResolveDefs);
-                    exporter.Export(exportSvgForm.FileName);
+                    exporter.Export(outputPath);
                 }
             }
             catch (Exception ex) {
@@ -1017,7 +1022,8 @@ namespace ACadSvgStudio {
         private void eventLoadAutoCadFile_FileOk(object sender, System.ComponentModel.CancelEventArgs e) {
             try {
                 string filename = _loadAutoCadFileDialog.FileName;
-                _autoCadDirectory = Path.GetDirectoryName(filename);
+                Settings.Default.AutoCadDirectory = Path.GetDirectoryName(filename);
+                Settings.Default.Save();
 
                 _updatingHTMLEnabled = false;
                 LoadFile(filename);
@@ -1036,7 +1042,8 @@ namespace ACadSvgStudio {
         private void eventOpenFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e) {
             try {
                 string filename = _openFileDialog.FileName;
-                _svgDirectory = Path.GetDirectoryName(filename);
+                Settings.Default.SvgDirectory = Path.GetDirectoryName(filename);
+                Settings.Default.Save();
 
                 _updatingHTMLEnabled = false;
                 LoadFile(filename);
