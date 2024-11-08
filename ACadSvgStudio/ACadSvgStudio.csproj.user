@@ -10,8 +10,14 @@
     <Compile Update="ConversionInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="ExportSVGForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="MainForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="SvgViewerUserControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
