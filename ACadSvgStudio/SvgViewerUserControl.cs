@@ -10,6 +10,7 @@ namespace ACadSvgStudio {
 		private int _x = 0;
 		private int _y = 0;
 		private float _zoom = 1;
+		private bool _posInitialized = false;
 
 		private SvgTransformCollection _svgTransformCollection;
 
@@ -42,10 +43,13 @@ namespace ACadSvgStudio {
 
 				_svgTransformCollection = (SvgTransformCollection)_svgDocument.Transforms.Clone();
 
-				_x = 0;
-				_y = 0;
+				if (!_posInitialized)
+				{
+					_x = 0;
+					_y = 0;
 
-				_zoom = 1;
+					_zoom = 1;
+				}
 
 				using (Bitmap bitmap = getBitmap())
 				{
@@ -54,7 +58,12 @@ namespace ACadSvgStudio {
 						return;
 					}
 
-					centerToFit();
+					if (!_posInitialized)
+					{
+						centerToFit();
+
+						_posInitialized = true;
+					}
 				}
 
 				Invalidate();
