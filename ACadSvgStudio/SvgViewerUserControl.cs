@@ -104,6 +104,9 @@ namespace ACadSvgStudio {
 
 		private void SvgViewerUserControl_Paint(object sender, PaintEventArgs e)
 		{
+			e.Graphics.Clear(BackColor);			
+
+
 			e.Graphics.DrawString("SVG Viewer (Experimental)", this.Font, new SolidBrush(Color.Yellow), 0, 0);
 
 
