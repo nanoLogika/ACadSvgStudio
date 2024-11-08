@@ -49,8 +49,12 @@ namespace ACadSvgStudio {
 
 				using (Bitmap bitmap = getBitmap())
 				{
-					_x = 200;
-					_y = (Height / 2) - (bitmap.Height / 2);
+					if (bitmap == null)
+					{
+						return;
+					}
+
+					centerToFit();
 				}
 
 				Invalidate();
@@ -75,7 +79,7 @@ namespace ACadSvgStudio {
 
 		private Bitmap getBitmap()
 		{
-			_svgDocument.ViewBox = new SvgViewBox(-500, -500, 1500, 1500);
+			_svgDocument.ViewBox = new SvgViewBox(_svgDocument.Bounds.X, _svgDocument.Bounds.Y, _svgDocument.Bounds.Width * _zoom, _svgDocument.Bounds.Height * _zoom);
 			if (_svgTransformCollection != null)
 			{
 				_svgDocument.Transforms = (SvgTransformCollection)_svgTransformCollection.Clone();
@@ -127,15 +131,26 @@ namespace ACadSvgStudio {
 		}
 
 
-		private void centerToFitToolStripMenuItem_Click(object sender, EventArgs e)
+		private void centerToFit()
 		{
 			using (Bitmap bitmap = getBitmap())
 			{
+				if (bitmap == null)
+				{
+					return;
+				}
+
 				_x = (Width / 2) - (bitmap.Width / 2);
 				_y = (Height / 2) - (bitmap.Height / 2);
 			}
 
 			Invalidate();
+		}
+
+
+		private void centerToFitToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			centerToFit();
 		}
 
 
