@@ -187,7 +187,40 @@ namespace ACadSvgStudio {
 		{
 			float zoomFactor = 0.0001f;
 
+			int prevWidth = 0;
+			int prevHeight = 0;
+			using (Bitmap bitmap = getBitmap())
+			{
+				if (bitmap != null)
+				{
+					prevWidth = bitmap.Width;
+					prevHeight = bitmap.Height;
+				}
+			}
+
 			_zoom += e.Delta * zoomFactor;
+
+			int newWidth = 0;
+			int newHeight = 0;
+			using (Bitmap bitmap = getBitmap())
+			{
+				if (bitmap != null)
+				{
+					newWidth = bitmap.Width;
+					newHeight = bitmap.Height;
+				}
+			}
+
+			int deltaWidth = 0;
+			int deltaHeight = 0;
+			if (prevWidth != 0 && prevHeight != 0)
+			{
+				deltaWidth = newWidth - prevWidth;
+				deltaHeight = newHeight - prevHeight;
+			}
+
+			_x = _x - deltaWidth;
+			_y = _y - deltaHeight;
 
 			Invalidate();
 		}
