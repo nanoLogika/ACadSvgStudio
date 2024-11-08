@@ -105,7 +105,7 @@ namespace ACadSvgStudio {
 
         private void updateRecentlyOpenedFiles() {
             bool hasRecentlyOpenedFiles = recentlyOpenedFilesManager.HasRecentlyOpenedFiles();
-            _recentlyOpenedFilesToolStripSeparator.Visible = hasRecentlyOpenedFiles;
+            _fileMenuSeparator1.Visible = hasRecentlyOpenedFiles;
             _recentlyOpenedFilesToolStripMenuItem.Visible = hasRecentlyOpenedFiles;
 
             _recentlyOpenedFilesToolStripMenuItem.DropDownItems.Clear();
@@ -1398,6 +1398,25 @@ namespace ACadSvgStudio {
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
             }
+        }
+
+        #endregion
+        #region -  Events Export Menu
+
+        private void eventExecuteExportBatch_Click(object sender, EventArgs e) {
+
+        }
+
+        private void eventEditExportBatch_Click(object sender, EventArgs e) {
+
+        }
+
+        private void eventSaveExportBatch_Click(object sender, EventArgs e) {
+
+        }
+
+        private void eventLoadExportBatch_Click(object sender, EventArgs e) {
+
         }
 
         #endregion
