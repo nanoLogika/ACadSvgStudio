@@ -32,7 +32,13 @@ namespace ACadSvgStudio.Defs {
 		}
 
 
-		public void Export(string path) {
+		public void Export(string path, bool exportAllDefs = false) {
+			if (exportAllDefs) {
+				File.WriteAllText(path, _doc.ToString());
+				return;
+			}
+
+
 			XDocument doc = new XDocument();
 
 			XElement root = createRootElement();

@@ -18,6 +18,7 @@ using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
 using SvgElements;
 using ACadSvgStudio.Defs;
+using ACadSvgStudio.CommandLine;
 
 namespace ACadSvgStudio {
 
@@ -27,10 +28,6 @@ namespace ACadSvgStudio {
 		private const string SvgKeywords = "circle defs ellipse g path pattern rect text tspan";
 
 		private RecentlyOpenedFilesManager recentlyOpenedFilesManager;
-
-		private SvgProperties _svgProperties;
-
-		private ConversionContext _conversionContext;
 
 		private Scintilla _scintillaSvgGroupEditor;
 		private Scintilla _scintillaCss;
@@ -62,10 +59,14 @@ namespace ACadSvgStudio {
 		private string _flippedConversionLog;
 		private bool _flippedContentChanged;
 
+		private AppContext _appContext;
+
 
 		public MainForm()
 		{
 			InitializeComponent();
+
+			_appContext = new AppContext();
 
 			this.Text = AppName;
 
@@ -164,8 +165,7 @@ namespace ACadSvgStudio {
 
 		private void initPropertyGrid()
 		{
-			_svgProperties = new SvgProperties(this);
-			_propertyGrid.SelectedObject = _svgProperties;
+			_propertyGrid.SelectedObject = _appContext.SvgProperties;
 		}
 
 
@@ -240,17 +240,6 @@ namespace ACadSvgStudio {
 		}
 
 
-		private void createConversionContext()
-		{
-			_conversionContext = new ConversionContext()
-			{
-				ConversionOptions = _svgProperties.GetConversionOptions(),
-				ViewboxData = _svgProperties.GetViewbox(),
-				GlobalAttributeData = _svgProperties.GetGlobalAttributeData()
-			};
-		}
-
-
 		private void updateConversionInfo(string filename, string fileFormat, string svgText, string scalesSvgText)
 		{
 			_flippedFilename = _loadedDwgFilename;
@@ -258,14 +247,14 @@ namespace ACadSvgStudio {
 			_flippedConversionLog = _conversionLog;
 			_flippedOccurringEntities = _occurringEntities;
 
-			ConversionInfo conversionInfo = _conversionContext.ConversionInfo;
+			ConversionInfo conversionInfo = _appContext.ConversionContext.ConversionInfo;
 			_conversionLog = conversionInfo.GetLog();
 			_occurringEntities = conversionInfo.OccurringEntities;
 			//_svgProperties.SetViewbox(_conversionContext.ViewboxData);
 
 			_centerToFitOnLoad = true;
 			_scintillaSvgGroupEditor.Text = svgText;
-			if (_conversionContext.ConversionOptions.CreateScaleFromModelSpaceExtent)
+			if (_appContext.ConversionContext.ConversionOptions.CreateScaleFromModelSpaceExtent)
 			{
 				_scintillaScales.Text = scalesSvgText;
 			}
@@ -527,9 +516,9 @@ namespace ACadSvgStudio {
 
 		private void readDwgFile(string filename)
 		{
-			createConversionContext();
+			_appContext.CreateConversionContext();
 
-			DocumentSvg docSvg = ACadLoader.LoadDwg(filename, _conversionContext);
+			DocumentSvg docSvg = ACadLoader.LoadDwg(filename, _appContext.ConversionContext);
 			string svgText = docSvg.ToSvg();
 			string scalesSvgText = docSvg.GetModelSpaceRectangle().ToString();
 
@@ -544,9 +533,9 @@ namespace ACadSvgStudio {
 
 		private void readDxfFile(string filename)
 		{
-			createConversionContext();
+			_appContext.CreateConversionContext();
 
-			DocumentSvg docSvg = ACadLoader.LoadDxf(filename, _conversionContext);
+			DocumentSvg docSvg = ACadLoader.LoadDxf(filename, _appContext.ConversionContext);
 			string svgText = docSvg.ToSvg();
 			string scalesSvgText = docSvg.GetModelSpaceRectangle().ToString();
 
@@ -561,7 +550,7 @@ namespace ACadSvgStudio {
 
 		private void readSvgFile(string filename)
 		{
-			createConversionContext();
+			_appContext.CreateConversionContext();
 
 			string svgText = System.IO.File.ReadAllText(filename);
 
@@ -1627,23 +1616,23 @@ namespace ACadSvgStudio {
 		{
 			isSvgEmpty = true;
 
-			if (_conversionContext == null)
+			if (_appContext.ConversionContext == null)
 			{
-				_conversionContext = new ConversionContext();
+				_appContext.CreateConversionContext();
 			}
 
-			_conversionContext.UpdateSettings(
-				_svgProperties.GetConversionOptions(),
-				_svgProperties.GetViewbox(),
-				_svgProperties.GetGlobalAttributeData());
+			_appContext.ConversionContext.UpdateSettings(
+				_appContext.SvgProperties.GetConversionOptions(),
+				_appContext.SvgProperties.GetViewbox(),
+				_appContext.SvgProperties.GetGlobalAttributeData());
 
-			SvgElement svgElement = DocumentSvg.CreateSVG(_conversionContext);
+			SvgElement svgElement = DocumentSvg.CreateSVG(_appContext.ConversionContext);
 
 			if (createFile)
 			{
 				svgElement.Style = "background-color:black;";
-				svgElement.Width = _svgProperties.ViewBoxWidth.ToString();
-				svgElement.Height = _svgProperties.ViewBoxHeight.ToString();
+				svgElement.Width = _appContext.SvgProperties.ViewBoxWidth.ToString();
+				svgElement.Height = _appContext.SvgProperties.ViewBoxHeight.ToString();
 				svgElement.WithViewbox(null, null, null, null);
 			}
 
@@ -1658,8 +1647,8 @@ namespace ACadSvgStudio {
 					try
 					{
 						XElement xElement = XElement.Parse(editorText);
-						int factor = _svgProperties.ReverseY ? -1 : 1;
-						xElement.SetAttributeValue("transform", $"scale(1, {factor}) translate({_svgProperties.ViewBoxMinX}, {factor * _svgProperties.ViewBoxMinY})");
+						int factor = _appContext.SvgProperties.ReverseY ? -1 : 1;
+						xElement.SetAttributeValue("transform", $"scale(1, {factor}) translate({_appContext.SvgProperties.ViewBoxMinX}, {factor * _appContext.SvgProperties.ViewBoxMinY})");
 						editorText = xElement.ToString();
 					}
 					catch (Exception e)
@@ -1816,6 +1805,12 @@ namespace ACadSvgStudio {
 		{
 			svgViewerUserControl.Show();
 			_webBrowser.Hide();
+		}
+
+		private void commandLineWindowToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			CommandLineForm commandLineForm = new CommandLineForm(_appContext);
+			commandLineForm.Show();
 		}
 	}
 }

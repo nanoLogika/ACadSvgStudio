@@ -97,6 +97,8 @@
 			_statusLabel = new ToolStripStatusLabel();
 			_textChangedTimer = new System.Windows.Forms.Timer(components);
 			_fontDialog = new FontDialog();
+			commandLineWindowToolStripMenuItem = new ToolStripMenuItem();
+			toolStripSeparator3 = new ToolStripSeparator();
 			((System.ComponentModel.ISupportInitialize)_splitContainer1).BeginInit();
 			_splitContainer1.Panel1.SuspendLayout();
 			_splitContainer1.Panel2.SuspendLayout();
@@ -412,7 +414,7 @@
 			// 
 			// _viewMenuItem
 			// 
-			_viewMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _centerToFitMenuItem, _toolStripSeparator3, _propertyGridToolStripMenuItem, _toolStripSeparator5, _collapseAllMenuItem, _expandAllToolStripMenuItem, toolStripSeparator1, drawingComponentToolStripMenuItem });
+			_viewMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _centerToFitMenuItem, _toolStripSeparator3, _propertyGridToolStripMenuItem, _toolStripSeparator5, _collapseAllMenuItem, _expandAllToolStripMenuItem, toolStripSeparator1, drawingComponentToolStripMenuItem, toolStripSeparator3, commandLineWindowToolStripMenuItem });
 			_viewMenuItem.Name = "_viewMenuItem";
 			_viewMenuItem.Size = new Size(44, 20);
 			_viewMenuItem.Text = "View";
@@ -421,14 +423,14 @@
 			// 
 			_centerToFitMenuItem.Name = "_centerToFitMenuItem";
 			_centerToFitMenuItem.ShortcutKeys = Keys.Control | Keys.E;
-			_centerToFitMenuItem.Size = new Size(180, 22);
+			_centerToFitMenuItem.Size = new Size(203, 22);
 			_centerToFitMenuItem.Text = "Center to Fit";
 			_centerToFitMenuItem.Click += eventCenterToFitMenuItem_Click;
 			// 
 			// _toolStripSeparator3
 			// 
 			_toolStripSeparator3.Name = "_toolStripSeparator3";
-			_toolStripSeparator3.Size = new Size(177, 6);
+			_toolStripSeparator3.Size = new Size(200, 6);
 			// 
 			// _propertyGridToolStripMenuItem
 			// 
@@ -436,39 +438,39 @@
 			_propertyGridToolStripMenuItem.CheckOnClick = true;
 			_propertyGridToolStripMenuItem.CheckState = CheckState.Checked;
 			_propertyGridToolStripMenuItem.Name = "_propertyGridToolStripMenuItem";
-			_propertyGridToolStripMenuItem.Size = new Size(180, 22);
+			_propertyGridToolStripMenuItem.Size = new Size(203, 22);
 			_propertyGridToolStripMenuItem.Text = "Property Grid";
 			_propertyGridToolStripMenuItem.CheckedChanged += eventPropertyGridMenuItem_CheckedChanged;
 			// 
 			// _toolStripSeparator5
 			// 
 			_toolStripSeparator5.Name = "_toolStripSeparator5";
-			_toolStripSeparator5.Size = new Size(177, 6);
+			_toolStripSeparator5.Size = new Size(200, 6);
 			// 
 			// _collapseAllMenuItem
 			// 
 			_collapseAllMenuItem.Name = "_collapseAllMenuItem";
-			_collapseAllMenuItem.Size = new Size(180, 22);
+			_collapseAllMenuItem.Size = new Size(203, 22);
 			_collapseAllMenuItem.Text = "Collapse All";
 			_collapseAllMenuItem.Click += eventCollapseAllMenuItem_Click;
 			// 
 			// _expandAllToolStripMenuItem
 			// 
 			_expandAllToolStripMenuItem.Name = "_expandAllToolStripMenuItem";
-			_expandAllToolStripMenuItem.Size = new Size(180, 22);
+			_expandAllToolStripMenuItem.Size = new Size(203, 22);
 			_expandAllToolStripMenuItem.Text = "Expand All";
 			_expandAllToolStripMenuItem.Click += eventExpandAllMenuItem_Click;
 			// 
 			// toolStripSeparator1
 			// 
 			toolStripSeparator1.Name = "toolStripSeparator1";
-			toolStripSeparator1.Size = new Size(177, 6);
+			toolStripSeparator1.Size = new Size(200, 6);
 			// 
 			// drawingComponentToolStripMenuItem
 			// 
 			drawingComponentToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { sVGViewerUserControlExperimentalToolStripMenuItem, webBrowserToolStripMenuItem });
 			drawingComponentToolStripMenuItem.Name = "drawingComponentToolStripMenuItem";
-			drawingComponentToolStripMenuItem.Size = new Size(180, 22);
+			drawingComponentToolStripMenuItem.Size = new Size(203, 22);
 			drawingComponentToolStripMenuItem.Text = "SVG Renderer";
 			// 
 			// sVGViewerUserControlExperimentalToolStripMenuItem
@@ -611,6 +613,18 @@
 			_textChangedTimer.Interval = 500;
 			_textChangedTimer.Tick += eventTextChangedTimer_Tick;
 			// 
+			// commandLineWindowToolStripMenuItem
+			// 
+			commandLineWindowToolStripMenuItem.Name = "commandLineWindowToolStripMenuItem";
+			commandLineWindowToolStripMenuItem.Size = new Size(203, 22);
+			commandLineWindowToolStripMenuItem.Text = "Command Line Window";
+			commandLineWindowToolStripMenuItem.Click += commandLineWindowToolStripMenuItem_Click;
+			// 
+			// toolStripSeparator3
+			// 
+			toolStripSeparator3.Name = "toolStripSeparator3";
+			toolStripSeparator3.Size = new Size(200, 6);
+			// 
 			// MainForm
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -727,5 +741,7 @@
 		private ToolStripMenuItem drawingComponentToolStripMenuItem;
 		private ToolStripMenuItem sVGViewerUserControlExperimentalToolStripMenuItem;
 		private ToolStripMenuItem webBrowserToolStripMenuItem;
+		private ToolStripSeparator toolStripSeparator3;
+		private ToolStripMenuItem commandLineWindowToolStripMenuItem;
 	}
 }
