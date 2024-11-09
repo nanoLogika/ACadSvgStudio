@@ -1000,6 +1000,14 @@ namespace ACadSvgStudio {
 
                     DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, exportSvgForm.SelectedDefsIds, exportSvgForm.ResolveDefs);
                     exporter.Export(outputPath);
+
+                    if (exportSvgForm.AddExportToCurrentBatch) {
+
+                    }
+
+                    if (exportSvgForm.OpenAfterExport) {
+                        LoadFile(outputPath);
+                    }
                 }
             }
             catch (Exception ex) {
