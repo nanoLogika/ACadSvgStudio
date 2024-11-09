@@ -73,26 +73,24 @@ namespace ACadSvgStudio {
             for (int x = 0; x < _defsCheckedListBox.Items.Count; x++) {
                 _defsCheckedListBox.SetItemChecked(x, true);
             }
-            _exportButton.Enabled = Directory.Exists(_directoryTextBox.Text) && !string.IsNullOrWhiteSpace(_filenameTextBox.Text);
         }
 
 
         private void ExportSVGForm_Load(object sender, EventArgs e) {
             _resolveDefsCheckBox.Checked = Settings.Default.ResolveDefs;
-            _exportButton.Enabled = File.Exists(SelectedPath);
         }
 
 
         private void browseButton_Click(object sender, EventArgs e) {
             _saveFileDialog.InitialDirectory = Settings.Default.SvgDirectory;
-            _saveFileDialog.FileName = string.Empty;
+            _saveFileDialog.FileName = _filenameTextBox.Text;
 
             if (_saveFileDialog.ShowDialog() == DialogResult.OK) {
                 _filenameTextBox.Text = Path.GetFileName(_saveFileDialog.FileName);
                 _directoryTextBox.Text = Path.GetDirectoryName(_saveFileDialog.FileName);
                 Settings.Default.SvgDirectory = _directoryTextBox.Text;
                 Settings.Default.Save();
-                _exportButton.Enabled = Directory.Exists(_directoryTextBox.Text) && !string.IsNullOrWhiteSpace(_filenameTextBox.Text);
+                enableExportButtons();
             }
         }
 
@@ -105,10 +103,11 @@ namespace ACadSvgStudio {
 
         private void eventFilenameTextBox_TextChanged(object sender, EventArgs e) {
             try {
-                _exportButton.Enabled = Directory.Exists(_directoryTextBox.Text) && !string.IsNullOrWhiteSpace(_filenameTextBox.Text);
+                enableExportButtons();
             }
             catch {
                 _exportButton.Enabled = false;
+                _exportAndOpenButton.Enabled = false;
             }
         }
 
@@ -121,5 +120,13 @@ namespace ACadSvgStudio {
         private void eventExport_Click(object sender, EventArgs e) {
             OpenAfterExport = false;
         }
+
+
+        private void enableExportButtons() {
+            bool enabled = Directory.Exists(_directoryTextBox.Text) && !string.IsNullOrWhiteSpace(_filenameTextBox.Text);
+            _exportButton.Enabled = enabled;
+            _exportAndOpenButton.Enabled = enabled;
+        }
+
     }
 }

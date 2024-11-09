@@ -153,6 +153,7 @@ namespace ACadSvgStudio {
             // _exportAndOpenButton
             // 
             _exportAndOpenButton.DialogResult = DialogResult.OK;
+            _exportAndOpenButton.Enabled = false;
             _exportAndOpenButton.Location = new Point(298, 472);
             _exportAndOpenButton.Name = "_exportAndOpenButton";
             _exportAndOpenButton.Size = new Size(114, 23);
