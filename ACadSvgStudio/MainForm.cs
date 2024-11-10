@@ -18,6 +18,7 @@ using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
 using SvgElements;
 using ACadSvgStudio.Defs;
+using ACadSvgStudio.BatchProcessing;
 
 namespace ACadSvgStudio {
 
@@ -1002,7 +1003,17 @@ namespace ACadSvgStudio {
                     exporter.Export(outputPath);
 
                     if (exportSvgForm.AddExportToCurrentBatch) {
-
+                        Batch batch = BatchController.CurrentBatch;
+                        if (batch == null) {
+                            _loadCommandBatchDialog.InitialDirectory = Settings.Default.CommandBatchDirectory;
+                            _loadCommandBatchDialog.FileName = string.Empty;
+                            _loadCommandBatchDialog.ShowDialog();
+                            string batchPath = _loadCommandBatchDialog.FileName;
+                            Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(batchPath);
+                            Settings.Default.Save();
+                            batch = BatchController.CreateBatch(batchPath);
+                        }
+                        batch.AddCommand(new ExportCommand(_loadedDwgFilename, outputPath, exportSvgForm.ResolveDefs, false, exportSvgForm.SelectedDefsIds));
                     }
 
                     if (exportSvgForm.OpenAfterExport) {
@@ -1412,19 +1423,91 @@ namespace ACadSvgStudio {
         #region -  Events Export Menu
 
         private void eventExecuteExportBatch_Click(object sender, EventArgs e) {
-
+            try {
+                Batch currentBatch = BatchController.CurrentBatch;
+                if (currentBatch == null) {
+                    _statusLabel.Text = "There is no current batch to be executed.";
+                    return;
+                }
+                createConversionContext();
+                currentBatch.Execute(_conversionContext);
+            }
+            catch (Exception ex) {
+                _statusLabel.Text = ex.Message;
+            }
         }
+
 
         private void eventEditExportBatch_Click(object sender, EventArgs e) {
 
         }
 
-        private void eventSaveExportBatch_Click(object sender, EventArgs e) {
 
+        private void eventSaveExportBatch_Click(object sender, EventArgs e) {
+            try {
+                Batch currentBatch = BatchController.CurrentBatch;
+                if (currentBatch == null) {
+                    _statusLabel.Text = "There is no current batch to save.";
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(currentBatch.Name)) {
+                    //  TODO open save dialog;
+                    return;
+                }
+                currentBatch.Save();
+            }
+            catch (Exception ex) {
+                _statusLabel.Text = ex.Message;
+            }
         }
 
-        private void eventLoadExportBatch_Click(object sender, EventArgs e) {
 
+        private void eventLoadExportBatch_Click(object sender, EventArgs e) {
+            try {
+                Batch currentBatch = BatchController.CurrentBatch;
+                if (currentBatch != null && currentBatch.HasChanges) {
+                    var ret = MessageBox.Show(
+                        $"CurrentBatch {currentBatch.Name} has changed has changed, save changes before loading or creating new batch?",
+                        "Load Export Batch", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    switch (ret) {
+                    case DialogResult.Yes:
+                        currentBatch.Save();
+                        _statusLabel.Text = "Current batch saved.";
+                        break;
+                    case DialogResult.No:
+                        _statusLabel.Text = "Current batch will be discarded.";
+                        break;
+                    default:
+                        return;
+                    }
+                }
+
+                _loadCommandBatchDialog.InitialDirectory = Settings.Default.CommandBatchDirectory;
+                _loadCommandBatchDialog.FileName = string.Empty;
+                _loadCommandBatchDialog.ShowDialog();
+            }
+            catch (Exception ex){
+                _statusLabel.Text = ex.Message;
+            }
+        }
+
+
+        private void eventLoadCommandBatch_FileOk(object sender, System.ComponentModel.CancelEventArgs e) {
+            try {
+                if (e.Cancel) {
+                    return;
+                }
+
+                string path = _loadCommandBatchDialog.FileName;
+                Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(path);
+                Settings.Default.Save();
+
+                BatchController.LoadBatch(path);
+            }
+            catch (Exception ex) {
+                _statusLabel.Text = ex.Message;
+            }
         }
 
         #endregion

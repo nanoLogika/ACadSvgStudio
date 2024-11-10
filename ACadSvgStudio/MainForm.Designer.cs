@@ -105,6 +105,8 @@
             _textChangedTimer = new System.Windows.Forms.Timer(components);
             _fontDialog = new FontDialog();
             _loadAutoCadFileDialog = new OpenFileDialog();
+            _loadCommandBatchDialog = new OpenFileDialog();
+            _saveCommandBatchAsDialog = new SaveFileDialog();
             _fileMenuSeparator2 = new ToolStripSeparator();
             _editMenuSeparator1 = new ToolStripSeparator();
             _viewMenuSeparator1 = new ToolStripSeparator();
@@ -682,6 +684,16 @@
             _loadAutoCadFileDialog.Filter = "DWG files|*.dwg|DXF files|*.dxf|All files|*.*";
             _loadAutoCadFileDialog.FileOk += eventLoadAutoCadFile_FileOk;
             // 
+            // _loadCommandBatchDialog
+            // 
+            _loadCommandBatchDialog.CheckFileExists = false;
+            _loadCommandBatchDialog.Title = "Load Command Batch";
+            _loadCommandBatchDialog.FileOk += eventLoadCommandBatch_FileOk;
+            // 
+            // _saveCommandBatchAsDialog
+            // 
+            _saveCommandBatchAsDialog.Title = "Save Command Batch As";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -805,5 +817,7 @@
         private ToolStripMenuItem _saveExportBatchToolStripMenuItem;
         private ToolStripMenuItem _editCommandFileToolStripMenuItem;
         private ToolStripMenuItem _executeExportBatchToolStripMenuItem;
+        private OpenFileDialog _loadCommandBatchDialog;
+        private SaveFileDialog _saveCommandBatchAsDialog;
     }
 }
