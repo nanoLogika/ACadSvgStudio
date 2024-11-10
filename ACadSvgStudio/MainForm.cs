@@ -206,6 +206,7 @@ namespace ACadSvgStudio {
             case ".svg":
             case ".g.svg":
                 readSvgFile(filename);
+                _contentChanged = false;
                 break;
 
             case ".dwg":
@@ -748,8 +749,8 @@ namespace ACadSvgStudio {
                         return;
                     }
                 }
-                if (BatchController.CurrentBatch.HasChanges) {
-                    Batch batch = BatchController.CurrentBatch;
+                Batch batch = BatchController.CurrentBatch;
+                if (batch != null && batch.HasChanges) {
                     string name = batch.Name;
                     switch (MessageBox.Show($"Current command batch {name} has been changed, save changes?", "Close", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning)) {
                     case DialogResult.Yes:
