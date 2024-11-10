@@ -687,11 +687,13 @@
             // _loadCommandBatchDialog
             // 
             _loadCommandBatchDialog.CheckFileExists = false;
+            _loadCommandBatchDialog.Filter = "Commman Batch files|*.bax|All files|*.*";
             _loadCommandBatchDialog.Title = "Load Command Batch";
             _loadCommandBatchDialog.FileOk += eventLoadCommandBatch_FileOk;
             // 
             // _saveCommandBatchAsDialog
             // 
+            _saveCommandBatchAsDialog.Filter = "Commman Batch files|*.bax|All files|*.*";
             _saveCommandBatchAsDialog.Title = "Save Command Batch As";
             // 
             // MainForm

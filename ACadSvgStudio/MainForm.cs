@@ -733,17 +733,39 @@ namespace ACadSvgStudio {
                 if (_contentChanged) {
                     switch (MessageBox.Show("Content has been changed, save changes?", "Close", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning)) {
                     case DialogResult.Yes:
-                        if (!string.IsNullOrEmpty(_loadedFilename)) {
-                            File.WriteAllText(_loadedFilename, _scintillaSvgGroupEditor.Text);
+                        if (string.IsNullOrEmpty(_loadedFilename)) {
+                            _saveFileDialog.FileName = _loadedFilename;
+                            _saveFileDialog.FilterIndex = 1;
+                            e.Cancel = _saveFileDialog.ShowDialog() == DialogResult.Cancel;
+                        }
+                        if (e.Cancel) {
                             return;
                         }
-                        _saveFileDialog.FileName = _loadedFilename;
-                        _saveFileDialog.FilterIndex = 1;
-                        e.Cancel = _saveFileDialog.ShowDialog() == DialogResult.Cancel;
+                        File.WriteAllText(_loadedFilename, _scintillaSvgGroupEditor.Text);
                         break;
                     case DialogResult.Cancel:
                         e.Cancel = true;
+                        return;
+                    }
+                }
+                if (BatchController.CurrentBatch.HasChanges) {
+                    Batch batch = BatchController.CurrentBatch;
+                    string name = batch.Name;
+                    switch (MessageBox.Show($"Current command batch {name} has been changed, save changes?", "Close", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning)) {
+                    case DialogResult.Yes:
+                        if (string.IsNullOrEmpty(name)) {
+                            _saveFileDialog.FileName = _loadedFilename;
+                            _saveFileDialog.FilterIndex = 1;
+                            e.Cancel = _saveFileDialog.ShowDialog() == DialogResult.Cancel;
+                        }
+                        if (e.Cancel) {
+                            return;
+                        }
+                        batch.Save();
                         break;
+                    case DialogResult.Cancel:
+                        e.Cancel = true;
+                        return;
                     }
                 }
             }
