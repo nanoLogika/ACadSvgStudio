@@ -1017,7 +1017,7 @@ namespace ACadSvgStudio {
                 if (exportSvgForm.ShowDialog() == DialogResult.OK) {
                     string outputPath = exportSvgForm.SelectedPath;
                     if (File.Exists(outputPath)) {
-                        if (MessageBox.Show("File exists, overwite?", "Export Selected Defs", MessageBoxButtons.OKCancel) == DialogResult.Cancel) {
+                        if (MessageBox.Show($"File {outputPath} exists, overwite?", "Export Selected Defs", MessageBoxButtons.OKCancel) == DialogResult.Cancel) {
                             return;
                         }
                     }
@@ -1034,7 +1034,12 @@ namespace ACadSvgStudio {
                             string batchPath = _loadCommandBatchDialog.FileName;
                             Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(batchPath);
                             Settings.Default.Save();
-                            batch = BatchController.CreateBatch(batchPath);
+                            if (File.Exists(batchPath)) {
+                                batch = BatchController.LoadBatch(batchPath);
+                            }
+                            else {
+                                batch = BatchController.CreateBatch(batchPath);
+                            }
                         }
                         batch.AddCommand(new ExportCommand(_loadedDwgFilename, outputPath, exportSvgForm.ResolveDefs, false, exportSvgForm.SelectedDefsIds));
                     }
@@ -1526,7 +1531,12 @@ namespace ACadSvgStudio {
                 Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(path);
                 Settings.Default.Save();
 
-                BatchController.LoadBatch(path);
+                if (File.Exists(path)) {
+                    BatchController.LoadBatch(path);
+                }
+                else { 
+                    BatchController.CreateBatch(path);
+                }
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
