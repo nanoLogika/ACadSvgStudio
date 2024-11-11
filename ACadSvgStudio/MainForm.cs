@@ -1034,12 +1034,7 @@ namespace ACadSvgStudio {
                             string batchPath = _loadCommandBatchDialog.FileName;
                             Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(batchPath);
                             Settings.Default.Save();
-                            if (File.Exists(batchPath)) {
-                                batch = BatchController.LoadBatch(batchPath);
-                            }
-                            else {
-                                batch = BatchController.CreateBatch(batchPath);
-                            }
+                            batch = BatchController.LoadOrCreateBatch(batchPath);
                         }
                         batch.AddCommand(new ExportCommand(_loadedDwgFilename, outputPath, exportSvgForm.ResolveDefs, false, exportSvgForm.SelectedDefsIds));
                     }
@@ -1531,12 +1526,7 @@ namespace ACadSvgStudio {
                 Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(path);
                 Settings.Default.Save();
 
-                if (File.Exists(path)) {
-                    BatchController.LoadBatch(path);
-                }
-                else { 
-                    BatchController.CreateBatch(path);
-                }
+                BatchController.LoadOrCreateBatch(path);
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;

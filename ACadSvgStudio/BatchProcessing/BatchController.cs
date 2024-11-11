@@ -16,14 +16,13 @@ namespace ACadSvgStudio.BatchProcessing {
         public static Batch CurrentBatch { get { return _currentBatch; } }
 
             
-        internal static Batch CreateBatch(string batchPath) {
-            _currentBatch = new Batch(batchPath);
-            return _currentBatch;
-        }
-
-
-        internal static Batch LoadBatch(string path) {
-            _currentBatch = Batch.FromFile(path);
+        internal static Batch LoadOrCreateBatch(string batchPath) {
+            if (File.Exists(batchPath)) {
+                _currentBatch = Batch.FromFile(batchPath);
+            }
+            else {
+                _currentBatch = new Batch(batchPath);
+            }
             return _currentBatch;
         }
     }

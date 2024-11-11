@@ -62,7 +62,7 @@ namespace ACadSvgStudio.BatchProcessing {
 
 
         public override string ToCommandLine() {
-            string rd = ResolveDefs ? " -rd+" : string.Empty;
+            string rd = ResolveDefs ? " -r+" : string.Empty;
             string rga = RemoveDevsGroupAttributes ? " -rga+" : string.Empty;
 
             StringBuilder commandLineSb = new StringBuilder("EXPORT");
@@ -71,7 +71,7 @@ namespace ACadSvgStudio.BatchProcessing {
             ;
             commandLineSb.Append(rd);
             commandLineSb.Append(rga);
-            commandLineSb.Append(" -s");
+            commandLineSb.Append(" -d");
             foreach (string gId in DefsGroupIds) {
                 commandLineSb.Append(' ').Append(gId);
             }
@@ -81,7 +81,7 @@ namespace ACadSvgStudio.BatchProcessing {
 
 
         public override string ToString() {
-            string rd = ResolveDefs ? " -rd+" : string.Empty;
+            string rd = ResolveDefs ? " -r+" : string.Empty;
             string rga = RemoveDevsGroupAttributes ? " -rga+" : string.Empty;
 
             StringBuilder commandLineSb = new StringBuilder("EXPORT");
@@ -89,7 +89,7 @@ namespace ACadSvgStudio.BatchProcessing {
             commandLineSb.Append(" -i ").Append(Path.GetFileNameWithoutExtension(InputPath));
             commandLineSb.Append(rd);
             commandLineSb.Append(rga);
-            commandLineSb.Append(" -s");
+            commandLineSb.Append(" -d");
             foreach (string gId in DefsGroupIds) {
                 commandLineSb.Append(' ').Append(gId);
             }
