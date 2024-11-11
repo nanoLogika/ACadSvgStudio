@@ -16,6 +16,6 @@ namespace ACadSvgStudio.BatchProcessing {
         public abstract string ToCommandLine();
 
 
-        public abstract void Execute(ConversionContext conversionContext);
+        public abstract void Execute(ConversionContext conversionContext, out string msg);
     }
 }

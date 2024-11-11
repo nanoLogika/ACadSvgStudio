@@ -43,11 +43,13 @@ namespace ACadSvgStudio.BatchProcessing {
         public bool RemoveDevsGroupAttributes { get; set; }
 
 
-        public override void Execute(ConversionContext conversionContext) {
+        public override void Execute(ConversionContext conversionContext, out string msg) {
             DocumentSvg docSvg = ACadLoader.LoadDwg(InputPath, conversionContext);
             string svgText = docSvg.ToSvg();
             DefsExporter exporter = new DefsExporter(svgText, DefsGroupIds, ResolveDefs);
             exporter.Export(OutputPath);
+
+            msg = $"Exporting '{OutputPath}' finished.";
         }
 
 

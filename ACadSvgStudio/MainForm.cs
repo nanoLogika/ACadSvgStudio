@@ -38,6 +38,7 @@ namespace ACadSvgStudio {
         private Scintilla _scintillaCss;
         private Scintilla _scintillaScales;
         private Scintilla _scintillaBatchEditor;
+        private TextBox _batchConsoleLog;
         private TabPage _batchTabPage;
         private ChromiumWebBrowser _webBrowser;
         private DevToolsContext _devToolsContext;
@@ -650,6 +651,15 @@ namespace ACadSvgStudio {
 			_scintillaBatchEditor.Styles[ScintillaNET.Style.Batch.Comment].ForeColor = Color.Green;
 
 			_scintillaBatchEditor.SetKeywords(0, BatchKeywords);
+
+
+            // Textbox for Console Log
+            _batchConsoleLog = new TextBox();
+            _batchConsoleLog.ReadOnly = true;
+            _batchConsoleLog.Dock = DockStyle.Bottom;
+            _batchConsoleLog.Multiline = true;
+            _batchConsoleLog.Height = 200;
+            _batchTabPage.Controls.Add(_batchConsoleLog);
 		}
 
 
@@ -1486,12 +1496,15 @@ namespace ACadSvgStudio {
             try {
                 Batch currentBatch = BatchController.CurrentBatch;
                 if (currentBatch == null) {
-                    _statusLabel.Text = "There is no current batch to be executed.";
+                    string msg = "There is no current batch to be executed.";
+					_statusLabel.Text = msg;
+                    _batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
                     return;
                 }
                 createConversionContext();
-                currentBatch.Execute(_conversionContext);
-            }
+                currentBatch.Execute(_conversionContext, out string batchMsg);
+				_batchConsoleLog.AppendText($"{batchMsg}{Environment.NewLine}");
+			}
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
             }

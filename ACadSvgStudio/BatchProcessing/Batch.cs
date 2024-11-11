@@ -80,10 +80,13 @@ namespace ACadSvgStudio.BatchProcessing {
         }
 
 
-        public void Execute(ConversionContext conversionContext) {
+        public void Execute(ConversionContext conversionContext, out string msg) {
+            StringBuilder sb = new StringBuilder();
             foreach (CommandBase command in _commands) {
-                command.Execute(conversionContext);
+                command.Execute(conversionContext, out string cmdMsg);
+                sb.Append(cmdMsg);
             }
+            msg = sb.ToString();
         }
 
 
