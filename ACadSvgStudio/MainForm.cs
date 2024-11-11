@@ -1463,6 +1463,7 @@ namespace ACadSvgStudio {
             _scintillaSvgGroupEditor.Font = font;
             _scintillaScales.Font = font;
             _scintillaCss.Font = font;
+            _scintillaBatchEditor.Font = font;
         }
 
         #endregion
