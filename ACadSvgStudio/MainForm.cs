@@ -26,6 +26,7 @@ namespace ACadSvgStudio {
 
         public const string AppName = "ACad SVG Studio";
         private const string SvgKeywords = "circle defs ellipse g path pattern rect text tspan";
+        private const string BatchKeywords = "export -i --input -o --output -d --defs-groups -r --resolve-defs";
 
         private RecentlyOpenedFilesManager recentlyOpenedFilesManager;
 
@@ -36,6 +37,8 @@ namespace ACadSvgStudio {
         private Scintilla _scintillaSvgGroupEditor;
         private Scintilla _scintillaCss;
         private Scintilla _scintillaScales;
+        private Scintilla _scintillaBatchEditor;
+        private TabPage _batchTabPage;
         private ChromiumWebBrowser _webBrowser;
         private DevToolsContext _devToolsContext;
         private IncrementalSearcher _incrementalSearcher;
@@ -72,6 +75,7 @@ namespace ACadSvgStudio {
             initScintillaSVGGroupEditor();
             initScintillaScales();
             initScintillaCss();
+            initBatchEditor();
             initWebBrowser();
 
             initPropertyGrid();
@@ -626,6 +630,29 @@ namespace ACadSvgStudio {
         }
 
 
+        private void initBatchEditor() {
+            _batchTabPage = new TabPage("Batch");
+
+			_scintillaBatchEditor = new ScintillaNET.Scintilla();
+			_scintillaBatchEditor.Dock = DockStyle.Fill;
+			_scintillaBatchEditor.BorderStyle = ScintillaNET.BorderStyle.FixedSingle;
+			_scintillaBatchEditor.TextChanged += eventScintillaBatchEditor_TextChanged;
+			updateLineMargin(_scintillaBatchEditor);
+			_batchTabPage.Controls.Add(_scintillaBatchEditor);
+
+
+			// Recipe for Batch
+			_scintillaBatchEditor.Lexer = ScintillaNET.Lexer.Batch;
+
+			_scintillaBatchEditor.Styles[ScintillaNET.Style.Batch.Word].ForeColor = Color.Violet;
+			_scintillaBatchEditor.Styles[ScintillaNET.Style.Batch.Hide].ForeColor = Color.Red;
+			_scintillaBatchEditor.Styles[ScintillaNET.Style.Batch.Label].ForeColor = Color.MediumBlue;
+			_scintillaBatchEditor.Styles[ScintillaNET.Style.Batch.Comment].ForeColor = Color.Green;
+
+			_scintillaBatchEditor.SetKeywords(0, BatchKeywords);
+		}
+
+
         private void initWebBrowser() {
             _webBrowser = new ChromiumWebBrowser();
             _webBrowser.Dock = DockStyle.Fill;
@@ -873,7 +900,12 @@ namespace ACadSvgStudio {
         }
 
 
-        private void eventEditorDragEnter(object sender, DragEventArgs e) {
+		private void eventScintillaBatchEditor_TextChanged(object? sender, EventArgs e) {
+
+        }
+
+
+		private void eventEditorDragEnter(object sender, DragEventArgs e) {
             try {
                 if (e.Data == null) {
                     return;
@@ -1036,8 +1068,12 @@ namespace ACadSvgStudio {
                             Settings.Default.Save();
                             batch = BatchController.LoadOrCreateBatch(batchPath);
                         }
-                        batch.AddCommand(new ExportCommand(_loadedDwgFilename, outputPath, exportSvgForm.ResolveDefs, false, exportSvgForm.SelectedDefsIds));
-                    }
+
+						batch.AddCommand(new ExportCommand(_loadedDwgFilename, outputPath, exportSvgForm.ResolveDefs, false, exportSvgForm.SelectedDefsIds));
+
+						_batchTabPage.Text = $"Batch: {batch.Name}";
+                        _scintillaBatchEditor.Text = batch.ToString();
+					}
 
                     if (exportSvgForm.OpenAfterExport) {
                         LoadFile(outputPath);
@@ -1462,7 +1498,11 @@ namespace ACadSvgStudio {
 
 
         private void eventEditExportBatch_Click(object sender, EventArgs e) {
+            if (!_tabControl.TabPages.Contains(_batchTabPage)) {
+                _tabControl.TabPages.Add(_batchTabPage);
+            }
 
+            _tabControl.SelectedTab = _batchTabPage;
         }
 
 
@@ -1526,7 +1566,9 @@ namespace ACadSvgStudio {
                 Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(path);
                 Settings.Default.Save();
 
-                BatchController.LoadOrCreateBatch(path);
+                Batch batch = BatchController.LoadOrCreateBatch(path);
+				_batchTabPage.Text = $"Batch: {batch.Name}";
+				_scintillaBatchEditor.Text = batch.ToString();
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;

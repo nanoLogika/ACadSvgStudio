@@ -7,6 +7,7 @@
 
 
 using ACadSvg;
+using System.Text;
 
 namespace ACadSvgStudio.BatchProcessing {
 
@@ -110,5 +111,14 @@ namespace ACadSvgStudio.BatchProcessing {
             }
             _hasChanges = false;
         }
-    }
+
+
+		public override string ToString() {
+            StringBuilder sb = new StringBuilder();
+			foreach (CommandBase command in _commands) {
+				sb.AppendLine(command.ToCommandLine());
+			}
+            return sb.ToString();
+		}
+	}
 }

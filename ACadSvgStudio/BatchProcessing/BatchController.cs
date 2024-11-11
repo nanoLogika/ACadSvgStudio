@@ -15,7 +15,7 @@ namespace ACadSvgStudio.BatchProcessing {
 
         public static Batch CurrentBatch { get { return _currentBatch; } }
 
-            
+
         internal static Batch LoadOrCreateBatch(string batchPath) {
             if (File.Exists(batchPath)) {
                 _currentBatch = Batch.FromFile(batchPath);
