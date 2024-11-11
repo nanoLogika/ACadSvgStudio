@@ -25,5 +25,24 @@ namespace ACadSvgStudio.BatchProcessing {
             }
             return _currentBatch;
         }
+
+
+        internal static Batch UpdateBatch(string batchScript) {
+            Batch batch = new Batch(_currentBatch.Path);
+            
+            string[] lines = batchScript.Split(new char[] { '\r', '\n' });
+            foreach (string line in lines) {
+                try {
+					batch.AddCommand(line);
+				}
+                catch (Exception ex) {
+                    // Error in batch code line...
+                }
+            }
+
+            _currentBatch = batch;
+
+            return batch;
+		}
     }
 }

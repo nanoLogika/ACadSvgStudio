@@ -901,7 +901,7 @@ namespace ACadSvgStudio {
 
 
 		private void eventScintillaBatchEditor_TextChanged(object? sender, EventArgs e) {
-
+            BatchController.UpdateBatch(_scintillaBatchEditor.Text);
         }
 
 

@@ -28,7 +28,12 @@ namespace ACadSvgStudio.BatchProcessing {
         
         
         public string Name {
-            get { return Path.GetFileNameWithoutExtension(_path ?? "*unnamed*"); }
+            get { return System.IO.Path.GetFileNameWithoutExtension(_path ?? "*unnamed*"); }
+        }
+
+
+        public string Path {
+            get { return _path; }
         }
 
 
