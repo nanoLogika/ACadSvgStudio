@@ -67,10 +67,19 @@ namespace ACadSvgStudio.BatchProcessing {
 
         public void AddCommand(string commandLine) {
             if (string.IsNullOrWhiteSpace(commandLine)) {
+                AddCommand(new EmptyLineCommand());
+                return;
+            }
+            if (commandLine.Trim().StartsWith("#")) {
+                AddCommand(new CommentLineCommand(commandLine));
                 return;
             }
 
-            string verb = commandLine.Substring(0, commandLine.IndexOf(' ')).ToLower();
+            int lengthOfVerb = commandLine.IndexOf(' ');
+            if (lengthOfVerb == -1) {
+                lengthOfVerb = commandLine.Length;
+            }
+            string verb = commandLine.Substring(0, lengthOfVerb).ToLower();
 
             CommandBase command;
             switch (verb) {
@@ -78,7 +87,8 @@ namespace ACadSvgStudio.BatchProcessing {
                 command = ExportCommand.FromCommandLine(commandLine);
                 break;
             default:
-                throw new InvalidOperationException($"Command {verb} not supported.");
+                command = new UnknownVerbCommand(verb, commandLine);
+                break;
             }
             AddCommand(command);
 
@@ -147,5 +157,18 @@ namespace ACadSvgStudio.BatchProcessing {
 			}
             return sb.ToString();
 		}
-	}
+
+
+        internal IList<int> GetErrorLines() {
+            IList<int> lines = new List<int>();
+            int i = 0;
+            foreach (CommandBase command in _commands) {
+                if (command.HasParseError) {
+                    lines.Add(i);
+                }
+                i++;
+            }
+            return lines;
+        }
+    }
 }

@@ -34,6 +34,9 @@ namespace ACadSvgStudio.BatchProcessing {
         }
 
 
-        public abstract void Execute(ConversionContext conversionContext, out string msg);
+        public virtual void Execute(ConversionContext conversionContext, out string msg) {
+            msg = string.Empty;
+            return;
+        }
     }
 }
