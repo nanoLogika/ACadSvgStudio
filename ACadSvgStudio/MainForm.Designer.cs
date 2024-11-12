@@ -41,6 +41,7 @@
 			_mainGroupTabPage = new TabPage();
 			_scalesTabPage = new TabPage();
 			_cssTabPage = new TabPage();
+			_batchTabPage = new TabPage();
 			_splitContainer2 = new SplitContainer();
 			svgViewerUserControl = new SvgViewerUserControl();
 			_rightTabControl = new TabControl();
@@ -216,6 +217,15 @@
 			_cssTabPage.TabIndex = 1;
 			_cssTabPage.Text = "CSS for Preview";
 			_cssTabPage.UseVisualStyleBackColor = true;
+			// 
+			// _batchTabPage
+			// 
+			_batchTabPage.Location = new Point(4, 24);
+			_batchTabPage.Name = "_batchTabPage";
+			_batchTabPage.Size = new Size(448, 688);
+			_batchTabPage.TabIndex = 3;
+			_batchTabPage.Text = "Batch";
+			_batchTabPage.UseVisualStyleBackColor = true;
 			// 
 			// _splitContainer2
 			// 
@@ -821,5 +831,6 @@
         private ToolStripMenuItem _executeExportBatchToolStripMenuItem;
         private OpenFileDialog _loadCommandBatchDialog;
         private SaveFileDialog _saveCommandBatchAsDialog;
+		private TabPage _batchTabPage;
 	}
 }

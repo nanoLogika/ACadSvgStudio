@@ -39,7 +39,6 @@ namespace ACadSvgStudio {
         private Scintilla _scintillaScales;
         private Scintilla _scintillaBatchEditor;
         private TextBox _batchConsoleLog;
-        private TabPage _batchTabPage;
         private ChromiumWebBrowser _webBrowser;
         private DevToolsContext _devToolsContext;
         private IncrementalSearcher _incrementalSearcher;
@@ -632,8 +631,6 @@ namespace ACadSvgStudio {
 
 
         private void initBatchEditor() {
-            _batchTabPage = new TabPage("Batch");
-
 			_scintillaBatchEditor = new ScintillaNET.Scintilla();
 			_scintillaBatchEditor.Dock = DockStyle.Fill;
 			_scintillaBatchEditor.BorderStyle = ScintillaNET.BorderStyle.FixedSingle;
