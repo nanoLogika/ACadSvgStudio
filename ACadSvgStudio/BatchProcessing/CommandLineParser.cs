@@ -5,6 +5,8 @@
 //  See LICENSE file in the project root for full license information.
 #endregion
 
+using System.Text;
+
 using CommandLine;
 
 
@@ -17,7 +19,17 @@ namespace ACadSvgStudio.BatchProcessing {
 
             ParserResult<ExportOptions> result = Parser.Default.ParseArguments<ExportOptions>(args);
             if (result.Tag == ParserResultType.NotParsed) {
-                parseErrorInfo = "Invalid command line: " + commandLine;
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("Invalid command line: ");
+                sb.Append("   ").AppendLine(commandLine);
+                foreach (Error error in result.Errors) {
+                    sb.Append("   ").Append(error.Tag);
+                    if (error is TokenError tokenError) {
+                        sb.Append(": ").Append(tokenError.Token);
+                    }
+                    sb.AppendLine();
+                }
+                parseErrorInfo = sb.ToString();
             }
             else {
                 parseErrorInfo = string.Empty;
