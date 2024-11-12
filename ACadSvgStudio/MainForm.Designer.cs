@@ -93,7 +93,6 @@
 			_executeExportBatchToolStripMenuItem = new ToolStripMenuItem();
 			_loadExportBatchToolStripMenuItem = new ToolStripMenuItem();
 			_saveExportBatchToolStripMenuItem = new ToolStripMenuItem();
-			_editCommandFileToolStripMenuItem = new ToolStripMenuItem();
 			_aboutACadSVGStudioMenuItem = new ToolStripMenuItem();
 			_openFileDialog = new OpenFileDialog();
 			_saveFileDialog = new SaveFileDialog();
@@ -587,7 +586,7 @@
 			// 
 			// _exportToolStripMenuItem
 			// 
-			_exportToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportSelectedDefsToolStripMenuItem, _exportMenuSeparator1, _executeExportBatchToolStripMenuItem, _exportMenuSeparator, _loadExportBatchToolStripMenuItem, _saveExportBatchToolStripMenuItem, _editCommandFileToolStripMenuItem });
+			_exportToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportSelectedDefsToolStripMenuItem, _exportMenuSeparator1, _executeExportBatchToolStripMenuItem, _exportMenuSeparator, _loadExportBatchToolStripMenuItem, _saveExportBatchToolStripMenuItem });
 			_exportToolStripMenuItem.Name = "_exportToolStripMenuItem";
 			_exportToolStripMenuItem.Size = new Size(53, 20);
 			_exportToolStripMenuItem.Text = "Export";
@@ -619,13 +618,6 @@
 			_saveExportBatchToolStripMenuItem.Size = new Size(185, 22);
 			_saveExportBatchToolStripMenuItem.Text = "Save Export Batch";
 			_saveExportBatchToolStripMenuItem.Click += eventSaveExportBatch_Click;
-			// 
-			// _editCommandFileToolStripMenuItem
-			// 
-			_editCommandFileToolStripMenuItem.Name = "_editCommandFileToolStripMenuItem";
-			_editCommandFileToolStripMenuItem.Size = new Size(185, 22);
-			_editCommandFileToolStripMenuItem.Text = "Edit Export Batch";
-			_editCommandFileToolStripMenuItem.Click += eventEditExportBatch_Click;
 			// 
 			// _aboutACadSVGStudioMenuItem
 			// 
@@ -828,7 +820,6 @@
         private ToolStripMenuItem exportSelectedDefsToolStripMenuItem;
         private ToolStripMenuItem _loadExportBatchToolStripMenuItem;
         private ToolStripMenuItem _saveExportBatchToolStripMenuItem;
-        private ToolStripMenuItem _editCommandFileToolStripMenuItem;
         private ToolStripMenuItem _executeExportBatchToolStripMenuItem;
         private OpenFileDialog _loadCommandBatchDialog;
         private SaveFileDialog _saveCommandBatchAsDialog;

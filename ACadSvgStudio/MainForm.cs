@@ -20,6 +20,7 @@ using SvgElements;
 using ACadSvgStudio.Defs;
 using ACadSvgStudio.BatchProcessing;
 
+
 namespace ACadSvgStudio {
 
     public partial class MainForm : Form {
@@ -908,24 +909,21 @@ namespace ACadSvgStudio {
 
 
 		private void eventScintillaBatchEditor_TextChanged(object? sender, EventArgs e) {
+            if (string.IsNullOrEmpty(_scintillaBatchEditor.Text)) {
+                return;
+            }
+
             BatchController.UpdateBatch(_scintillaBatchEditor.Text);
 
-			_scintillaBatchEditor.Markers[0].SetBackColor(Color.Red);
+			_scintillaBatchEditor.Markers[0].SetBackColor(Color.Pink);
 
 			if (BatchController.CurrentBatch != null) {
-				for (int i = 0; i < _scintillaBatchEditor.Lines.Count; i++) {
-                    string line = _scintillaBatchEditor.Lines[i].Text;
+                foreach (var line in  _scintillaBatchEditor.Lines) {
+                    line.MarkerDelete(0);
+                }
 
-					_scintillaBatchEditor.Lines[i].MarkerDelete(0);
-
-					if (!string.IsNullOrEmpty(line)) {
-						try {
-							CommandLineParser.ParseCommandLine(line);
-						}
-                        catch {
-							_scintillaBatchEditor.Lines[i].MarkerAdd(0);
-						}
-					}
+				foreach (int index in BatchController.CurrentBatch.GetErrorLines()) {
+					_scintillaBatchEditor.Lines[index].MarkerAdd(0);
 				}
 			}
         }
@@ -1542,15 +1540,6 @@ namespace ACadSvgStudio {
         }
 
 
-        private void eventEditExportBatch_Click(object sender, EventArgs e) {
-            if (!_tabControl.TabPages.Contains(_batchTabPage)) {
-                _tabControl.TabPages.Add(_batchTabPage);
-            }
-
-            _tabControl.SelectedTab = _batchTabPage;
-        }
-
-
         private void eventSaveExportBatch_Click(object sender, EventArgs e) {
             try {
                 Batch currentBatch = BatchController.CurrentBatch;
@@ -1564,6 +1553,8 @@ namespace ACadSvgStudio {
                     return;
                 }
                 currentBatch.Save();
+
+                _statusLabel.Text = $"Batch: {currentBatch.Name} saved.";
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
@@ -1614,6 +1605,10 @@ namespace ACadSvgStudio {
                 Batch batch = BatchController.LoadOrCreateBatch(path);
 				_batchTabPage.Text = $"Batch: {batch.Name}";
 				_scintillaBatchEditor.Text = batch.ToString();
+
+                _statusLabel.Text = $"Batch: {batch.Name} loaded.";
+
+                _tabControl.SelectedTab = _batchTabPage;
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
