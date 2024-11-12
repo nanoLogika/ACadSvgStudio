@@ -31,6 +31,11 @@ namespace ACadSvgStudio.BatchProcessing {
             if (string.IsNullOrEmpty(batchScript.Trim())) {
                 return null;
             }
+
+            if (_currentBatch == null) {
+                return null;
+            }
+
             Batch batch = new Batch(_currentBatch.Path);
             
             string[] lines = batchScript.Replace("\r\n", "\n").Split('\n');
