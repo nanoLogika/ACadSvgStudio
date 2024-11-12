@@ -16,7 +16,10 @@ namespace ACadSvgStudio.BatchProcessing {
 
     internal class ExportCommand : CommandBase {
 
-        public ExportCommand() { }
+        public ExportCommand(string commandLine, string message) {
+            _commandLine = commandLine;
+            _parseError = message;
+        }
 
 
         public ExportCommand(string inputPath, string outputPath, bool resolveDefs, bool removeDevsGroupAttributes, string[] defsGroupIds) {
@@ -25,6 +28,7 @@ namespace ACadSvgStudio.BatchProcessing {
             ResolveDefs = resolveDefs;
             RemoveDevsGroupAttributes = removeDevsGroupAttributes;
             DefsGroupIds = defsGroupIds ?? throw new ArgumentNullException(nameof(defsGroupIds));
+            _parseError = string.Empty;
         }
 
 
@@ -54,37 +58,48 @@ namespace ACadSvgStudio.BatchProcessing {
 
 
         public static ExportCommand FromCommandLine(string commandLine) {
-            ExportOptions exportOptions = CommandLineParser.ParseCommandLine(commandLine);
+            try {
+                ExportOptions exportOptions = CommandLineParser.ParseCommandLine(commandLine);
 
-            return new ExportCommand(
-                exportOptions.Input, exportOptions.Output,
-                exportOptions.ResolveDefs, false,
-                exportOptions.IncludedDefs.ToArray<string>());
+                return new ExportCommand(
+                    exportOptions.Input, exportOptions.Output,
+                    exportOptions.ResolveDefs, false,
+                    exportOptions.IncludedDefs.ToArray<string>());
+            }
+            catch (Exception ex) {
+                return new ExportCommand(commandLine, ex.Message);
+            }
         }
 
 
         public override string ToCommandLine() {
-            string rd = ResolveDefs ? " -r+" : string.Empty;
-            string rga = RemoveDevsGroupAttributes ? " -rga+" : string.Empty;
+            if (string.IsNullOrEmpty(_parseError)) {
 
-            StringBuilder commandLineSb = new StringBuilder("EXPORT");
-            commandLineSb.Append(" -o \"").Append(OutputPath).Append('"');
-            commandLineSb.Append(" -i \"").Append(InputPath).Append('"');
-            ;
-            commandLineSb.Append(rd);
-            commandLineSb.Append(rga);
-            commandLineSb.Append(" -d");
-            foreach (string gId in DefsGroupIds) {
-                commandLineSb.Append(' ').Append(gId);
+                string rd = ResolveDefs ? " -r+" : string.Empty;
+                string rga = RemoveDevsGroupAttributes ? " -a+" : string.Empty;
+
+                StringBuilder commandLineSb = new StringBuilder("EXPORT");
+                commandLineSb.Append(" -o \"").Append(OutputPath).Append('"');
+                commandLineSb.Append(" -i \"").Append(InputPath).Append('"');
+
+                commandLineSb.Append(rd);
+                commandLineSb.Append(rga);
+                commandLineSb.Append(" -d");
+                foreach (string gId in DefsGroupIds) {
+                    commandLineSb.Append(' ').Append(gId);
+                }
+
+                return commandLineSb.ToString();
             }
-
-            return commandLineSb.ToString();
+            else {
+                return _commandLine;
+            }
         }
 
 
         public override string ToString() {
             string rd = ResolveDefs ? " -r+" : string.Empty;
-            string rga = RemoveDevsGroupAttributes ? " -rga+" : string.Empty;
+            string rga = RemoveDevsGroupAttributes ? " -a+" : string.Empty;
 
             StringBuilder commandLineSb = new StringBuilder("EXPORT");
             commandLineSb.Append(" -o ").Append(Path.GetFileNameWithoutExtension(OutputPath));

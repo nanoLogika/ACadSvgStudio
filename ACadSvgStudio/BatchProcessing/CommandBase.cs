@@ -12,8 +12,17 @@ namespace ACadSvgStudio.BatchProcessing {
 
     internal abstract class CommandBase {
 
+        protected string _commandLine;
+        protected string _parseError;
+
 
         public abstract string ToCommandLine();
+
+
+        public string CommandLine { get { return _commandLine; } }
+        
+        
+        public string ParseError { get { return _parseError; } }
 
 
         public abstract void Execute(ConversionContext conversionContext, out string msg);

@@ -50,6 +50,9 @@ namespace ACadSvgStudio.BatchProcessing {
 
 
         public void AddCommand(string commandLine) {
+            if (string.IsNullOrWhiteSpace(commandLine)) {
+                return;
+            }
 
             string verb = commandLine.Substring(0, commandLine.IndexOf(' ')).ToLower();
 

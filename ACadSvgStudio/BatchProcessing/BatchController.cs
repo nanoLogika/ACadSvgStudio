@@ -28,9 +28,12 @@ namespace ACadSvgStudio.BatchProcessing {
 
 
         internal static Batch UpdateBatch(string batchScript) {
+            if (string.IsNullOrEmpty(batchScript.Trim())) {
+                return null;
+            }
             Batch batch = new Batch(_currentBatch.Path);
             
-            string[] lines = batchScript.Split(new char[] { '\r', '\n' });
+            string[] lines = batchScript.Replace("\r\n", "\n").Split('\n');
             foreach (string line in lines) {
                 try {
 					batch.AddCommand(line);
