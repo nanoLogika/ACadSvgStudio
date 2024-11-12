@@ -925,6 +925,8 @@ namespace ACadSvgStudio {
 				foreach (int index in BatchController.CurrentBatch.GetErrorLines()) {
 					_scintillaBatchEditor.Lines[index].MarkerAdd(0);
 				}
+
+                _batchConsoleLog.Text = BatchController.CurrentBatch.GetParseErrorInfos();
 			}
         }
 
