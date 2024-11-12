@@ -42,7 +42,7 @@ namespace ACadSvgStudio.BatchProcessing {
                 return false;
             }
         }
-        
+
         public string Name {
             get { return System.IO.Path.GetFileNameWithoutExtension(_path ?? "*unnamed*"); }
         }

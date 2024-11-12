@@ -909,6 +909,25 @@ namespace ACadSvgStudio {
 
 		private void eventScintillaBatchEditor_TextChanged(object? sender, EventArgs e) {
             BatchController.UpdateBatch(_scintillaBatchEditor.Text);
+
+			_scintillaBatchEditor.Markers[0].SetBackColor(Color.Red);
+
+			if (BatchController.CurrentBatch != null) {
+				for (int i = 0; i < _scintillaBatchEditor.Lines.Count; i++) {
+                    string line = _scintillaBatchEditor.Lines[i].Text;
+
+					_scintillaBatchEditor.Lines[i].MarkerDelete(0);
+
+					if (!string.IsNullOrEmpty(line)) {
+						try {
+							CommandLineParser.ParseCommandLine(line);
+						}
+                        catch {
+							_scintillaBatchEditor.Lines[i].MarkerAdd(0);
+						}
+					}
+				}
+			}
         }
 
 
