@@ -1491,6 +1491,7 @@ namespace ACadSvgStudio {
 
         private void eventExecuteExportBatch_Click(object sender, EventArgs e) {
             try {
+                //  TODO select tab
                 Batch currentBatch = BatchController.CurrentBatch;
                 if (currentBatch == null) {
                     string msg = "There is no current batch to be executed.";
@@ -1498,6 +1499,20 @@ namespace ACadSvgStudio {
                     _batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
                     return;
                 }
+                if (currentBatch.IsEmpty) {
+                    string msg = "The current batch does not yet contain any command.";
+                    _statusLabel.Text = msg;
+                    _batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
+                    return;
+                }
+                if (currentBatch.HasErrors) {
+                    string msg = "The current batch has parse errors.";
+                    _statusLabel.Text = msg;
+                    _batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
+                    return;
+                }
+
+                _batchConsoleLog.Text = string.Empty;
                 createConversionContext();
                 currentBatch.Execute(_conversionContext, out string batchMsg);
 				_batchConsoleLog.AppendText($"{batchMsg}{Environment.NewLine}");

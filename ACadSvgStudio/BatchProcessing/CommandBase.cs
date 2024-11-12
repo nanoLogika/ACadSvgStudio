@@ -19,10 +19,19 @@ namespace ACadSvgStudio.BatchProcessing {
         public abstract string ToCommandLine();
 
 
-        public string CommandLine { get { return _commandLine; } }
+        public string CommandLine {
+            get { return _commandLine; }
+        }
         
         
-        public string ParseError { get { return _parseError; } }
+        public string ParseError {
+            get { return _parseError; }
+        }
+
+
+        public bool HasParseError {
+            get { return !string.IsNullOrEmpty(_parseError); }
+        }
 
 
         public abstract void Execute(ConversionContext conversionContext, out string msg);

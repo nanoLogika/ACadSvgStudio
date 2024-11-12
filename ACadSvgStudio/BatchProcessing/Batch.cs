@@ -26,6 +26,22 @@ namespace ACadSvgStudio.BatchProcessing {
             get { return _hasChanges; }
         }
         
+
+        public bool IsEmpty {
+            get { return _commands.Count == 0; }
+        }
+
+
+        public bool HasErrors {
+            get {
+                foreach (CommandBase command in _commands) {
+                    if (command.HasParseError) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
         
         public string Name {
             get { return System.IO.Path.GetFileNameWithoutExtension(_path ?? "*unnamed*"); }
