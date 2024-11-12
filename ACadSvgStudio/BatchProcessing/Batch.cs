@@ -159,7 +159,7 @@ namespace ACadSvgStudio.BatchProcessing {
 		}
 
 
-        internal IList<int> GetErrorLines() {
+        public IList<int> GetErrorLines() {
             IList<int> lines = new List<int>();
             int i = 0;
             foreach (CommandBase command in _commands) {
@@ -169,6 +169,18 @@ namespace ACadSvgStudio.BatchProcessing {
                 i++;
             }
             return lines;
+        }
+
+
+        public string GetParseErrorInfos() {
+            StringBuilder sb = new StringBuilder();
+            int i = 0;
+            foreach (CommandBase command in _commands) {
+                if (command.HasParseError) {
+                    sb.Append(i).Append(": ").AppendLine(command.ParseError);
+                }
+            }
+            return sb.ToString();
         }
     }
 }

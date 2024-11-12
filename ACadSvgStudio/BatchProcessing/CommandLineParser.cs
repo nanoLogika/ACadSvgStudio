@@ -12,12 +12,15 @@ namespace ACadSvgStudio.BatchProcessing {
 
     internal static class CommandLineParser {
 
-        public static ExportOptions ParseCommandLine(string commandLine) {
+        public static ExportOptions ParseCommandLine(string commandLine, out string parseErrorInfo) {
             string[] args = splitArguments(commandLine);
 
             ParserResult<ExportOptions> result = Parser.Default.ParseArguments<ExportOptions>(args);
             if (result.Tag == ParserResultType.NotParsed) {
-                throw new InvalidDataException("Invalid command line: " + commandLine);
+                parseErrorInfo = "Invalid command line: " + commandLine;
+            }
+            else {
+                parseErrorInfo = string.Empty;
             }
 
             return result.Value;

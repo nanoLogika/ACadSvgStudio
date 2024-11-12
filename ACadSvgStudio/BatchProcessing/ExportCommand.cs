@@ -59,12 +59,16 @@ namespace ACadSvgStudio.BatchProcessing {
 
         public static ExportCommand FromCommandLine(string commandLine) {
             try {
-                ExportOptions exportOptions = CommandLineParser.ParseCommandLine(commandLine);
+                ExportOptions exportOptions = CommandLineParser.ParseCommandLine(commandLine, out string errorInfo);
 
-                return new ExportCommand(
-                    exportOptions.Input, exportOptions.Output,
-                    exportOptions.ResolveDefs, false,
-                    exportOptions.IncludedDefs.ToArray<string>());
+                if (string.IsNullOrEmpty(errorInfo)) {
+                    return new ExportCommand(
+                        exportOptions.Input, exportOptions.Output,
+                        exportOptions.ResolveDefs, false,
+                        exportOptions.IncludedDefs.ToArray<string>());
+                }
+
+                return new ExportCommand(commandLine, errorInfo);
             }
             catch (Exception ex) {
                 return new ExportCommand(commandLine, ex.Message);

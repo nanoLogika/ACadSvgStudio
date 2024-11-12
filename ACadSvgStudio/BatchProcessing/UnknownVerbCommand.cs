@@ -13,7 +13,7 @@ namespace ACadSvgStudio.BatchProcessing {
 
         public UnknownVerbCommand(string verb, string commandLine) {
             _commandLine = commandLine;
-            _parseError = $"Command {verb} not supported.";
+            _parseError = $"Command {verb.ToUpper()} not supported.";
         }
 
 
