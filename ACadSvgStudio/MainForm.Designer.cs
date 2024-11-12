@@ -41,7 +41,6 @@
 			_mainGroupTabPage = new TabPage();
 			_scalesTabPage = new TabPage();
 			_cssTabPage = new TabPage();
-			_batchTabPage = new TabPage();
 			_splitContainer2 = new SplitContainer();
 			svgViewerUserControl = new SvgViewerUserControl();
 			_rightTabControl = new TabControl();
@@ -49,6 +48,7 @@
 			_propertyGrid = new PropertyGrid();
 			_defsTabPage = new TabPage();
 			_defsTreeView = new TreeView();
+			_batchTabPage = new TabPage();
 			_menuStrip = new MenuStrip();
 			_fileToolStripMenuItem = new ToolStripMenuItem();
 			_loadDwgToolStripMenuItem = new ToolStripMenuItem();
@@ -182,6 +182,7 @@
 			_tabControl.Controls.Add(_mainGroupTabPage);
 			_tabControl.Controls.Add(_scalesTabPage);
 			_tabControl.Controls.Add(_cssTabPage);
+			_tabControl.Controls.Add(_batchTabPage);
 			_tabControl.Dock = DockStyle.Fill;
 			_tabControl.Location = new Point(0, 0);
 			_tabControl.Name = "_tabControl";
@@ -217,15 +218,6 @@
 			_cssTabPage.TabIndex = 1;
 			_cssTabPage.Text = "CSS for Preview";
 			_cssTabPage.UseVisualStyleBackColor = true;
-			// 
-			// _batchTabPage
-			// 
-			_batchTabPage.Location = new Point(4, 24);
-			_batchTabPage.Name = "_batchTabPage";
-			_batchTabPage.Size = new Size(448, 688);
-			_batchTabPage.TabIndex = 3;
-			_batchTabPage.Text = "Batch";
-			_batchTabPage.UseVisualStyleBackColor = true;
 			// 
 			// _splitContainer2
 			// 
@@ -303,6 +295,15 @@
 			_defsTreeView.Size = new Size(271, 682);
 			_defsTreeView.TabIndex = 1;
 			_defsTreeView.AfterCheck += eventDefsTreeViewAfterCheck;
+			// 
+			// _batchTabPage
+			// 
+			_batchTabPage.Location = new Point(4, 24);
+			_batchTabPage.Name = "_batchTabPage";
+			_batchTabPage.Size = new Size(448, 688);
+			_batchTabPage.TabIndex = 3;
+			_batchTabPage.Text = "Batch";
+			_batchTabPage.UseVisualStyleBackColor = true;
 			// 
 			// _menuStrip
 			// 
