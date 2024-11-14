@@ -18,6 +18,8 @@ using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
 using SvgElements;
 using ACadSvgStudio.Defs;
+using ACadSvgStudio.BatchProcessing;
+
 
 namespace ACadSvgStudio {
 
@@ -25,6 +27,7 @@ namespace ACadSvgStudio {
 
         public const string AppName = "ACad SVG Studio";
         private const string SvgKeywords = "circle defs ellipse g path pattern rect text tspan";
+        private const string BatchKeywords = "export -i --input -o --output -d --defs-groups -r --resolve-defs";
 
         private RecentlyOpenedFilesManager recentlyOpenedFilesManager;
 
@@ -35,6 +38,8 @@ namespace ACadSvgStudio {
         private Scintilla _scintillaSvgGroupEditor;
         private Scintilla _scintillaCss;
         private Scintilla _scintillaScales;
+        private Scintilla _scintillaBatchEditor;
+        private TextBox _batchConsoleLog;
         private ChromiumWebBrowser _webBrowser;
         private DevToolsContext _devToolsContext;
         private IncrementalSearcher _incrementalSearcher;
@@ -71,6 +76,7 @@ namespace ACadSvgStudio {
             initScintillaSVGGroupEditor();
             initScintillaScales();
             initScintillaCss();
+            initBatchEditor();
             initWebBrowser();
 
             initPropertyGrid();
@@ -205,6 +211,7 @@ namespace ACadSvgStudio {
             case ".svg":
             case ".g.svg":
                 readSvgFile(filename);
+                _contentChanged = false;
                 break;
 
             case ".dwg":
@@ -624,6 +631,36 @@ namespace ACadSvgStudio {
         }
 
 
+        private void initBatchEditor() {
+			_scintillaBatchEditor = new ScintillaNET.Scintilla();
+			_scintillaBatchEditor.Dock = DockStyle.Fill;
+			_scintillaBatchEditor.BorderStyle = ScintillaNET.BorderStyle.FixedSingle;
+			_scintillaBatchEditor.TextChanged += eventScintillaBatchEditor_TextChanged;
+			updateLineMargin(_scintillaBatchEditor);
+			_batchTabPage.Controls.Add(_scintillaBatchEditor);
+
+
+			// Recipe for Batch
+			_scintillaBatchEditor.Lexer = ScintillaNET.Lexer.Batch;
+
+			_scintillaBatchEditor.Styles[ScintillaNET.Style.Batch.Word].ForeColor = Color.Violet;
+			_scintillaBatchEditor.Styles[ScintillaNET.Style.Batch.Hide].ForeColor = Color.Red;
+			_scintillaBatchEditor.Styles[ScintillaNET.Style.Batch.Label].ForeColor = Color.MediumBlue;
+			_scintillaBatchEditor.Styles[ScintillaNET.Style.Batch.Comment].ForeColor = Color.Green;
+
+			_scintillaBatchEditor.SetKeywords(0, BatchKeywords);
+
+
+            // Textbox for Console Log
+            _batchConsoleLog = new TextBox();
+            _batchConsoleLog.ReadOnly = true;
+            _batchConsoleLog.Dock = DockStyle.Bottom;
+            _batchConsoleLog.Multiline = true;
+            _batchConsoleLog.Height = 200;
+            _batchTabPage.Controls.Add(_batchConsoleLog);
+		}
+
+
         private void initWebBrowser() {
             _webBrowser = new ChromiumWebBrowser();
             _webBrowser.Dock = DockStyle.Fill;
@@ -732,17 +769,39 @@ namespace ACadSvgStudio {
                 if (_contentChanged) {
                     switch (MessageBox.Show("Content has been changed, save changes?", "Close", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning)) {
                     case DialogResult.Yes:
-                        if (!string.IsNullOrEmpty(_loadedFilename)) {
-                            File.WriteAllText(_loadedFilename, _scintillaSvgGroupEditor.Text);
+                        if (string.IsNullOrEmpty(_loadedFilename)) {
+                            _saveFileDialog.FileName = _loadedFilename;
+                            _saveFileDialog.FilterIndex = 1;
+                            e.Cancel = _saveFileDialog.ShowDialog() == DialogResult.Cancel;
+                        }
+                        if (e.Cancel) {
                             return;
                         }
-                        _saveFileDialog.FileName = _loadedFilename;
-                        _saveFileDialog.FilterIndex = 1;
-                        e.Cancel = _saveFileDialog.ShowDialog() == DialogResult.Cancel;
+                        File.WriteAllText(_loadedFilename, _scintillaSvgGroupEditor.Text);
                         break;
                     case DialogResult.Cancel:
                         e.Cancel = true;
+                        return;
+                    }
+                }
+                Batch batch = BatchController.CurrentBatch;
+                if (batch != null && batch.HasChanges) {
+                    string name = batch.Name;
+                    switch (MessageBox.Show($"Current command batch {name} has been changed, save changes?", "Close", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning)) {
+                    case DialogResult.Yes:
+                        if (string.IsNullOrEmpty(name)) {
+                            _saveFileDialog.FileName = _loadedFilename;
+                            _saveFileDialog.FilterIndex = 1;
+                            e.Cancel = _saveFileDialog.ShowDialog() == DialogResult.Cancel;
+                        }
+                        if (e.Cancel) {
+                            return;
+                        }
+                        batch.Save();
                         break;
+                    case DialogResult.Cancel:
+                        e.Cancel = true;
+                        return;
                     }
                 }
             }
@@ -849,7 +908,30 @@ namespace ACadSvgStudio {
         }
 
 
-        private void eventEditorDragEnter(object sender, DragEventArgs e) {
+		private void eventScintillaBatchEditor_TextChanged(object? sender, EventArgs e) {
+            if (string.IsNullOrEmpty(_scintillaBatchEditor.Text)) {
+                return;
+            }
+
+            BatchController.UpdateBatch(_scintillaBatchEditor.Text);
+
+			_scintillaBatchEditor.Markers[0].SetBackColor(Color.Pink);
+
+			if (BatchController.CurrentBatch != null) {
+                foreach (var line in  _scintillaBatchEditor.Lines) {
+                    line.MarkerDelete(0);
+                }
+
+				foreach (int index in BatchController.CurrentBatch.GetErrorLines()) {
+					_scintillaBatchEditor.Lines[index].MarkerAdd(0);
+				}
+
+                _batchConsoleLog.Text = BatchController.CurrentBatch.GetParseErrorInfos();
+			}
+        }
+
+
+		private void eventEditorDragEnter(object sender, DragEventArgs e) {
             try {
                 if (e.Data == null) {
                     return;
@@ -993,7 +1075,7 @@ namespace ACadSvgStudio {
                 if (exportSvgForm.ShowDialog() == DialogResult.OK) {
                     string outputPath = exportSvgForm.SelectedPath;
                     if (File.Exists(outputPath)) {
-                        if (MessageBox.Show("File exists, overwite?", "Export Selected Defs", MessageBoxButtons.OKCancel) == DialogResult.Cancel) {
+                        if (MessageBox.Show($"File {outputPath} exists, overwite?", "Export Selected Defs", MessageBoxButtons.OKCancel) == DialogResult.Cancel) {
                             return;
                         }
                     }
@@ -1002,8 +1084,22 @@ namespace ACadSvgStudio {
                     exporter.Export(outputPath);
 
                     if (exportSvgForm.AddExportToCurrentBatch) {
+                        Batch batch = BatchController.CurrentBatch;
+                        if (batch == null) {
+                            _loadCommandBatchDialog.InitialDirectory = Settings.Default.CommandBatchDirectory;
+                            _loadCommandBatchDialog.FileName = string.Empty;
+                            _loadCommandBatchDialog.ShowDialog();
+                            string batchPath = _loadCommandBatchDialog.FileName;
+                            Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(batchPath);
+                            Settings.Default.Save();
+                            batch = BatchController.LoadOrCreateBatch(batchPath);
+                        }
 
-                    }
+						batch.AddCommand(new ExportCommand(_loadedDwgFilename, outputPath, exportSvgForm.ResolveDefs, false, exportSvgForm.SelectedDefsIds));
+
+						_batchTabPage.Text = $"Batch: {batch.Name}";
+                        _scintillaBatchEditor.Text = batch.ToString();
+					}
 
                     if (exportSvgForm.OpenAfterExport) {
                         LoadFile(outputPath);
@@ -1393,6 +1489,7 @@ namespace ACadSvgStudio {
             _scintillaSvgGroupEditor.Font = font;
             _scintillaScales.Font = font;
             _scintillaCss.Font = font;
+            _scintillaBatchEditor.Font = font;
         }
 
         #endregion
@@ -1412,19 +1509,112 @@ namespace ACadSvgStudio {
         #region -  Events Export Menu
 
         private void eventExecuteExportBatch_Click(object sender, EventArgs e) {
+            try {
+                //  TODO select tab
+                Batch currentBatch = BatchController.CurrentBatch;
+                if (currentBatch == null) {
+                    string msg = "There is no current batch to be executed.";
+					_statusLabel.Text = msg;
+                    _batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
+                    return;
+                }
+                if (currentBatch.IsEmpty) {
+                    string msg = "The current batch does not yet contain any command.";
+                    _statusLabel.Text = msg;
+                    _batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
+                    return;
+                }
+                if (currentBatch.HasErrors) {
+                    string msg = "The current batch has parse errors.";
+                    _statusLabel.Text = msg;
+                    _batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
+                    return;
+                }
 
+                _batchConsoleLog.Text = string.Empty;
+                createConversionContext();
+                currentBatch.Execute(_conversionContext, out string batchMsg);
+				_batchConsoleLog.AppendText($"{batchMsg}{Environment.NewLine}");
+			}
+            catch (Exception ex) {
+                _statusLabel.Text = ex.Message;
+            }
         }
 
-        private void eventEditExportBatch_Click(object sender, EventArgs e) {
-
-        }
 
         private void eventSaveExportBatch_Click(object sender, EventArgs e) {
+            try {
+                Batch currentBatch = BatchController.CurrentBatch;
+                if (currentBatch == null) {
+                    _statusLabel.Text = "There is no current batch to save.";
+                    return;
+                }
 
+                if (string.IsNullOrEmpty(currentBatch.Name)) {
+                    //  TODO open save dialog;
+                    return;
+                }
+                currentBatch.Save();
+
+                _statusLabel.Text = $"Batch: {currentBatch.Name} saved.";
+            }
+            catch (Exception ex) {
+                _statusLabel.Text = ex.Message;
+            }
         }
 
-        private void eventLoadExportBatch_Click(object sender, EventArgs e) {
 
+        private void eventLoadExportBatch_Click(object sender, EventArgs e) {
+            try {
+                Batch currentBatch = BatchController.CurrentBatch;
+                if (currentBatch != null && currentBatch.HasChanges) {
+                    var ret = MessageBox.Show(
+                        $"CurrentBatch {currentBatch.Name} has changed has changed, save changes before loading or creating new batch?",
+                        "Load Export Batch", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    switch (ret) {
+                    case DialogResult.Yes:
+                        currentBatch.Save();
+                        _statusLabel.Text = "Current batch saved.";
+                        break;
+                    case DialogResult.No:
+                        _statusLabel.Text = "Current batch will be discarded.";
+                        break;
+                    default:
+                        return;
+                    }
+                }
+
+                _loadCommandBatchDialog.InitialDirectory = Settings.Default.CommandBatchDirectory;
+                _loadCommandBatchDialog.FileName = string.Empty;
+                _loadCommandBatchDialog.ShowDialog();
+            }
+            catch (Exception ex){
+                _statusLabel.Text = ex.Message;
+            }
+        }
+
+
+        private void eventLoadCommandBatch_FileOk(object sender, System.ComponentModel.CancelEventArgs e) {
+            try {
+                if (e.Cancel) {
+                    return;
+                }
+
+                string path = _loadCommandBatchDialog.FileName;
+                Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(path);
+                Settings.Default.Save();
+
+                Batch batch = BatchController.LoadOrCreateBatch(path);
+				_batchTabPage.Text = $"Batch: {batch.Name}";
+				_scintillaBatchEditor.Text = batch.ToString();
+
+                _statusLabel.Text = $"Batch: {batch.Name} loaded.";
+
+                _tabControl.SelectedTab = _batchTabPage;
+            }
+            catch (Exception ex) {
+                _statusLabel.Text = ex.Message;
+            }
         }
 
         #endregion

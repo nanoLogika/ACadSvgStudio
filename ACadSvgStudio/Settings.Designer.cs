@@ -561,5 +561,17 @@ namespace ACadSvgStudio {
                 this["SvgDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CommandBatchDirectory {
+            get {
+                return ((string)(this["CommandBatchDirectory"]));
+            }
+            set {
+                this["CommandBatchDirectory"] = value;
+            }
+        }
     }
 }

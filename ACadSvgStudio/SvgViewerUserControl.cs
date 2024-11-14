@@ -145,16 +145,42 @@ namespace ACadSvgStudio {
 
 		private void centerToFit()
 		{
-			using (Bitmap bitmap = getBitmap())
-			{
-				if (bitmap == null)
-				{
-					return;
+			int bitmapWidth = 0;
+			int bitmapHeight = 0;
+
+			bool sizeCalculated = false;
+			bool isLargerThanControl = false;
+
+			do {
+				using (Bitmap bitmap = getBitmap()) {
+					if (bitmap == null) {
+						return;
+					}
+
+					bitmapWidth = bitmap.Width;
+					bitmapHeight = bitmap.Height;
+
+					if (!sizeCalculated)
+					{
+						isLargerThanControl = bitmapWidth > Width || bitmapHeight > Height;
+						sizeCalculated = true;
+					}
+
+					_x = (Width / 2) - (bitmap.Width / 2);
+					_y = (Height / 2) - (bitmap.Height / 2);
 				}
 
-				_x = (Width / 2) - (bitmap.Width / 2);
-				_y = (Height / 2) - (bitmap.Height / 2);
+				if (isLargerThanControl && (bitmapWidth > Width || bitmapHeight > Height)) {
+					_zoom -= 0.1f;
+				}
+
+				if (!isLargerThanControl && (bitmapWidth < Width || bitmapHeight < Height))
+				{
+					_zoom += 0.1f;
+				}
 			}
+			while ((isLargerThanControl && (bitmapWidth > Width || bitmapHeight > Height))
+				|| (!isLargerThanControl && (bitmapWidth < Width || bitmapHeight < Height)));
 
 			Invalidate();
 		}
