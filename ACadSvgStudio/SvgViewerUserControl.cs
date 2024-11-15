@@ -160,7 +160,7 @@ namespace ACadSvgStudio {
 					}
 				}
 
-				_dimensions = _svgDocument.GetDimensions();
+				_dimensions = new SizeF(_svgDocument.Bounds.Width, _svgDocument.Bounds.Height);
 			}
 
 			return _dimensions;
@@ -177,11 +177,18 @@ namespace ACadSvgStudio {
 				return;
 			}
 
-			g.TranslateTransform(_x, _y);
-			_svgDocument.Draw(g);
-			g.TranslateTransform(-_x, -_y);
+			try
+			{
+				g.TranslateTransform(_x, _y);
+				_svgDocument.Draw(g);
+				g.TranslateTransform(-_x, -_y);
 
-			_needsUpdate = false;
+				_needsUpdate = false;
+			}
+			catch (Exception ex)
+			{
+
+			}
 		}
 
 
@@ -211,38 +218,75 @@ namespace ACadSvgStudio {
 		}
 
 
-		public void CenterToFit()
+		private void center()
 		{
-			bool sizeCalculated = false;
-			bool isLargerThanControl = false;
-
-			SizeF bitmapSize = new SizeF(0, 0);
-
-			do {
-				bitmapSize = calculateTransforms();
-
-				if (!sizeCalculated)
-				{
-					isLargerThanControl = bitmapSize.Width > Width || bitmapSize.Height > Height;
-					sizeCalculated = true;
-				}
-
+			SizeF bitmapSize = calculateTransforms();
+			if (bitmapSize.Width != 0 && bitmapSize.Height != 0)
+			{
 				X = (int)((Width / 2) - (bitmapSize.Width / 2));
 				Y = (int)((Height / 2) - (bitmapSize.Height / 2));
-
-
-				if (isLargerThanControl && (bitmapSize.Width > Width || bitmapSize.Height > Height)) {
-					Zoom -= 0.1f;
-				}
-
-				if (!isLargerThanControl && (bitmapSize.Width < Width || bitmapSize.Height < Height))
-				{
-					Zoom += 0.1f;
-				}
 			}
-			while ((bitmapSize.Width != 0 && bitmapSize.Height != 0) && ((isLargerThanControl && (bitmapSize.Width > Width || bitmapSize.Height > Height))
-				|| (!isLargerThanControl && (bitmapSize.Width < Width || bitmapSize.Height < Height))));
+		}
 
+
+		public void CenterToFit()
+		{
+			/*
+			SizeF bitmapSize = calculateTransforms();
+
+            if (bitmapSize.Width != 0 && bitmapSize.Height != 0)
+			{
+				float maxWidth = Math.Max(Math.Abs(bitmapSize.Width), Width);
+				float maxHeight = Math.Max(Math.Abs(bitmapSize.Height), Height);
+
+				float ratio;
+				if (maxWidth > maxHeight)
+				{
+					ratio = maxWidth / maxHeight;
+				}
+				else
+				{
+					ratio = maxHeight / maxWidth;
+				}
+
+				float delta;
+				if (maxWidth > maxHeight)
+				{
+					float w = Math.Abs(Width - maxWidth);
+					if (w == 0)
+					{
+						delta = 1;
+					}
+					else
+					{
+						delta = maxWidth / w;
+					}
+				}
+				else
+				{
+					float h = Math.Abs(Height - maxHeight);
+					if (h == 0)
+					{
+						delta = 1;
+					}
+					else
+					{
+						delta = maxHeight / h;
+					}
+				}
+
+				Zoom = 0.5f;
+
+				SizeF newBitmapSize = calculateTransforms();
+
+				X = (int)((Width / 2) - (newBitmapSize.Width / 2));
+				Y = (int)((Height / 2) - (newBitmapSize.Height / 2));
+			
+				Invalidate();
+			}
+			*/
+
+			center();
 			Invalidate();
 		}
 
