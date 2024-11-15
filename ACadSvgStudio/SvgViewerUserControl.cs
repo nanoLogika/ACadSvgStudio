@@ -107,7 +107,7 @@ namespace ACadSvgStudio {
 
 					Zoom = 1;
 
-					centerToFit();
+					CenterToFit();
 
 					_posInitialized = true;
 				}
@@ -211,7 +211,7 @@ namespace ACadSvgStudio {
 		}
 
 
-		private void centerToFit()
+		public void CenterToFit()
 		{
 			bool sizeCalculated = false;
 			bool isLargerThanControl = false;
@@ -249,7 +249,7 @@ namespace ACadSvgStudio {
 
 		private void centerToFitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			centerToFit();
+			CenterToFit();
 		}
 
 

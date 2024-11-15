@@ -1778,6 +1778,8 @@ namespace ACadSvgStudio {
         #region -  WebBrowser functions
 
         public void centerToFit() {
+            svgViewerUserControl.CenterToFit();
+
             if (!_webBrowser.CanExecuteJavascriptInMainFrame) {
                 return;
             }
