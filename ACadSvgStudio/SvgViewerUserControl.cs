@@ -7,9 +7,64 @@ namespace ACadSvgStudio {
 
 		private Svg.SvgDocument _svgDocument;
 
+		private bool _needsUpdate = true;
+
 		private int _x = 0;
+		private int X
+		{
+			get
+			{
+				return _x;
+			}
+			set
+			{
+				if (value != _x)
+				{
+					_needsUpdate = true;
+				}
+
+				_x = value;
+			}
+		}
+
 		private int _y = 0;
+		private int Y
+		{
+			get
+			{
+				return _y;
+			}
+			set
+			{
+				if (value != _y)
+				{
+					_needsUpdate = true;
+				}
+
+				_y = value;
+			}
+		}
+
 		private float _zoom = 1;
+		private float Zoom
+		{
+			get
+			{
+				return _zoom;
+			}
+			set
+			{
+				if (_zoom != value)
+				{
+					_needsUpdate = true;
+				}
+
+				_zoom = value;
+			}
+		}
+
+		private SizeF _dimensions;
+
 		private bool _posInitialized = false;
 
 		private SvgTransformCollection _svgTransformCollection;
@@ -34,6 +89,8 @@ namespace ACadSvgStudio {
 		{
 			try
 			{
+				_needsUpdate = true;
+
 				_svgDocument = Svg.SvgDocument.FromSvg<SvgDocument>(content);
 				if (_svgDocument.Transforms == null)
 				{
@@ -45,25 +102,14 @@ namespace ACadSvgStudio {
 
 				if (!_posInitialized)
 				{
-					_x = 0;
-					_y = 0;
+					X = 0;
+					Y = 0;
 
-					_zoom = 1;
-				}
+					Zoom = 1;
 
-				using (Bitmap bitmap = getBitmap())
-				{
-					if (bitmap == null)
-					{
-						return;
-					}
+					centerToFit();
 
-					if (!_posInitialized)
-					{
-						centerToFit();
-
-						_posInitialized = true;
-					}
+					_posInitialized = true;
 				}
 
 				Invalidate();
@@ -86,28 +132,56 @@ namespace ACadSvgStudio {
 		}
 
 
-		private Bitmap getBitmap()
+		private SizeF calculateTransforms()
 		{
-			_svgDocument.ViewBox = new SvgViewBox(_svgDocument.Bounds.X, _svgDocument.Bounds.Y, _svgDocument.Bounds.Width * _zoom, _svgDocument.Bounds.Height * _zoom);
-			if (_svgTransformCollection != null)
+			if (_svgDocument == null)
 			{
-				_svgDocument.Transforms = (SvgTransformCollection)_svgTransformCollection.Clone();
+				_dimensions = new SizeF(0, 0);
+				return _dimensions;
+			}
 
-				if (_svgDocument.Transforms != null)
+			if (_needsUpdate)
+			{
+				_svgDocument.ViewBox = new SvgViewBox(_svgDocument.Bounds.X, _svgDocument.Bounds.Y, _svgDocument.Bounds.Width * _zoom, _svgDocument.Bounds.Height * _zoom);
+				if (_svgTransformCollection != null)
 				{
-					foreach (SvgTransform transform in _svgDocument.Transforms)
+					_svgDocument.Transforms = (SvgTransformCollection)_svgTransformCollection.Clone();
+
+					if (_svgDocument.Transforms != null)
 					{
-						if (transform is SvgScale scale)
+						foreach (SvgTransform transform in _svgDocument.Transforms)
 						{
-							scale.X = scale.X * _zoom;
-							scale.Y = scale.Y * _zoom;
+							if (transform is SvgScale scale)
+							{
+								scale.X = scale.X * _zoom;
+								scale.Y = scale.Y * _zoom;
+							}
 						}
 					}
 				}
+
+				_dimensions = _svgDocument.GetDimensions();
 			}
 
-			Bitmap bitmap = _svgDocument.Draw();
-			return bitmap;
+			return _dimensions;
+		}
+
+
+		private void draw(Graphics g)
+		{
+			SizeF size = calculateTransforms();
+
+			if (size.Width == 0 || size.Height == 0)
+			{
+				_needsUpdate = false;
+				return;
+			}
+
+			g.TranslateTransform(_x, _y);
+			_svgDocument.Draw(g);
+			g.TranslateTransform(-_x, -_y);
+
+			_needsUpdate = false;
 		}
 
 
@@ -133,54 +207,41 @@ namespace ACadSvgStudio {
 			}
 
 
-			using (Bitmap bitmap = getBitmap())
-			{
-				if (bitmap != null)
-				{
-					e.Graphics.DrawImage(bitmap, _x, _y);
-				}
-			}
+			draw(e.Graphics);
 		}
 
 
 		private void centerToFit()
 		{
-			int bitmapWidth = 0;
-			int bitmapHeight = 0;
-
 			bool sizeCalculated = false;
 			bool isLargerThanControl = false;
 
+			SizeF bitmapSize = new SizeF(0, 0);
+
 			do {
-				using (Bitmap bitmap = getBitmap()) {
-					if (bitmap == null) {
-						return;
-					}
+				bitmapSize = calculateTransforms();
 
-					bitmapWidth = bitmap.Width;
-					bitmapHeight = bitmap.Height;
-
-					if (!sizeCalculated)
-					{
-						isLargerThanControl = bitmapWidth > Width || bitmapHeight > Height;
-						sizeCalculated = true;
-					}
-
-					_x = (Width / 2) - (bitmap.Width / 2);
-					_y = (Height / 2) - (bitmap.Height / 2);
-				}
-
-				if (isLargerThanControl && (bitmapWidth > Width || bitmapHeight > Height)) {
-					_zoom -= 0.1f;
-				}
-
-				if (!isLargerThanControl && (bitmapWidth < Width || bitmapHeight < Height))
+				if (!sizeCalculated)
 				{
-					_zoom += 0.1f;
+					isLargerThanControl = bitmapSize.Width > Width || bitmapSize.Height > Height;
+					sizeCalculated = true;
+				}
+
+				X = (int)((Width / 2) - (bitmapSize.Width / 2));
+				Y = (int)((Height / 2) - (bitmapSize.Height / 2));
+
+
+				if (isLargerThanControl && (bitmapSize.Width > Width || bitmapSize.Height > Height)) {
+					Zoom -= 0.1f;
+				}
+
+				if (!isLargerThanControl && (bitmapSize.Width < Width || bitmapSize.Height < Height))
+				{
+					Zoom += 0.1f;
 				}
 			}
-			while ((isLargerThanControl && (bitmapWidth > Width || bitmapHeight > Height))
-				|| (!isLargerThanControl && (bitmapWidth < Width || bitmapHeight < Height)));
+			while ((bitmapSize.Width != 0 && bitmapSize.Height != 0) && ((isLargerThanControl && (bitmapSize.Width > Width || bitmapSize.Height > Height))
+				|| (!isLargerThanControl && (bitmapSize.Width < Width || bitmapSize.Height < Height))));
 
 			Invalidate();
 		}
@@ -205,8 +266,8 @@ namespace ACadSvgStudio {
 		{
 			if (_mouseDown)
 			{
-				_x = (_mousePos.X - (e.Location.X)) * -1;
-				_y = (_mousePos.Y - (e.Location.Y)) * -1;
+				X = (_mousePos.X - (e.Location.X)) * -1;
+				Y = (_mousePos.Y - (e.Location.Y)) * -1;
 
 				Invalidate();
 			}
@@ -225,40 +286,20 @@ namespace ACadSvgStudio {
 		{
 			float zoomFactor = 0.0001f;
 
-			int prevWidth = 0;
-			int prevHeight = 0;
-			using (Bitmap bitmap = getBitmap())
+			SizeF prevSize = calculateTransforms();
+
+			Zoom += e.Delta * zoomFactor;
+
+			SizeF newSize = calculateTransforms();
+
+			if (prevSize.Width != 0 && prevSize.Height != 0)
 			{
-				if (bitmap != null)
-				{
-					prevWidth = bitmap.Width;
-					prevHeight = bitmap.Height;
-				}
+				float deltaWidth = newSize.Width - prevSize.Width;
+				float deltaHeight = newSize.Height - prevSize.Height;
+
+				X = (int)(_x - deltaWidth);
+				Y = (int)(_y - deltaHeight);
 			}
-
-			_zoom += e.Delta * zoomFactor;
-
-			int newWidth = 0;
-			int newHeight = 0;
-			using (Bitmap bitmap = getBitmap())
-			{
-				if (bitmap != null)
-				{
-					newWidth = bitmap.Width;
-					newHeight = bitmap.Height;
-				}
-			}
-
-			int deltaWidth = 0;
-			int deltaHeight = 0;
-			if (prevWidth != 0 && prevHeight != 0)
-			{
-				deltaWidth = newWidth - prevWidth;
-				deltaHeight = newHeight - prevHeight;
-			}
-
-			_x = _x - deltaWidth;
-			_y = _y - deltaHeight;
 
 			Invalidate();
 		}
