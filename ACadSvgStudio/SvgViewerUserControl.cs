@@ -294,11 +294,10 @@ namespace ACadSvgStudio {
 
 			if (prevSize.Width != 0 && prevSize.Height != 0)
 			{
-				float deltaWidth = newSize.Width - prevSize.Width;
-				float deltaHeight = newSize.Height - prevSize.Height;
+				SizeF deltaSize = newSize - prevSize;
 
-				X = (int)(_x - deltaWidth);
-				Y = (int)(_y - deltaHeight);
+				X = (int)(_x - deltaSize.Width);
+				Y = (int)(_y - deltaSize.Height);
 			}
 
 			Invalidate();
