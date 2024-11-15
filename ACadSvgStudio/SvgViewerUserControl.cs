@@ -143,7 +143,7 @@ namespace ACadSvgStudio {
 			if (_needsUpdate)
 			{
 				_svgDocument.ViewBox = new SvgViewBox(_svgDocument.Bounds.X, _svgDocument.Bounds.Y, _svgDocument.Bounds.Width * _zoom, _svgDocument.Bounds.Height * _zoom);
-				if (_svgTransformCollection != null)
+			/*	if (_svgTransformCollection != null)
 				{
 					_svgDocument.Transforms = (SvgTransformCollection)_svgTransformCollection.Clone();
 
@@ -158,9 +158,9 @@ namespace ACadSvgStudio {
 							}
 						}
 					}
-				}
+				}*/
 
-				_dimensions = new SizeF(_svgDocument.Bounds.Width, _svgDocument.Bounds.Height);
+				_dimensions = new SizeF(_svgDocument.Width * _zoom, _svgDocument.Height * _zoom);
 			}
 
 			return _dimensions;
