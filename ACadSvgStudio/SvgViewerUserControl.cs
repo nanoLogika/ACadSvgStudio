@@ -208,6 +208,14 @@ namespace ACadSvgStudio {
 			e.Graphics.DrawRectangle(new Pen(Color.Red), 0, 0, Width - 1, Height - 1);
 
 
+			if (hasErrors())
+			{
+				e.Graphics.FillRectangle(new SolidBrush(Color.IndianRed), 0, 0, Width, Height);
+
+				return;
+			}
+
+
 			if (DebugEnabled)
 			{
 				SizeF size = calculateTransforms();
@@ -217,8 +225,10 @@ namespace ACadSvgStudio {
 				lines.Add($"X: {_x}");
 				lines.Add($"Y: {_y}");
 				lines.Add($"Zoom: {_zoom}");
-				lines.Add($"Bounding Box Width: {size.Width}");
-				lines.Add($"Bounding Box Height: {size.Height}");
+				SvgViewBox viewBox = _svgDocument.ViewBox;
+				lines.Add($"ViewBox: Min X: {viewBox.MinX}, Min Y: {viewBox.MinY}, Width: {viewBox.Width}, Height: {viewBox.Height}");
+				lines.Add($"Size Width: {size.Width}");
+				lines.Add($"Size Height: {size.Height}");
 				lines.Add($"User Control Width: {Width}");
 				lines.Add($"User Control Height: {Height}");
 
@@ -226,14 +236,6 @@ namespace ACadSvgStudio {
 				{
 					e.Graphics.DrawString(lines[y], this.Font, new SolidBrush(Color.Yellow), 0, (y + 1) * 20);
 				}
-			}
-
-
-			if (hasErrors())
-			{
-				e.Graphics.FillRectangle(new SolidBrush(Color.IndianRed), 0, 0, Width, Height);
-
-				return;
 			}
 
 
