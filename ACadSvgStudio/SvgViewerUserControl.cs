@@ -143,7 +143,7 @@ namespace ACadSvgStudio {
 			if (_needsUpdate)
 			{
 				_svgDocument.ViewBox = new SvgViewBox(_svgDocument.Bounds.X, _svgDocument.Bounds.Y, _svgDocument.Bounds.Width * _zoom, _svgDocument.Bounds.Height * _zoom);
-			/*	if (_svgTransformCollection != null)
+				if (_svgTransformCollection != null)
 				{
 					_svgDocument.Transforms = (SvgTransformCollection)_svgTransformCollection.Clone();
 
@@ -158,9 +158,9 @@ namespace ACadSvgStudio {
 							}
 						}
 					}
-				}*/
+				}
 
-				_dimensions = new SizeF(_svgDocument.Width * _zoom, _svgDocument.Height * _zoom);
+				_dimensions = _svgDocument.GetDimensions();
 			}
 
 			return _dimensions;
@@ -220,11 +220,17 @@ namespace ACadSvgStudio {
 
 		private void center()
 		{
-			SizeF bitmapSize = calculateTransforms();
-			if (bitmapSize.Width != 0 && bitmapSize.Height != 0)
+			SizeF size = calculateTransforms();
+			if (size.Width != 0 && size.Height != 0)
 			{
-				X = (int)((Width / 2) - (bitmapSize.Width / 2));
-				Y = (int)((Height / 2) - (bitmapSize.Height / 2));
+				float w1 = (float)Width / 2;
+				float h1 = (float)Height / 2;
+
+				float w2 = (float)size.Width / 2;
+				float h2 = (float)size.Height / 2;
+
+				X = (int)(w1 - w2);
+				Y = (int)(h1 - h2);
 			}
 		}
 
@@ -338,7 +344,7 @@ namespace ACadSvgStudio {
 
 			if (prevSize.Width != 0 && prevSize.Height != 0)
 			{
-				SizeF deltaSize = newSize - prevSize;
+					SizeF deltaSize = newSize - prevSize;
 
 				X = (int)(_x - deltaSize.Width);
 				Y = (int)(_y - deltaSize.Height);
