@@ -219,13 +219,19 @@ namespace ACadSvgStudio {
 			if (DebugEnabled)
 			{
 				SizeF size = calculateTransforms();
-				e.Graphics.DrawRectangle(new Pen(Color.GreenYellow), _x, _y, size.Width, size.Height);
+
+				Color sizeColor = Color.SkyBlue;
+				e.Graphics.DrawRectangle(new Pen(sizeColor), _x, _y, size.Width, size.Height);
+
+				Color viewBoxColor = Color.Magenta;
+				SvgViewBox viewBox = _svgDocument.ViewBox;
+				e.Graphics.DrawRectangle(new Pen(viewBoxColor), _x + viewBox.MinX, _y + viewBox.MinY, viewBox.Width, viewBox.Height);
+
 
 				List<string> lines = new List<string>();
 				lines.Add($"X: {_x}");
 				lines.Add($"Y: {_y}");
 				lines.Add($"Zoom: {_zoom}");
-				SvgViewBox viewBox = _svgDocument.ViewBox;
 				lines.Add($"ViewBox: Min X: {viewBox.MinX}, Min Y: {viewBox.MinY}, Width: {viewBox.Width}, Height: {viewBox.Height}");
 				lines.Add($"Size Width: {size.Width}");
 				lines.Add($"Size Height: {size.Height}");
@@ -234,7 +240,23 @@ namespace ACadSvgStudio {
 
 				for (int y = 0; y < lines.Count; y++)
 				{
-					e.Graphics.DrawString(lines[y], this.Font, new SolidBrush(Color.Yellow), 0, (y + 1) * 20);
+					string line = lines[y];
+
+					SolidBrush brush;
+					if (line.StartsWith("ViewBox"))
+					{
+						brush = new SolidBrush(viewBoxColor);
+					}
+					else if (line.StartsWith("Size"))
+					{
+						brush = new SolidBrush(sizeColor);
+					}
+                    else
+                    {
+						brush = new SolidBrush(Color.Yellow);
+					}
+
+                    e.Graphics.DrawString(line, this.Font, brush, 0, (y + 1) * 20);
 				}
 			}
 
