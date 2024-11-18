@@ -5,6 +5,8 @@ namespace ACadSvgStudio {
 
 	public partial class SvgViewerUserControl : UserControl {
 
+		public bool DebugEnabled { get; set; } = true;
+
 		private Svg.SvgDocument _svgDocument;
 
 		private bool _needsUpdate = true;
@@ -204,6 +206,13 @@ namespace ACadSvgStudio {
 			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
 
 			e.Graphics.DrawRectangle(new Pen(Color.Red), 0, 0, Width - 1, Height - 1);
+
+
+			if (DebugEnabled)
+			{
+				SizeF size = calculateTransforms();
+				e.Graphics.DrawRectangle(new Pen(Color.GreenYellow), _x, _y, size.Width, size.Height);
+			}
 
 
 			if (hasErrors())
