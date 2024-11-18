@@ -212,6 +212,20 @@ namespace ACadSvgStudio {
 			{
 				SizeF size = calculateTransforms();
 				e.Graphics.DrawRectangle(new Pen(Color.GreenYellow), _x, _y, size.Width, size.Height);
+
+				List<string> lines = new List<string>();
+				lines.Add($"X: {_x}");
+				lines.Add($"Y: {_y}");
+				lines.Add($"Zoom: {_zoom}");
+				lines.Add($"Bounding Box Width: {size.Width}");
+				lines.Add($"Bounding Box Height: {size.Height}");
+				lines.Add($"User Control Width: {Width}");
+				lines.Add($"User Control Height: {Height}");
+
+				for (int y = 0; y < lines.Count; y++)
+				{
+					e.Graphics.DrawString(lines[y], this.Font, new SolidBrush(Color.Yellow), 0, (y + 1) * 20);
+				}
 			}
 
 
