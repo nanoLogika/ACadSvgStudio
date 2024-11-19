@@ -266,31 +266,28 @@ namespace ACadSvgStudio {
 
 		public void CenterToFit()
 		{
-			SizeF size = calculateTransforms();
-			if (size.Width != 0 && size.Height != 0)
+			if (_svgDocument == null)
+			{
+				return;
+			}
+
+
+			float w = _svgDocument.Bounds.Width;
+			float h = _svgDocument.Bounds.Height;
+
+			if (w != 0 && h != 0)
 			{
 				if (Width > Height)
 				{
-					if (size.Width > size.Height)
-					{
-						Zoom = Height / size.Width;
-					}
-					else
-					{
-						Zoom = Height / size.Height;
-					}
+					Zoom = Height / Math.Max(w, h);
 				}
 				else
 				{
-					if (size.Width > size.Height)
-					{
-						Zoom = Width / size.Width;
-					}
-					else
-					{
-						Zoom = Width / size.Height;
-					}
+					Zoom = Width / Math.Max(w, h);
 				}
+
+				// Offset
+				Zoom /= 1.2f;
 
 				center();
 
