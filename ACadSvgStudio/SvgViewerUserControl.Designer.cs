@@ -57,6 +57,7 @@
 			MouseDown += SvgViewerUserControl_MouseDown;
 			MouseMove += SvgViewerUserControl_MouseMove;
 			MouseUp += SvgViewerUserControl_MouseUp;
+			Resize += SvgViewerUserControl_Resize;
 			contextMenuStrip.ResumeLayout(false);
 			ResumeLayout(false);
 		}

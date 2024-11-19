@@ -186,7 +186,7 @@ namespace ACadSvgStudio {
 
 		private void SvgViewerUserControl_Paint(object sender, PaintEventArgs e)
 		{
-			e.Graphics.Clear(BackColor);			
+			e.Graphics.Clear(BackColor);
 
 
 			e.Graphics.DrawString("SVG Viewer (Experimental)", this.Font, new SolidBrush(Color.Yellow), 0, 0);
@@ -213,7 +213,7 @@ namespace ACadSvgStudio {
 				Color sizeColor = Color.SkyBlue;
 				Rectangle boundingBox = getBoundingBox();
 				e.Graphics.DrawRectangle(new Pen(sizeColor), boundingBox);
-				
+
 				List<string> lines = new List<string>();
 				lines.Add($"X: {_x}");
 				lines.Add($"Y: {_y}");
@@ -233,12 +233,12 @@ namespace ACadSvgStudio {
 					{
 						brush = new SolidBrush(sizeColor);
 					}
-                    else
-                    {
+					else
+					{
 						brush = new SolidBrush(Color.Yellow);
 					}
 
-                    e.Graphics.DrawString(line, this.Font, brush, 0, (y + 1) * 20);
+					e.Graphics.DrawString(line, this.Font, brush, 0, (y + 1) * 20);
 				}
 			}
 
@@ -330,6 +330,11 @@ namespace ACadSvgStudio {
 			}
 		}
 
+		private void SvgViewerUserControl_Resize(object sender, EventArgs e)
+		{
+			Invalidate();
+		}
+
 
 		private void OnMouseWheel(object? sender, MouseEventArgs e)
 		{
@@ -343,7 +348,7 @@ namespace ACadSvgStudio {
 
 			if (prevSize.Width != 0 && prevSize.Height != 0)
 			{
-					SizeF deltaSize = newSize - prevSize;
+				SizeF deltaSize = newSize - prevSize;
 
 				X = (int)(_x - deltaSize.Width);
 				Y = (int)(_y - deltaSize.Height);
