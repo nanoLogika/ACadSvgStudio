@@ -266,63 +266,36 @@ namespace ACadSvgStudio {
 
 		public void CenterToFit()
 		{
-			/*
-			SizeF bitmapSize = calculateTransforms();
-
-            if (bitmapSize.Width != 0 && bitmapSize.Height != 0)
+			SizeF size = calculateTransforms();
+			if (size.Width != 0 && size.Height != 0)
 			{
-				float maxWidth = Math.Max(Math.Abs(bitmapSize.Width), Width);
-				float maxHeight = Math.Max(Math.Abs(bitmapSize.Height), Height);
-
-				float ratio;
-				if (maxWidth > maxHeight)
+				if (Width > Height)
 				{
-					ratio = maxWidth / maxHeight;
-				}
-				else
-				{
-					ratio = maxHeight / maxWidth;
-				}
-
-				float delta;
-				if (maxWidth > maxHeight)
-				{
-					float w = Math.Abs(Width - maxWidth);
-					if (w == 0)
+					if (size.Width > size.Height)
 					{
-						delta = 1;
+						Zoom = Height / size.Width;
 					}
 					else
 					{
-						delta = maxWidth / w;
+						Zoom = Height / size.Height;
 					}
 				}
 				else
 				{
-					float h = Math.Abs(Height - maxHeight);
-					if (h == 0)
+					if (size.Width > size.Height)
 					{
-						delta = 1;
+						Zoom = Width / size.Width;
 					}
 					else
 					{
-						delta = maxHeight / h;
+						Zoom = Width / size.Height;
 					}
 				}
 
-				Zoom = 0.5f;
+				center();
 
-				SizeF newBitmapSize = calculateTransforms();
-
-				X = (int)((Width / 2) - (newBitmapSize.Width / 2));
-				Y = (int)((Height / 2) - (newBitmapSize.Height / 2));
-			
 				Invalidate();
 			}
-			*/
-
-			center();
-			Invalidate();
 		}
 
 
