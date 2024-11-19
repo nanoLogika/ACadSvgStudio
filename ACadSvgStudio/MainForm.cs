@@ -1722,7 +1722,7 @@ namespace ACadSvgStudio {
             centerToFit();
 
             svgViewerUserControl.BackColor = Settings.Default.BackgroundColor;
-            svgViewerUserControl.LoadSvgContent(svg);
+            svgViewerUserControl.LoadSvgContent(svg, true);
         }
 
 
@@ -1740,7 +1740,7 @@ namespace ACadSvgStudio {
             updateBrowserContent(svg, isSvgEmpty, backgroundColor);
 
             svgViewerUserControl.BackColor = Settings.Default.BackgroundColor;
-            svgViewerUserControl.LoadSvgContent(svg);
+            svgViewerUserControl.LoadSvgContent(svg, false);
         }
 
 

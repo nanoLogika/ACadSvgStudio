@@ -79,8 +79,6 @@ namespace ACadSvgStudio {
 
 		private SizeF _dimensions;
 
-		private bool _posInitialized = false;
-
 		private SvgTransformCollection _svgTransformCollection;
 
 		private bool _mouseDown = false;
@@ -99,7 +97,7 @@ namespace ACadSvgStudio {
 		}
 
 
-		public void LoadSvgContent(string content)
+		public void LoadSvgContent(string content, bool resetPosition)
 		{
 			try
 			{
@@ -107,7 +105,7 @@ namespace ACadSvgStudio {
 
 				_svgDocument = Svg.SvgDocument.FromSvg<SvgDocument>(content);
 
-				if (!_posInitialized)
+				if (resetPosition)
 				{
 					X = 0;
 					Y = 0;
@@ -115,8 +113,6 @@ namespace ACadSvgStudio {
 					Zoom = 1;
 
 					CenterToFit();
-
-					_posInitialized = true;
 				}
 
 				Invalidate();
