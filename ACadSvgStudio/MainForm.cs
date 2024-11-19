@@ -86,6 +86,8 @@ namespace ACadSvgStudio {
 
             recentlyOpenedFilesManager = new RecentlyOpenedFilesManager();
             updateRecentlyOpenedFiles();
+
+            UpdateSvgViewer();
         }
 
 
