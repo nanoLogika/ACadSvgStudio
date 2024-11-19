@@ -47,10 +47,39 @@ namespace ACadSvgStudio {
 		public SvgProperties(MainForm mainForm) {
 			_mainForm = mainForm;
 		}
+		#region Svg Viewer
+		[Category("Svg Viewer")]
+		[DisplayName("Debug Enabled")]
+		[Description("Show Svg Viewer debug info.")]
+		public bool DebugEnabled
+		{
+			get
+			{
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
+				{
+					return Settings.Default.SvgViewerDebugEnabled;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			set
+			{
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
+				{
+					Settings.Default.SvgViewerDebugEnabled = value;
+					Settings.Default.Save();
 
-        #region View
+					_mainForm.ProposeUpdateHTML();
+					_mainForm.UpdateSvgViewer();
+				}
+			}
+		}
+		#endregion
+		#region View
 
-        [Category("View")]
+		[Category("View")]
         [DisplayName("Background Color")]
 		[Description("Background color.")]
 		public Color BackgroundColor {

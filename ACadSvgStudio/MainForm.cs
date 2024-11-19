@@ -1804,5 +1804,10 @@ namespace ACadSvgStudio {
             svgViewerUserControl.Show();
             _webBrowser.Hide();
         }
+
+
+        internal void UpdateSvgViewer() {
+            svgViewerUserControl.DebugEnabled = Settings.Default.SvgViewerDebugEnabled;
+        }
     }
 }

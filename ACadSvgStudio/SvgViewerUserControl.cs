@@ -5,7 +5,19 @@ namespace ACadSvgStudio {
 
 	public partial class SvgViewerUserControl : UserControl {
 
-		public bool DebugEnabled { get; set; } = true;
+		private bool _debugEnabled = false;
+		public bool DebugEnabled
+		{
+			get
+			{
+				return _debugEnabled;
+			}
+			set
+			{
+				_debugEnabled = value;
+				Invalidate();
+			}
+		}
 
 		private Svg.SvgDocument _svgDocument;
 
