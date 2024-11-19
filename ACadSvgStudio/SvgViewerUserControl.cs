@@ -94,13 +94,6 @@ namespace ACadSvgStudio {
 				_needsUpdate = true;
 
 				_svgDocument = Svg.SvgDocument.FromSvg<SvgDocument>(content);
-				if (_svgDocument.Transforms == null)
-				{
-					_svgDocument.Transforms = new SvgTransformCollection();
-					_svgDocument.Transforms.Add(new SvgScale(1, 1));
-				}
-
-				_svgTransformCollection = (SvgTransformCollection)_svgDocument.Transforms.Clone();
 
 				if (!_posInitialized)
 				{
@@ -144,28 +137,26 @@ namespace ACadSvgStudio {
 
 			if (_needsUpdate)
 			{
-				_svgDocument.ViewBox = new SvgViewBox(_svgDocument.Bounds.X, _svgDocument.Bounds.Y, _svgDocument.Bounds.Width * _zoom, _svgDocument.Bounds.Height * _zoom);
-				if (_svgTransformCollection != null)
-				{
-					_svgDocument.Transforms = (SvgTransformCollection)_svgTransformCollection.Clone();
-
-					if (_svgDocument.Transforms != null)
-					{
-						foreach (SvgTransform transform in _svgDocument.Transforms)
-						{
-							if (transform is SvgScale scale)
-							{
-								scale.X = scale.X * _zoom;
-								scale.Y = scale.Y * _zoom;
-							}
-						}
-					}
-				}
-
+				_svgDocument.ViewBox = new SvgViewBox(_svgDocument.Bounds.X, _svgDocument.Bounds.Y, _svgDocument.Bounds.Width, _svgDocument.Bounds.Height);
 				_dimensions = _svgDocument.GetDimensions();
 			}
 
 			return _dimensions;
+		}
+
+
+		private Rectangle getBoundingBox()
+		{
+			int width = 0;
+			int height = 0;
+
+			if (_svgDocument != null)
+			{
+				width = (int)(_svgDocument.Bounds.Width * _zoom);
+				height = (int)(_svgDocument.Bounds.Height * _zoom);
+			}
+
+			return new Rectangle(_x, _y, width, height);
 		}
 
 
@@ -182,8 +173,7 @@ namespace ACadSvgStudio {
 			try
 			{
 				g.TranslateTransform(_x, _y);
-				_svgDocument.Draw(g);
-				g.TranslateTransform(-_x, -_y);
+				_svgDocument.Draw(g, new SizeF(_svgDocument.Bounds.Width * _zoom, _svgDocument.Bounds.Height * _zoom));
 
 				_needsUpdate = false;
 			}
@@ -221,18 +211,14 @@ namespace ACadSvgStudio {
 				SizeF size = calculateTransforms();
 
 				Color sizeColor = Color.SkyBlue;
-				e.Graphics.DrawRectangle(new Pen(sizeColor), _x, _y, size.Width, size.Height);
-
-				Color viewBoxColor = Color.Magenta;
-				SvgViewBox viewBox = _svgDocument.ViewBox;
-				e.Graphics.DrawRectangle(new Pen(viewBoxColor), _x + viewBox.MinX, _y + viewBox.MinY, viewBox.Width, viewBox.Height);
-
-
+				Rectangle boundingBox = getBoundingBox();
+				e.Graphics.DrawRectangle(new Pen(sizeColor), boundingBox);
+				
 				List<string> lines = new List<string>();
 				lines.Add($"X: {_x}");
 				lines.Add($"Y: {_y}");
 				lines.Add($"Zoom: {_zoom}");
-				lines.Add($"ViewBox: Min X: {viewBox.MinX}, Min Y: {viewBox.MinY}, Width: {viewBox.Width}, Height: {viewBox.Height}");
+				lines.Add($"ViewBox: Min X: {_svgDocument.ViewBox.MinX}, Min Y: {_svgDocument.ViewBox.MinY}, Width: {_svgDocument.ViewBox.Width}, Height: {_svgDocument.ViewBox.Height}");
 				lines.Add($"Size Width: {size.Width}");
 				lines.Add($"Size Height: {size.Height}");
 				lines.Add($"User Control Width: {Width}");
@@ -243,11 +229,7 @@ namespace ACadSvgStudio {
 					string line = lines[y];
 
 					SolidBrush brush;
-					if (line.StartsWith("ViewBox"))
-					{
-						brush = new SolidBrush(viewBoxColor);
-					}
-					else if (line.StartsWith("Size"))
+					if (line.StartsWith("Size"))
 					{
 						brush = new SolidBrush(sizeColor);
 					}
@@ -267,14 +249,14 @@ namespace ACadSvgStudio {
 
 		private void center()
 		{
-			SizeF size = calculateTransforms();
-			if (size.Width != 0 && size.Height != 0)
+			Rectangle boundingBox = getBoundingBox();
+			if (boundingBox.Width != 0 && boundingBox.Height != 0)
 			{
 				float w1 = (float)Width / 2;
 				float h1 = (float)Height / 2;
 
-				float w2 = (float)size.Width / 2;
-				float h2 = (float)size.Height / 2;
+				float w2 = (float)boundingBox.Width / 2;
+				float h2 = (float)boundingBox.Height / 2;
 
 				X = (int)(w1 - w2);
 				Y = (int)(h1 - h2);
