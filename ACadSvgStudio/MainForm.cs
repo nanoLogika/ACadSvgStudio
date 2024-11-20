@@ -1679,7 +1679,6 @@ namespace ACadSvgStudio {
 
 
         public void UpdateHTML() {
-            string backgroundColor = ColorTranslator.ToHtml(Settings.Default.BackgroundColor);
             var svg = buildSVG(Settings.Default.ScalesEnabled, Settings.Default.CSSPreviewEnabled, out bool isSvgEmpty, false);
 
             svgViewerUserControl.BackColor = Settings.Default.BackgroundColor;
