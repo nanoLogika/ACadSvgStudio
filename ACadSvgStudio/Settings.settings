@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="BackgroundColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">White</Value>
+      <Value Profile="(Default)">33, 40, 48</Value>
     </Setting>
     <Setting Name="ScalesSvg" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

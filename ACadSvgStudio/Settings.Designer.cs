@@ -25,7 +25,7 @@ namespace ACadSvgStudio {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        [global::System.Configuration.DefaultSettingValueAttribute("33, 40, 48")]
         public global::System.Drawing.Color BackgroundColor {
             get {
                 return ((global::System.Drawing.Color)(this["BackgroundColor"]));
