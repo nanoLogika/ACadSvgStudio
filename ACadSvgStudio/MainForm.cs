@@ -1687,11 +1687,12 @@ namespace ACadSvgStudio {
 
 		}
 
+		internal void UpdateSvgViewer()
+		{
+			svgViewerUserControl.DebugEnabled = Settings.Default.SvgViewerDebugEnabled;
+		}
 
-        #endregion
-        
-        internal void UpdateSvgViewer() {
-            svgViewerUserControl.DebugEnabled = Settings.Default.SvgViewerDebugEnabled;
-        }
-    }
+		#endregion
+
+	}
 }
