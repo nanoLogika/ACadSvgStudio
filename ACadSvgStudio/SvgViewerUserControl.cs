@@ -352,12 +352,11 @@ namespace ACadSvgStudio {
 			}
 			else
 			{
-				Zoom /= factor;
-			}
-
-			if (Zoom < 0)
-			{
-				Zoom = 0;
+				Rectangle boundingBox = getBoundingBox();
+				if (boundingBox.Width > 0 && boundingBox.Height > 0)
+				{
+					Zoom /= factor;
+				}
 			}
 
 			SizeF newSize = _svgDocument.GetDimensions();
