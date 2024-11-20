@@ -37,54 +37,6 @@ namespace ACadSvgStudio {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public double ViewBoxMinX {
-            get {
-                return ((double)(this["ViewBoxMinX"]));
-            }
-            set {
-                this["ViewBoxMinX"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public double ViewBoxMinY {
-            get {
-                return ((double)(this["ViewBoxMinY"]));
-            }
-            set {
-                this["ViewBoxMinY"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8000")]
-        public double ViewBoxWidth {
-            get {
-                return ((double)(this["ViewBoxWidth"]));
-            }
-            set {
-                this["ViewBoxWidth"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8000")]
-        public double ViewBoxHeight {
-            get {
-                return ((double)(this["ViewBoxHeight"]));
-            }
-            set {
-                this["ViewBoxHeight"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ScalesSvg {
             get {
@@ -128,18 +80,6 @@ namespace ACadSvgStudio {
             }
             set {
                 this["CSSPreviewEnabled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ViewBoxEnabled {
-            get {
-                return ((bool)(this["ViewBoxEnabled"]));
-            }
-            set {
-                this["ViewBoxEnabled"] = value;
             }
         }
         
@@ -583,18 +523,6 @@ namespace ACadSvgStudio {
             }
             set {
                 this["SvgViewerDebugEnabled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.0001")]
-        public float SvgViewerZoomStep {
-            get {
-                return ((float)(this["SvgViewerZoomStep"]));
-            }
-            set {
-                this["SvgViewerZoomStep"] = value;
             }
         }
     }

@@ -78,8 +78,6 @@ namespace ACadSvgStudio {
 			}
 		}
 
-		public float ZoomStep { get; set; } = 0.0001f;
-
 
 		private SizeF _dimensions;
 
@@ -347,7 +345,20 @@ namespace ACadSvgStudio {
 
 			SizeF prevSize = _svgDocument.GetDimensions();
 
-			Zoom += e.Delta * ZoomStep;
+			float factor = 1.2f;
+			if (e.Delta > 0)
+			{
+				Zoom *= factor;
+			}
+			else
+			{
+				Zoom /= factor;
+			}
+
+			if (Zoom < 0)
+			{
+				Zoom = 0;
+			}
 
 			SizeF newSize = _svgDocument.GetDimensions();
 

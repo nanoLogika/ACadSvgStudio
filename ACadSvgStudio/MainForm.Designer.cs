@@ -245,7 +245,6 @@
 			svgViewerUserControl.Name = "svgViewerUserControl";
 			svgViewerUserControl.Size = new Size(455, 716);
 			svgViewerUserControl.TabIndex = 1;
-			svgViewerUserControl.ZoomStep = 0.0001F;
 			// 
 			// _rightTabControl
 			// 
