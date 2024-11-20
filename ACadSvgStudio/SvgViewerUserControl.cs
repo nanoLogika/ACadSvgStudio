@@ -342,8 +342,7 @@ namespace ACadSvgStudio {
 				return;
 			}
 
-
-			SizeF prevSize = _svgDocument.GetDimensions();
+			Rectangle prevRect = getBoundingBox();
 
 			float factor = 1.2f;
 			if (e.Delta > 0)
@@ -359,14 +358,24 @@ namespace ACadSvgStudio {
 				}
 			}
 
-			SizeF newSize = _svgDocument.GetDimensions();
+			Rectangle newRect = getBoundingBox();
 
-			if (prevSize.Width != 0 && prevSize.Height != 0)
+			if (prevRect.Width != 0 && prevRect.Height != 0)
 			{
-				SizeF deltaSize = newSize - prevSize;
+				if (e.Delta > 0)
+				{
+					SizeF deltaSize = newRect.Size - prevRect.Size;
 
-				X = (int)(_x - deltaSize.Width);
-				Y = (int)(_y - deltaSize.Height);
+					X = _x - (int)(deltaSize.Width / 2) - (int)((e.X - (Width / 2)) * _zoom);
+					Y = _y - (int)(deltaSize.Height / 2) - (int)((e.Y - (Height / 2)) * _zoom);
+				}
+				else
+				{
+					SizeF deltaSize = prevRect.Size - newRect.Size;
+
+					X = _x + (int)(deltaSize.Width / 2) - (int)((e.X - (Width / 2)) * _zoom);
+					Y = _y + (int)(deltaSize.Height / 2) - (int)((e.Y - (Height / 2)) * _zoom);
+				}
 			}
 
 			Invalidate();
