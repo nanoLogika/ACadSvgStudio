@@ -288,17 +288,10 @@ namespace ACadSvgStudio {
 
 			if (w != 0 && h != 0)
 			{
-				if (Width > Height)
-				{
-					Zoom = Height / Math.Max(w, h);
-				}
-				else
-				{
-					Zoom = Width / Math.Max(w, h);
-				}
+				Zoom = Math.Min(Width, Height) / Math.Max(w, h);
 
-				// Offset
-				Zoom /= 1.2f;
+				// Offset margin 10%
+				Zoom -= Zoom * 0.1f;
 
 				center();
 
