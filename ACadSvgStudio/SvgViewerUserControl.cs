@@ -114,8 +114,10 @@ namespace ACadSvgStudio {
 
 					CenterToFit();
 				}
-
-				Invalidate();
+				else
+				{
+					Invalidate();
+				}
 			}
 			catch
 			{
@@ -168,9 +170,9 @@ namespace ACadSvgStudio {
 
 		private void draw(Graphics g)
 		{
-			SizeF size = calculateTransforms();
+			Rectangle boundingBox = getBoundingBox();
 
-			if (size.Width == 0 || size.Height == 0)
+			if (boundingBox.Width == 0 || boundingBox.Height == 0)
 			{
 				_needsUpdate = false;
 				return;
@@ -179,7 +181,7 @@ namespace ACadSvgStudio {
 			try
 			{
 				g.TranslateTransform(_x, _y);
-				_svgDocument.Draw(g, new SizeF(_svgDocument.Bounds.Width * _zoom, _svgDocument.Bounds.Height * _zoom));
+				_svgDocument.Draw(g, boundingBox.Size);
 
 				_needsUpdate = false;
 			}
