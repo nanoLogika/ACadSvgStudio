@@ -1,5 +1,4 @@
 ﻿using Svg;
-using Svg.Transforms;
 
 namespace ACadSvgStudio {
 
@@ -82,8 +81,6 @@ namespace ACadSvgStudio {
 
 		private SizeF _dimensions;
 
-		private SvgTransformCollection _svgTransformCollection;
-
 		private bool _mouseDown = false;
 		private Point _mousePos;
 
@@ -143,10 +140,8 @@ namespace ACadSvgStudio {
 			if (_svgDocument == null)
 			{
 				_dimensions = new SizeF(0, 0);
-				return _dimensions;
 			}
-
-			if (_needsUpdate)
+			else if (_needsUpdate)
 			{
 				_svgDocument.ViewBox = new SvgViewBox(_svgDocument.Bounds.X, _svgDocument.Bounds.Y, _svgDocument.Bounds.Width, _svgDocument.Bounds.Height);
 				_dimensions = _svgDocument.GetDimensions();
