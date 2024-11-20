@@ -585,5 +585,17 @@ namespace ACadSvgStudio {
                 this["SvgViewerDebugEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.0001")]
+        public float SvgViewerZoomStep {
+            get {
+                return ((float)(this["SvgViewerZoomStep"]));
+            }
+            set {
+                this["SvgViewerZoomStep"] = value;
+            }
+        }
     }
 }

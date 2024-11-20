@@ -77,6 +77,9 @@ namespace ACadSvgStudio {
 			}
 		}
 
+		public float ZoomStep { get; set; } = 0.0001f;
+
+
 		private SizeF _dimensions;
 
 		private SvgTransformCollection _svgTransformCollection;
@@ -346,11 +349,9 @@ namespace ACadSvgStudio {
 
 		private void OnMouseWheel(object? sender, MouseEventArgs e)
 		{
-			float zoomFactor = 0.0001f;
-
 			SizeF prevSize = calculateTransforms();
 
-			Zoom += e.Delta * zoomFactor;
+			Zoom += e.Delta * ZoomStep;
 
 			SizeF newSize = calculateTransforms();
 

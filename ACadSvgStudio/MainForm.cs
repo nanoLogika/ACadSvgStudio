@@ -1810,6 +1810,7 @@ namespace ACadSvgStudio {
 
         internal void UpdateSvgViewer() {
             svgViewerUserControl.DebugEnabled = Settings.Default.SvgViewerDebugEnabled;
+            svgViewerUserControl.ZoomStep = Settings.Default.SvgViewerZoomStep;
         }
     }
 }

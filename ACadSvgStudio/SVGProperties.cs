@@ -48,6 +48,7 @@ namespace ACadSvgStudio {
 			_mainForm = mainForm;
 		}
 		#region Svg Viewer
+
 		[Category("Svg Viewer")]
 		[DisplayName("Debug Enabled")]
 		[Description("Show Svg Viewer debug info.")]
@@ -76,6 +77,36 @@ namespace ACadSvgStudio {
 				}
 			}
 		}
+
+		[Category("Svg Viewer")]
+		[DisplayName("Zoom Step")]
+		[Description("Svg Viewer zoom step.")]
+		public float ZoomStep
+		{
+			get
+			{
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
+				{
+					return Settings.Default.SvgViewerZoomStep;
+				}
+				else
+				{
+					return 0;
+				}
+			}
+			set
+			{
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
+				{
+					Settings.Default.SvgViewerZoomStep = value;
+					Settings.Default.Save();
+
+					_mainForm.ProposeUpdateHTML();
+					_mainForm.UpdateSvgViewer();
+				}
+			}
+		}
+
 		#endregion
 		#region View
 
