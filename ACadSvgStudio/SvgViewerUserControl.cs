@@ -19,6 +19,7 @@ namespace ACadSvgStudio {
 		}
 
 		private Svg.SvgDocument _svgDocument;
+		private RectangleF _bounds;
 
 		private bool _needsUpdate = true;
 
@@ -105,6 +106,7 @@ namespace ACadSvgStudio {
 				_needsUpdate = true;
 
 				_svgDocument = Svg.SvgDocument.FromSvg<SvgDocument>(content);
+				_bounds = _svgDocument.Bounds;
 
 				updateViewBox();
 
@@ -147,7 +149,7 @@ namespace ACadSvgStudio {
 				return;
 			}
 
-			_svgDocument.ViewBox = new SvgViewBox(_svgDocument.Bounds.X, _svgDocument.Bounds.Y, _svgDocument.Bounds.Width, _svgDocument.Bounds.Height);
+			_svgDocument.ViewBox = new SvgViewBox(_bounds.X, _bounds.Y, _bounds.Width, _bounds.Height);
 		}
 
 
@@ -158,8 +160,8 @@ namespace ACadSvgStudio {
 
 			if (_svgDocument != null)
 			{
-				width = (int)(_svgDocument.Bounds.Width * _zoom);
-				height = (int)(_svgDocument.Bounds.Height * _zoom);
+				width = (int)(_bounds.Width * _zoom);
+				height = (int)(_bounds.Height * _zoom);
 			}
 
 			return new Rectangle(_x, _y, width, height);
@@ -278,8 +280,8 @@ namespace ACadSvgStudio {
 			}
 
 
-			float w = _svgDocument.Bounds.Width;
-			float h = _svgDocument.Bounds.Height;
+			float w = _bounds.Width;
+			float h = _bounds.Height;
 
 			if (w != 0 && h != 0)
 			{
