@@ -11,9 +11,6 @@ using File = System.IO.File;
 
 using ACadSvg;
 
-using CefSharp;
-using CefSharp.WinForms;
-using CefSharp.Dom;
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
 using SvgElements;
