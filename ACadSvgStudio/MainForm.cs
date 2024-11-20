@@ -722,7 +722,7 @@ namespace ACadSvgStudio {
                 _scintillaCss.Text = Settings.Default.CSSPreview;
                 _updatingHTMLEnabled = true;
 
-                CreateHTML();
+                UpdateHTML();
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
@@ -1678,27 +1678,15 @@ namespace ACadSvgStudio {
         }
 
 
-        public void CreateHTML() {
-            string backgroundColor = ColorTranslator.ToHtml(Settings.Default.BackgroundColor);
-            var svg = buildSVG(Settings.Default.ScalesEnabled, Settings.Default.CSSPreviewEnabled, out bool isSvgEmpty, false);
-
-            svgViewerUserControl.BackColor = Settings.Default.BackgroundColor;
-            svgViewerUserControl.LoadSvgContent(svg, true);
-        }
-
-
         public void UpdateHTML() {
-            if (_centerToFitOnLoad) {
-                CreateHTML();
-                return;
-            }
-
             string backgroundColor = ColorTranslator.ToHtml(Settings.Default.BackgroundColor);
             var svg = buildSVG(Settings.Default.ScalesEnabled, Settings.Default.CSSPreviewEnabled, out bool isSvgEmpty, false);
 
             svgViewerUserControl.BackColor = Settings.Default.BackgroundColor;
-            svgViewerUserControl.LoadSvgContent(svg, false);
-        }
+            svgViewerUserControl.LoadSvgContent(svg, _centerToFitOnLoad);
+            _centerToFitOnLoad = false;
+
+		}
 
 
         #endregion
