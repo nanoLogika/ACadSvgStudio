@@ -69,6 +69,7 @@ namespace ACadSvgStudio {
 			{
 				if (_zoom != value)
 				{
+					updateViewBox();
 					_needsUpdate = true;
 				}
 
@@ -105,6 +106,8 @@ namespace ACadSvgStudio {
 
 				_svgDocument = Svg.SvgDocument.FromSvg<SvgDocument>(content);
 
+				updateViewBox();
+
 				if (resetPosition)
 				{
 					X = 0;
@@ -137,19 +140,14 @@ namespace ACadSvgStudio {
 		}
 
 
-		private SizeF calculateTransforms()
+		private void updateViewBox()
 		{
 			if (_svgDocument == null)
 			{
-				_dimensions = new SizeF(0, 0);
-			}
-			else if (_needsUpdate)
-			{
-				_svgDocument.ViewBox = new SvgViewBox(_svgDocument.Bounds.X, _svgDocument.Bounds.Y, _svgDocument.Bounds.Width, _svgDocument.Bounds.Height);
-				_dimensions = _svgDocument.GetDimensions();
+				return;
 			}
 
-			return _dimensions;
+			_svgDocument.ViewBox = new SvgViewBox(_svgDocument.Bounds.X, _svgDocument.Bounds.Y, _svgDocument.Bounds.Width, _svgDocument.Bounds.Height);
 		}
 
 
@@ -216,7 +214,7 @@ namespace ACadSvgStudio {
 
 			if (DebugEnabled)
 			{
-				SizeF size = calculateTransforms();
+				SizeF size = _svgDocument.GetDimensions();
 
 				Color sizeColor = Color.SkyBlue;
 				Rectangle boundingBox = getBoundingBox();
@@ -339,11 +337,17 @@ namespace ACadSvgStudio {
 
 		private void OnMouseWheel(object? sender, MouseEventArgs e)
 		{
-			SizeF prevSize = calculateTransforms();
+			if (_svgDocument == null)
+			{
+				return;
+			}
+
+
+			SizeF prevSize = _svgDocument.GetDimensions();
 
 			Zoom += e.Delta * ZoomStep;
 
-			SizeF newSize = calculateTransforms();
+			SizeF newSize = _svgDocument.GetDimensions();
 
 			if (prevSize.Width != 0 && prevSize.Height != 0)
 			{
