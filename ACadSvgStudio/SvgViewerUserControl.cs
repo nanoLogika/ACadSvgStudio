@@ -197,7 +197,7 @@ namespace ACadSvgStudio {
 			e.Graphics.Clear(BackColor);
 
 
-			e.Graphics.DrawString("SVG Viewer (Experimental)", this.Font, new SolidBrush(Color.Yellow), 0, 0);
+			e.Graphics.DrawString("SVG Viewer", this.Font, new SolidBrush(Color.Yellow), 0, 0);
 
 
 			e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;

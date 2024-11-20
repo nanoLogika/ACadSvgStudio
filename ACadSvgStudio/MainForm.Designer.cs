@@ -15,10 +15,6 @@
 			{
 				components.Dispose();
 			}
-			if (_devToolsContext != null)
-			{
-				_devToolsContext.Dispose();
-			}
 			base.Dispose(disposing);
 		}
 
@@ -28,7 +24,8 @@
 		///  Required method for Designer support - do not modify
 		///  the contents of this method with the code editor.
 		/// </summary>
-        private void InitializeComponent() {
+		private void InitializeComponent()
+		{
 			components = new System.ComponentModel.Container();
 			ToolStripSeparator _fileMenuSeparator2;
 			ToolStripSeparator _editMenuSeparator1;
@@ -41,6 +38,7 @@
 			_mainGroupTabPage = new TabPage();
 			_scalesTabPage = new TabPage();
 			_cssTabPage = new TabPage();
+			_batchTabPage = new TabPage();
 			_splitContainer2 = new SplitContainer();
 			svgViewerUserControl = new SvgViewerUserControl();
 			_rightTabControl = new TabControl();
@@ -48,7 +46,6 @@
 			_propertyGrid = new PropertyGrid();
 			_defsTabPage = new TabPage();
 			_defsTreeView = new TreeView();
-			_batchTabPage = new TabPage();
 			_menuStrip = new MenuStrip();
 			_fileToolStripMenuItem = new ToolStripMenuItem();
 			_loadDwgToolStripMenuItem = new ToolStripMenuItem();
@@ -75,16 +72,11 @@
 			_viewMenuSeparator2 = new ToolStripSeparator();
 			_collapseAllMenuItem = new ToolStripMenuItem();
 			_expandAllToolStripMenuItem = new ToolStripMenuItem();
-			_viewMenuSeparator3 = new ToolStripSeparator();
-			drawingComponentToolStripMenuItem = new ToolStripMenuItem();
-			sVGViewerUserControlExperimentalToolStripMenuItem = new ToolStripMenuItem();
-			webBrowserToolStripMenuItem = new ToolStripMenuItem();
 			_contentMenuItem = new ToolStripMenuItem();
 			_restorePreviousMenuItem = new ToolStripMenuItem();
 			_extrasMenuItem = new ToolStripMenuItem();
 			_removeStylesMenuItem = new ToolStripMenuItem();
 			_extrasMenuSeparator1 = new ToolStripSeparator();
-			_showDeveloperToolsMenuItem = new ToolStripMenuItem();
 			editorFontToolStripMenuItem = new ToolStripMenuItem();
 			_converisonInfoMenuItem = new ToolStripMenuItem();
 			_showConversionLogMenuItem = new ToolStripMenuItem();
@@ -132,17 +124,17 @@
 			// _fileMenuSeparator2
 			// 
 			_fileMenuSeparator2.Name = "_fileMenuSeparator2";
-            _fileMenuSeparator2.Size = new Size(246, 6);
+			_fileMenuSeparator2.Size = new Size(213, 6);
 			// 
 			// _editMenuSeparator1
 			// 
 			_editMenuSeparator1.Name = "_editMenuSeparator1";
-			_editMenuSeparator1.Size = new Size(119, 6);
+			_editMenuSeparator1.Size = new Size(177, 6);
 			// 
 			// _viewMenuSeparator1
 			// 
 			_viewMenuSeparator1.Name = "_viewMenuSeparator1";
-            _viewMenuSeparator1.Size = new Size(178, 6);
+			_viewMenuSeparator1.Size = new Size(177, 6);
 			// 
 			// _exportMenuSeparator1
 			// 
@@ -157,7 +149,7 @@
 			// _fileMenuSeparator1
 			// 
 			_fileMenuSeparator1.Name = "_fileMenuSeparator1";
-            _fileMenuSeparator1.Size = new Size(246, 6);
+			_fileMenuSeparator1.Size = new Size(213, 6);
 			// 
 			// _splitContainer1
 			// 
@@ -218,6 +210,15 @@
 			_cssTabPage.Text = "CSS for Preview";
 			_cssTabPage.UseVisualStyleBackColor = true;
 			// 
+			// _batchTabPage
+			// 
+			_batchTabPage.Location = new Point(4, 24);
+			_batchTabPage.Name = "_batchTabPage";
+			_batchTabPage.Size = new Size(448, 688);
+			_batchTabPage.TabIndex = 3;
+			_batchTabPage.Text = "Batch";
+			_batchTabPage.UseVisualStyleBackColor = true;
+			// 
 			// _splitContainer2
 			// 
 			_splitContainer2.Dock = DockStyle.Fill;
@@ -238,11 +239,13 @@
 			// 
 			// svgViewerUserControl
 			// 
+			svgViewerUserControl.DebugEnabled = false;
 			svgViewerUserControl.Dock = DockStyle.Fill;
 			svgViewerUserControl.Location = new Point(0, 0);
 			svgViewerUserControl.Name = "svgViewerUserControl";
 			svgViewerUserControl.Size = new Size(455, 716);
 			svgViewerUserControl.TabIndex = 1;
+			svgViewerUserControl.ZoomStep = 0.0001F;
 			// 
 			// _rightTabControl
 			// 
@@ -295,15 +298,6 @@
 			_defsTreeView.TabIndex = 1;
 			_defsTreeView.AfterCheck += eventDefsTreeViewAfterCheck;
 			// 
-			// _batchTabPage
-			// 
-			_batchTabPage.Location = new Point(4, 24);
-			_batchTabPage.Name = "_batchTabPage";
-			_batchTabPage.Size = new Size(448, 688);
-			_batchTabPage.TabIndex = 3;
-			_batchTabPage.Text = "Batch";
-			_batchTabPage.UseVisualStyleBackColor = true;
-			// 
 			// _menuStrip
 			// 
 			_menuStrip.Items.AddRange(new ToolStripItem[] { _fileToolStripMenuItem, _editMenuItem, _searchToolStripMenuItem, _viewMenuItem, _contentMenuItem, _extrasMenuItem, _converisonInfoMenuItem, _exportToolStripMenuItem, _aboutACadSVGStudioMenuItem });
@@ -324,7 +318,7 @@
 			// 
 			_loadDwgToolStripMenuItem.Name = "_loadDwgToolStripMenuItem";
 			_loadDwgToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.D;
-            _loadDwgToolStripMenuItem.Size = new Size(249, 22);
+			_loadDwgToolStripMenuItem.Size = new Size(216, 22);
 			_loadDwgToolStripMenuItem.Text = "Load AutoCAD File";
 			_loadDwgToolStripMenuItem.Click += eventLoadAutoCadFile_Click;
 			// 
@@ -332,7 +326,7 @@
 			// 
 			_openMenuItem.Name = "_openMenuItem";
 			_openMenuItem.ShortcutKeys = Keys.Control | Keys.O;
-            _openMenuItem.Size = new Size(249, 22);
+			_openMenuItem.Size = new Size(216, 22);
 			_openMenuItem.Text = "Open";
 			_openMenuItem.Click += eventOpenClick;
 			// 
@@ -340,7 +334,7 @@
 			// 
 			_saveMenuItem.Name = "_saveMenuItem";
 			_saveMenuItem.ShortcutKeys = Keys.Control | Keys.S;
-            _saveMenuItem.Size = new Size(249, 22);
+			_saveMenuItem.Size = new Size(216, 22);
 			_saveMenuItem.Text = "Save";
 			_saveMenuItem.Click += eventSaveSvgGroupClick;
 			// 
@@ -348,21 +342,21 @@
 			// 
 			_saveAsMenuItem.Name = "_saveAsMenuItem";
 			_saveAsMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
-            _saveAsMenuItem.Size = new Size(249, 22);
+			_saveAsMenuItem.Size = new Size(216, 22);
 			_saveAsMenuItem.Text = "Save as ...";
 			_saveAsMenuItem.Click += eventSaveSvgGroupAsClick;
 			// 
 			// _recentlyOpenedFilesToolStripMenuItem
 			// 
 			_recentlyOpenedFilesToolStripMenuItem.Name = "_recentlyOpenedFilesToolStripMenuItem";
-            _recentlyOpenedFilesToolStripMenuItem.Size = new Size(249, 22);
+			_recentlyOpenedFilesToolStripMenuItem.Size = new Size(216, 22);
 			_recentlyOpenedFilesToolStripMenuItem.Text = "Recently Opened Files";
 			// 
 			// _exitMenuItem
 			// 
 			_exitMenuItem.Name = "_exitMenuItem";
 			_exitMenuItem.ShortcutKeys = Keys.Alt | Keys.F4;
-            _exitMenuItem.Size = new Size(249, 22);
+			_exitMenuItem.Size = new Size(216, 22);
 			_exitMenuItem.Text = "Exit";
 			_exitMenuItem.Click += eventExit_Click;
 			// 
@@ -377,54 +371,54 @@
 			// _undoMenuItem
 			// 
 			_undoMenuItem.Name = "_undoMenuItem";
-			_undoMenuItem.Size = new Size(122, 22);
+			_undoMenuItem.Size = new Size(180, 22);
 			_undoMenuItem.Text = "Undo";
 			_undoMenuItem.Click += eventUndo_Click;
 			// 
 			// _redoMenuItem
 			// 
 			_redoMenuItem.Name = "_redoMenuItem";
-			_redoMenuItem.Size = new Size(122, 22);
+			_redoMenuItem.Size = new Size(180, 22);
 			_redoMenuItem.Text = "Redo";
 			_redoMenuItem.Click += eventRedo_Click;
 			// 
 			// _cutMenuItem
 			// 
 			_cutMenuItem.Name = "_cutMenuItem";
-			_cutMenuItem.Size = new Size(122, 22);
+			_cutMenuItem.Size = new Size(180, 22);
 			_cutMenuItem.Text = "Cut";
 			_cutMenuItem.Click += eventCut_Click;
 			// 
 			// _copyMenuItem
 			// 
 			_copyMenuItem.Name = "_copyMenuItem";
-			_copyMenuItem.Size = new Size(122, 22);
+			_copyMenuItem.Size = new Size(180, 22);
 			_copyMenuItem.Text = "Copy";
 			_copyMenuItem.Click += eventCopy_Click;
 			// 
 			// _pasteMenuItem
 			// 
 			_pasteMenuItem.Name = "_pasteMenuItem";
-			_pasteMenuItem.Size = new Size(122, 22);
+			_pasteMenuItem.Size = new Size(180, 22);
 			_pasteMenuItem.Text = "Paste";
 			_pasteMenuItem.Click += eventPaste_Click;
 			// 
 			// _deleteMenuItem
 			// 
 			_deleteMenuItem.Name = "_deleteMenuItem";
-			_deleteMenuItem.Size = new Size(122, 22);
+			_deleteMenuItem.Size = new Size(180, 22);
 			_deleteMenuItem.Text = "Delete";
 			_deleteMenuItem.Click += eventDelete_Click;
 			// 
 			// _editMenuSeparator2
 			// 
 			_editMenuSeparator2.Name = "_editMenuSeparator2";
-			_editMenuSeparator2.Size = new Size(119, 6);
+			_editMenuSeparator2.Size = new Size(177, 6);
 			// 
 			// _selectAllMenuItem
 			// 
 			_selectAllMenuItem.Name = "_selectAllMenuItem";
-			_selectAllMenuItem.Size = new Size(122, 22);
+			_selectAllMenuItem.Size = new Size(180, 22);
 			_selectAllMenuItem.Text = "Select All";
 			_selectAllMenuItem.Click += eventSelectAll_Click;
 			// 
@@ -439,7 +433,7 @@
 			// 
 			_quickFindMenuItem.Name = "_quickFindMenuItem";
 			_quickFindMenuItem.ShortcutKeys = Keys.Control | Keys.F;
-            _quickFindMenuItem.Size = new Size(289, 22);
+			_quickFindMenuItem.Size = new Size(236, 22);
 			_quickFindMenuItem.Text = "Quick Find";
 			_quickFindMenuItem.Click += eventQuickFind_Click;
 			// 
@@ -447,13 +441,13 @@
 			// 
 			_findAndReplaceMenuItem.Name = "_findAndReplaceMenuItem";
 			_findAndReplaceMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F;
-            _findAndReplaceMenuItem.Size = new Size(289, 22);
+			_findAndReplaceMenuItem.Size = new Size(236, 22);
 			_findAndReplaceMenuItem.Text = "Find and Replace";
 			_findAndReplaceMenuItem.Click += eventFindAndReplace_Click;
 			// 
 			// _viewMenuItem
 			// 
-			_viewMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _centerToFitMenuItem, _viewMenuSeparator1, _propertyGridToolStripMenuItem, _viewMenuSeparator2, _collapseAllMenuItem, _expandAllToolStripMenuItem, _viewMenuSeparator3, drawingComponentToolStripMenuItem });
+			_viewMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _centerToFitMenuItem, _viewMenuSeparator1, _propertyGridToolStripMenuItem, _viewMenuSeparator2, _collapseAllMenuItem, _expandAllToolStripMenuItem });
 			_viewMenuItem.Name = "_viewMenuItem";
 			_viewMenuItem.Size = new Size(44, 20);
 			_viewMenuItem.Text = "View";
@@ -462,7 +456,7 @@
 			// 
 			_centerToFitMenuItem.Name = "_centerToFitMenuItem";
 			_centerToFitMenuItem.ShortcutKeys = Keys.Control | Keys.E;
-            _centerToFitMenuItem.Size = new Size(181, 22);
+			_centerToFitMenuItem.Size = new Size(180, 22);
 			_centerToFitMenuItem.Text = "Center to Fit";
 			_centerToFitMenuItem.Click += eventCenterToFitMenuItem_Click;
 			// 
@@ -472,54 +466,28 @@
 			_propertyGridToolStripMenuItem.CheckOnClick = true;
 			_propertyGridToolStripMenuItem.CheckState = CheckState.Checked;
 			_propertyGridToolStripMenuItem.Name = "_propertyGridToolStripMenuItem";
-            _propertyGridToolStripMenuItem.Size = new Size(181, 22);
+			_propertyGridToolStripMenuItem.Size = new Size(180, 22);
 			_propertyGridToolStripMenuItem.Text = "Property Grid";
 			_propertyGridToolStripMenuItem.CheckedChanged += eventPropertyGridMenuItem_CheckedChanged;
 			// 
 			// _viewMenuSeparator2
 			// 
 			_viewMenuSeparator2.Name = "_viewMenuSeparator2";
-            _viewMenuSeparator2.Size = new Size(178, 6);
+			_viewMenuSeparator2.Size = new Size(177, 6);
 			// 
 			// _collapseAllMenuItem
 			// 
 			_collapseAllMenuItem.Name = "_collapseAllMenuItem";
-            _collapseAllMenuItem.Size = new Size(181, 22);
+			_collapseAllMenuItem.Size = new Size(180, 22);
 			_collapseAllMenuItem.Text = "Collapse All";
 			_collapseAllMenuItem.Click += eventCollapseAllMenuItem_Click;
 			// 
 			// _expandAllToolStripMenuItem
 			// 
 			_expandAllToolStripMenuItem.Name = "_expandAllToolStripMenuItem";
-            _expandAllToolStripMenuItem.Size = new Size(181, 22);
+			_expandAllToolStripMenuItem.Size = new Size(180, 22);
 			_expandAllToolStripMenuItem.Text = "Expand All";
 			_expandAllToolStripMenuItem.Click += eventExpandAllMenuItem_Click;
-			// 
-			// _viewMenuSeparator3
-			// 
-			_viewMenuSeparator3.Name = "_viewMenuSeparator3";
-            _viewMenuSeparator3.Size = new Size(178, 6);
-			// 
-			// drawingComponentToolStripMenuItem
-			// 
-			drawingComponentToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { sVGViewerUserControlExperimentalToolStripMenuItem, webBrowserToolStripMenuItem });
-			drawingComponentToolStripMenuItem.Name = "drawingComponentToolStripMenuItem";
-            drawingComponentToolStripMenuItem.Size = new Size(181, 22);
-			drawingComponentToolStripMenuItem.Text = "SVG Renderer";
-			// 
-			// sVGViewerUserControlExperimentalToolStripMenuItem
-			// 
-			sVGViewerUserControlExperimentalToolStripMenuItem.Name = "sVGViewerUserControlExperimentalToolStripMenuItem";
-			sVGViewerUserControlExperimentalToolStripMenuItem.Size = new Size(282, 22);
-			sVGViewerUserControlExperimentalToolStripMenuItem.Text = "SVG Viewer User Control (Experimental)";
-			sVGViewerUserControlExperimentalToolStripMenuItem.Click += sVGViewerUserControlExperimentalToolStripMenuItem_Click;
-			// 
-			// webBrowserToolStripMenuItem
-			// 
-			webBrowserToolStripMenuItem.Name = "webBrowserToolStripMenuItem";
-			webBrowserToolStripMenuItem.Size = new Size(282, 22);
-			webBrowserToolStripMenuItem.Text = "Web Browser";
-			webBrowserToolStripMenuItem.Click += webBrowserToolStripMenuItem_Click;
 			// 
 			// _contentMenuItem
 			// 
@@ -531,13 +499,13 @@
 			// _restorePreviousMenuItem
 			// 
 			_restorePreviousMenuItem.Name = "_restorePreviousMenuItem";
-			_restorePreviousMenuItem.Size = new Size(161, 22);
+			_restorePreviousMenuItem.Size = new Size(180, 22);
 			_restorePreviousMenuItem.Text = "Restore Previous";
 			_restorePreviousMenuItem.Click += eventFlipContent_Click;
 			// 
 			// _extrasMenuItem
 			// 
-			_extrasMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _removeStylesMenuItem, _extrasMenuSeparator1, _showDeveloperToolsMenuItem, editorFontToolStripMenuItem });
+			_extrasMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _removeStylesMenuItem, _extrasMenuSeparator1, editorFontToolStripMenuItem });
 			_extrasMenuItem.Name = "_extrasMenuItem";
 			_extrasMenuItem.Size = new Size(50, 20);
 			_extrasMenuItem.Text = "Extras";
@@ -545,27 +513,19 @@
 			// _removeStylesMenuItem
 			// 
 			_removeStylesMenuItem.Name = "_removeStylesMenuItem";
-			_removeStylesMenuItem.Size = new Size(214, 22);
+			_removeStylesMenuItem.Size = new Size(180, 22);
 			_removeStylesMenuItem.Text = "Remove Styles";
 			_removeStylesMenuItem.Click += eventRemoveStyles_Click;
 			// 
 			// _extrasMenuSeparator1
 			// 
 			_extrasMenuSeparator1.Name = "_extrasMenuSeparator1";
-			_extrasMenuSeparator1.Size = new Size(211, 6);
-			// 
-			// _showDeveloperToolsMenuItem
-			// 
-			_showDeveloperToolsMenuItem.Name = "_showDeveloperToolsMenuItem";
-			_showDeveloperToolsMenuItem.ShortcutKeys = Keys.F12;
-			_showDeveloperToolsMenuItem.Size = new Size(214, 22);
-			_showDeveloperToolsMenuItem.Text = "Show Developer Tools";
-			_showDeveloperToolsMenuItem.Click += eventShowDeveloperToolsMenuItem_Click;
+			_extrasMenuSeparator1.Size = new Size(177, 6);
 			// 
 			// editorFontToolStripMenuItem
 			// 
 			editorFontToolStripMenuItem.Name = "editorFontToolStripMenuItem";
-			editorFontToolStripMenuItem.Size = new Size(214, 22);
+			editorFontToolStripMenuItem.Size = new Size(180, 22);
 			editorFontToolStripMenuItem.Text = "Editor Font";
 			editorFontToolStripMenuItem.Click += eventEditorFontToolStripMenuItem_Click;
 			// 
@@ -660,7 +620,6 @@
 			_showDeveloperToolsContextMenuItem.Name = "_showDeveloperToolsContextMenuItem";
 			_showDeveloperToolsContextMenuItem.Size = new Size(189, 22);
 			_showDeveloperToolsContextMenuItem.Text = "Show Developer Tools";
-			_showDeveloperToolsContextMenuItem.Click += eventShowDeveloperToolsMenuItem_Click;
 			// 
 			// _statusStrip
 			// 
@@ -711,7 +670,6 @@
 			Name = "MainForm";
 			StartPosition = FormStartPosition.CenterScreen;
 			Text = "ACadSvgStudio";
-			Load += MainForm_Load;
 			_splitContainer1.Panel1.ResumeLayout(false);
 			_splitContainer1.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)_splitContainer1).EndInit();
@@ -760,7 +718,6 @@
 		private ToolStripMenuItem _searchToolStripMenuItem;
 		private ToolStripMenuItem _findToolStripMenuItem;
 		private ToolStripSeparator _extrasMenuSeparator1;
-		private ToolStripMenuItem _showDeveloperToolsMenuItem;
 		private OpenFileDialog _openFileDialog;
 		private SaveFileDialog _saveFileDialog;
 		private ToolStripMenuItem _propertyGridToolStripMenuItem;
@@ -810,10 +767,6 @@
 		private TabPage _defsTabPage;
 		private TreeView _defsTreeView;
 		private SvgViewerUserControl svgViewerUserControl;
-		private ToolStripSeparator _viewMenuSeparator3;
-		private ToolStripMenuItem drawingComponentToolStripMenuItem;
-		private ToolStripMenuItem sVGViewerUserControlExperimentalToolStripMenuItem;
-		private ToolStripMenuItem webBrowserToolStripMenuItem;
         private ToolStripMenuItem _loadDwgToolStripMenuItem;
         private OpenFileDialog _loadAutoCadFileDialog;
         private ToolStripMenuItem _exportToolStripMenuItem;
