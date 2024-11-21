@@ -113,7 +113,7 @@ namespace ACadSvgStudio.BatchProcessing {
             StringBuilder sb = new StringBuilder();
             foreach (CommandBase command in _commands) {
                 command.Execute(conversionContext, out string cmdMsg);
-                sb.Append(cmdMsg);
+                sb.AppendLine(cmdMsg);
             }
             msg = sb.ToString();
         }
