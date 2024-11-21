@@ -801,6 +801,48 @@ namespace ACadSvgStudio {
         }
 
 
+		[Category("Batch Processing")]
+		[DisplayName("ACad-Load Base Directory")]
+		[Description("The base directory of the repository where AutoCAD documents (DWG or DXF) are to be loaded from. A relative path specified as an input path is assumed to be relative to this base path.")]
+        public string BatchACadLoadBaseDirectory {
+            get {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    return Settings.Default.BatchACadLoadBaseDirectory;
+                }
+                else {
+                    return string.Empty;
+                }
+            }
+            set {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    Settings.Default.BatchACadLoadBaseDirectory = value;
+                    Settings.Default.Save();
+                }
+            }
+        }
+
+
+        [Category("Batch Processing")]
+        [DisplayName("SVG Base Directory")]
+        [Description("The base directory of the repository where converted SVG documents hall be saved to. A relative path specified as an output path is assumed to be relative to this base path.")]
+        public string BatchSvgExportBaseDirectory {
+            get {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    return Settings.Default.BatchSvgExportBaseDirectory;
+                }
+                else {
+                    return string.Empty;
+                }
+            }
+            set {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
+                    Settings.Default.BatchSvgExportBaseDirectory = value;
+                    Settings.Default.Save();
+                }
+            }
+        }
+
+
         public ConversionOptions GetConversionOptions() {
 			return new ConversionOptions() {
 				ExportHandleAsID = this.ExportHandleAsID,

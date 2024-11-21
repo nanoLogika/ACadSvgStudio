@@ -1061,64 +1061,6 @@ namespace ACadSvgStudio {
         }
 
 
-        private void eventExportSelectedDefs_Click(object sender, EventArgs e) {
-            try {
-                IDictionary<string, TreeNode> selectedTreeNodes = new Dictionary<string, TreeNode>();
-                collectFlatListOfTreeNodes(_defsTreeView.Nodes, selectedTreeNodes, true);
-
-                XElement xElement = XElement.Parse(_scintillaSvgGroupEditor.Text);
-
-                HashSet<string> defsIds = new HashSet<string>();
-                foreach (KeyValuePair<string, TreeNode> selectedTreeNode in selectedTreeNodes) {
-                    string id = selectedTreeNode.Key;
-                    defsIds.Add(id);
-
-                    DefsUtils.CollectUsedDefsIds(id, xElement, defsIds);
-                }
-
-                DefsUtils.CollectUsedDefsIds(xElement, defsIds, false);
-
-                ExportSVGForm exportSvgForm = new ExportSVGForm(defsIds);
-                if (exportSvgForm.ShowDialog() == DialogResult.OK) {
-                    string outputPath = exportSvgForm.SelectedPath;
-                    if (File.Exists(outputPath)) {
-                        if (MessageBox.Show($"File {outputPath} exists, overwite?", "Export Selected Defs", MessageBoxButtons.OKCancel) == DialogResult.Cancel) {
-                            return;
-                        }
-                    }
-
-                    DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, exportSvgForm.ResolveDefs);
-                    exporter.Export(outputPath, exportSvgForm.SelectedDefsIds);
-
-                    if (exportSvgForm.AddExportToCurrentBatch) {
-                        Batch batch = BatchController.CurrentBatch;
-                        if (batch == null) {
-                            _loadCommandBatchDialog.InitialDirectory = Settings.Default.CommandBatchDirectory;
-                            _loadCommandBatchDialog.FileName = string.Empty;
-                            _loadCommandBatchDialog.ShowDialog();
-                            string batchPath = _loadCommandBatchDialog.FileName;
-                            Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(batchPath);
-                            Settings.Default.Save();
-                            batch = BatchController.LoadOrCreateBatch(batchPath);
-                        }
-
-						batch.AddCommand(new ExportCommand(_loadedDwgFilename, outputPath, exportSvgForm.ResolveDefs, false, exportSvgForm.SelectedDefsIds));
-
-						_batchTabPage.Text = $"Batch: {batch.Name}";
-                        _scintillaBatchEditor.Text = batch.ToString();
-					}
-
-                    if (exportSvgForm.OpenAfterExport) {
-                        LoadFile(outputPath);
-                    }
-                }
-            }
-            catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
-        }
-
-
         private void eventExit_Click(object sender, EventArgs e) {
             try {
                 Close();
@@ -1514,6 +1456,64 @@ namespace ACadSvgStudio {
 
         #endregion
         #region -  Events Export Menu
+
+        private void eventExportSelectedDefs_Click(object sender, EventArgs e) {
+            try {
+                IDictionary<string, TreeNode> selectedTreeNodes = new Dictionary<string, TreeNode>();
+                collectFlatListOfTreeNodes(_defsTreeView.Nodes, selectedTreeNodes, true);
+
+                XElement xElement = XElement.Parse(_scintillaSvgGroupEditor.Text);
+
+                HashSet<string> defsIds = new HashSet<string>();
+                foreach (KeyValuePair<string, TreeNode> selectedTreeNode in selectedTreeNodes) {
+                    string id = selectedTreeNode.Key;
+                    defsIds.Add(id);
+
+                    DefsUtils.CollectUsedDefsIds(id, xElement, defsIds);
+                }
+
+                DefsUtils.CollectUsedDefsIds(xElement, defsIds, false);
+
+                ExportSVGForm exportSvgForm = new ExportSVGForm(defsIds);
+                if (exportSvgForm.ShowDialog() == DialogResult.OK) {
+                    string outputPath = exportSvgForm.SelectedPath;
+                    if (File.Exists(outputPath)) {
+                        if (MessageBox.Show($"File {outputPath} exists, overwite?", "Export Selected Defs", MessageBoxButtons.OKCancel) == DialogResult.Cancel) {
+                            return;
+                        }
+                    }
+
+                    DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, exportSvgForm.ResolveDefs);
+                    exporter.Export(outputPath, exportSvgForm.SelectedDefsIds);
+
+                    if (exportSvgForm.AddExportToCurrentBatch) {
+                        Batch batch = BatchController.CurrentBatch;
+                        if (batch == null) {
+                            _loadCommandBatchDialog.InitialDirectory = Settings.Default.CommandBatchDirectory;
+                            _loadCommandBatchDialog.FileName = string.Empty;
+                            _loadCommandBatchDialog.ShowDialog();
+                            string batchPath = _loadCommandBatchDialog.FileName;
+                            Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(batchPath);
+                            Settings.Default.Save();
+                            batch = BatchController.LoadOrCreateBatch(batchPath);
+                        }
+
+                        batch.AddCommand(new ExportCommand(_loadedDwgFilename, outputPath, exportSvgForm.ResolveDefs, false, exportSvgForm.SelectedDefsIds));
+
+                        _batchTabPage.Text = $"Batch: {batch.Name}";
+                        _scintillaBatchEditor.Text = batch.ToString();
+                    }
+
+                    if (exportSvgForm.OpenAfterExport) {
+                        LoadFile(outputPath);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                _statusLabel.Text = ex.Message;
+            }
+        }
+
 
         private void eventExecuteExportBatch_Click(object sender, EventArgs e) {
             try {

@@ -573,5 +573,29 @@ namespace ACadSvgStudio {
                 this["CommandBatchDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BatchACadLoadBaseDirectory {
+            get {
+                return ((string)(this["BatchACadLoadBaseDirectory"]));
+            }
+            set {
+                this["BatchACadLoadBaseDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BatchSvgExportBaseDirectory {
+            get {
+                return ((string)(this["BatchSvgExportBaseDirectory"]));
+            }
+            set {
+                this["BatchSvgExportBaseDirectory"] = value;
+            }
+        }
     }
 }
