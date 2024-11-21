@@ -37,6 +37,7 @@ namespace ACadSvgStudio {
         private Scintilla _scintillaScales;
         private Scintilla _scintillaBatchEditor;
         private TextBox _batchConsoleLog;
+        private Splitter _batchSplitter;
         private IncrementalSearcher _incrementalSearcher;
         private FindReplace _findReplace;
         private int _maxLineNumberCharLength;
@@ -644,15 +645,21 @@ namespace ACadSvgStudio {
 
 			_scintillaBatchEditor.SetKeywords(0, BatchKeywords);
 
-
+            // Splitter
+            _batchSplitter = new Splitter();
+            _batchSplitter.Dock = DockStyle.Bottom;
+            
             // Textbox for Console Log
             _batchConsoleLog = new TextBox();
             _batchConsoleLog.ReadOnly = true;
             _batchConsoleLog.Dock = DockStyle.Bottom;
             _batchConsoleLog.Multiline = true;
+            _batchConsoleLog.ScrollBars = ScrollBars.Vertical;
+            _batchConsoleLog.WordWrap = true;
             _batchConsoleLog.Height = 200;
+            _batchTabPage.Controls.Add(_batchSplitter);
             _batchTabPage.Controls.Add(_batchConsoleLog);
-		}
+        }
 
 
         private void updateLineMargin(object? sender) {
@@ -1024,64 +1031,6 @@ namespace ACadSvgStudio {
                 }
                 _saveFileDialog.InitialDirectory = Settings.Default.SvgDirectory;
                 _saveFileDialog.ShowDialog();
-            }
-            catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
-        }
-
-
-        private void eventExportSelectedDefs_Click(object sender, EventArgs e) {
-            try {
-                IDictionary<string, TreeNode> selectedTreeNodes = new Dictionary<string, TreeNode>();
-                collectFlatListOfTreeNodes(_defsTreeView.Nodes, selectedTreeNodes, true);
-
-                XElement xElement = XElement.Parse(_scintillaSvgGroupEditor.Text);
-
-                HashSet<string> defsIds = new HashSet<string>();
-                foreach (KeyValuePair<string, TreeNode> selectedTreeNode in selectedTreeNodes) {
-                    string id = selectedTreeNode.Key;
-                    defsIds.Add(id);
-
-                    DefsUtils.CollectUsedDefsIds(id, xElement, defsIds);
-                }
-
-                DefsUtils.CollectUsedDefsIds(xElement, defsIds, false);
-
-                ExportSVGForm exportSvgForm = new ExportSVGForm(defsIds);
-                if (exportSvgForm.ShowDialog() == DialogResult.OK) {
-                    string outputPath = exportSvgForm.SelectedPath;
-                    if (File.Exists(outputPath)) {
-                        if (MessageBox.Show($"File {outputPath} exists, overwite?", "Export Selected Defs", MessageBoxButtons.OKCancel) == DialogResult.Cancel) {
-                            return;
-                        }
-                    }
-
-                    DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, exportSvgForm.SelectedDefsIds, exportSvgForm.ResolveDefs);
-                    exporter.Export(outputPath);
-
-                    if (exportSvgForm.AddExportToCurrentBatch) {
-                        Batch batch = BatchController.CurrentBatch;
-                        if (batch == null) {
-                            _loadCommandBatchDialog.InitialDirectory = Settings.Default.CommandBatchDirectory;
-                            _loadCommandBatchDialog.FileName = string.Empty;
-                            _loadCommandBatchDialog.ShowDialog();
-                            string batchPath = _loadCommandBatchDialog.FileName;
-                            Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(batchPath);
-                            Settings.Default.Save();
-                            batch = BatchController.LoadOrCreateBatch(batchPath);
-                        }
-
-						batch.AddCommand(new ExportCommand(_loadedDwgFilename, outputPath, exportSvgForm.ResolveDefs, false, exportSvgForm.SelectedDefsIds));
-
-						_batchTabPage.Text = $"Batch: {batch.Name}";
-                        _scintillaBatchEditor.Text = batch.ToString();
-					}
-
-                    if (exportSvgForm.OpenAfterExport) {
-                        LoadFile(outputPath);
-                    }
-                }
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
@@ -1474,6 +1423,64 @@ namespace ACadSvgStudio {
 
         #endregion
         #region -  Events Export Menu
+
+        private void eventExportSelectedDefs_Click(object sender, EventArgs e) {
+            try {
+                IDictionary<string, TreeNode> selectedTreeNodes = new Dictionary<string, TreeNode>();
+                collectFlatListOfTreeNodes(_defsTreeView.Nodes, selectedTreeNodes, true);
+
+                XElement xElement = XElement.Parse(_scintillaSvgGroupEditor.Text);
+
+                HashSet<string> defsIds = new HashSet<string>();
+                foreach (KeyValuePair<string, TreeNode> selectedTreeNode in selectedTreeNodes) {
+                    string id = selectedTreeNode.Key;
+                    defsIds.Add(id);
+
+                    DefsUtils.CollectUsedDefsIds(id, xElement, defsIds);
+                }
+
+                DefsUtils.CollectUsedDefsIds(xElement, defsIds, false);
+
+                ExportSVGForm exportSvgForm = new ExportSVGForm(defsIds);
+                if (exportSvgForm.ShowDialog() == DialogResult.OK) {
+                    string outputPath = exportSvgForm.SelectedPath;
+                    if (File.Exists(outputPath)) {
+                        if (MessageBox.Show($"File {outputPath} exists, overwite?", "Export Selected Defs", MessageBoxButtons.OKCancel) == DialogResult.Cancel) {
+                            return;
+                        }
+                    }
+
+                    DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, exportSvgForm.ResolveDefs);
+                    exporter.Export(outputPath, exportSvgForm.SelectedDefsIds);
+
+                    if (exportSvgForm.AddExportToCurrentBatch) {
+                        Batch batch = BatchController.CurrentBatch;
+                        if (batch == null) {
+                            _loadCommandBatchDialog.InitialDirectory = Settings.Default.CommandBatchDirectory;
+                            _loadCommandBatchDialog.FileName = string.Empty;
+                            _loadCommandBatchDialog.ShowDialog();
+                            string batchPath = _loadCommandBatchDialog.FileName;
+                            Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(batchPath);
+                            Settings.Default.Save();
+                            batch = BatchController.LoadOrCreateBatch(batchPath);
+                        }
+
+                        batch.AddCommand(new ExportCommand(_loadedDwgFilename, outputPath, exportSvgForm.ResolveDefs, false, exportSvgForm.SelectedDefsIds));
+
+                        _batchTabPage.Text = $"Batch: {batch.Name}";
+                        _scintillaBatchEditor.Text = batch.ToString();
+                    }
+
+                    if (exportSvgForm.OpenAfterExport) {
+                        LoadFile(outputPath);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                _statusLabel.Text = ex.Message;
+            }
+        }
+
 
         private void eventExecuteExportBatch_Click(object sender, EventArgs e) {
             try {

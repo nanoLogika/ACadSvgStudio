@@ -12,13 +12,11 @@ namespace ACadSvgStudio.Defs {
 	internal class DefsExporter {
 
 		private XDocument _doc;
-		private string[] _selectedDefsIds;
 		private bool _resolveDefs;
 
 
-		public DefsExporter(string doc, string[] selectedDefsIds, bool resolveDefs) {
+		public DefsExporter(string doc, bool resolveDefs) {
 			_doc = XDocument.Parse(doc);
-			_selectedDefsIds = selectedDefsIds;
 			_resolveDefs = resolveDefs;
 		}
 
@@ -32,7 +30,8 @@ namespace ACadSvgStudio.Defs {
 		}
 
 
-		public void Export(string path) {
+		public void Export(string path, string[] selectedDefsIds) {
+            
 			XDocument doc = new XDocument();
 
 			XElement root = createRootElement();
@@ -41,18 +40,15 @@ namespace ACadSvgStudio.Defs {
 			DefsUtils.CollectUseElements(_doc.Root!, useElements);
 
 			XElement defs = new XElement("defs");
-			foreach (string useElement in useElements) {
-				string id = useElement.Substring(1);
-				if (_selectedDefsIds.Contains(id)) {
-					XElement? def = DefsUtils.FindGroupById(id, _doc.Root!);
+			foreach (string id in selectedDefsIds) {
+				XElement? def = DefsUtils.FindGroupById(id, _doc.Root!);
+				if (def != null) {
+					defs.Add(def);
+				}
+				else {
+					def = DefsUtils.FindPatternById(id, _doc.Root!);
 					if (def != null) {
 						defs.Add(def);
-					}
-					else {
-						def = DefsUtils.FindPatternById(id, _doc.Root!);
-						if (def != null) {
-							defs.Add(def);
-						}
 					}
 				}
 			}
