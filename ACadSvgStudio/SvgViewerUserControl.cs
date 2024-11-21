@@ -6,6 +6,7 @@
 #endregion
 
 using Svg;
+using System.Drawing.Drawing2D;
 
 namespace ACadSvgStudio {
 
@@ -21,6 +22,8 @@ namespace ACadSvgStudio {
         private SizeF _dimensions;
         private bool _mouseDown = false;
         private Point _mousePos;
+        private Point _mouseZoomFactor = new Point(0, 0);
+        private PointF _mouseZoomFactorPercentage = new PointF(0, 0);
 
 
         public SvgViewerUserControl() {
@@ -156,9 +159,10 @@ namespace ACadSvgStudio {
 
             try {
                 g.TranslateTransform(_x, _y);
+
                 _svgDocument.Draw(g, boundingBox.Size);
 
-                _needsUpdate = false;
+				_needsUpdate = false;
             }
             catch (Exception ex) {
 
@@ -184,7 +188,12 @@ namespace ACadSvgStudio {
                 Rectangle boundingBox = getBoundingBox();
                 e.Graphics.DrawRectangle(new Pen(sizeColor), boundingBox);
 
-                List<string> lines = new List<string>();
+
+                e.Graphics.DrawLine(new Pen(new HatchBrush(HatchStyle.SmallCheckerBoard, Color.DeepSkyBlue), 1), Width / 2, 0, Width / 2, Height);
+				e.Graphics.DrawLine(new Pen(new HatchBrush(HatchStyle.SmallCheckerBoard, Color.DeepSkyBlue), 1), 0, Height / 2, Width, Height / 2);
+
+
+				List<string> lines = new List<string>();
                 lines.Add($"X: {_x}");
                 lines.Add($"Y: {_y}");
                 lines.Add($"Zoom: {_zoom}");
@@ -193,6 +202,8 @@ namespace ACadSvgStudio {
                 lines.Add($"Size Height: {size.Height}");
                 lines.Add($"User Control Width: {Width}");
                 lines.Add($"User Control Height: {Height}");
+                lines.Add($"Mouse Zoom Factor: {_mouseZoomFactor}");
+                lines.Add($"Mouse Zoom Factor (Percentage): {_mouseZoomFactorPercentage}");
 
                 for (int y = 0; y < lines.Count; y++) {
                     string line = lines[y];
@@ -263,12 +274,34 @@ namespace ACadSvgStudio {
 
 
         private void SvgViewerUserControl_MouseMove(object sender, MouseEventArgs e) {
+            bool invalidate = _mouseDown || DebugEnabled;
+
             if (_mouseDown) {
                 X = (_mousePos.X - (e.Location.X)) * -1;
                 Y = (_mousePos.Y - (e.Location.Y)) * -1;
-
-                Invalidate();
             }
+
+            if (DebugEnabled) {
+                if (e.X >= Width / 2) {
+					_mouseZoomFactor.X = (int)Math.Abs((Width - (Width / 2) - e.X));
+				}
+                else {
+                    _mouseZoomFactor.X = -((Width / 2) - e.X);
+				}
+				_mouseZoomFactorPercentage.X = ((float)_mouseZoomFactor.X / (float)(Width / 2));
+
+				if (e.Y >= Height / 2) {
+					_mouseZoomFactor.Y = (int)Math.Abs((Height - (Height / 2) - e.Y));
+				}
+				else {
+					_mouseZoomFactor.Y = -((Height / 2) - e.Y);
+				}
+				_mouseZoomFactorPercentage.Y = ((float)_mouseZoomFactor.Y / (float)(Height / 2));
+			}
+
+            if (invalidate) {
+				Invalidate();
+			}
         }
 
 
@@ -289,6 +322,7 @@ namespace ACadSvgStudio {
                 return;
             }
 
+
             Rectangle prevRect = getBoundingBox();
 
             float factor = 1.2f;
@@ -301,24 +335,24 @@ namespace ACadSvgStudio {
                     Zoom /= factor;
                 }
             }
-
+            
             Rectangle newRect = getBoundingBox();
 
             if (prevRect.Width != 0 && prevRect.Height != 0) {
-                if (e.Delta > 0) {
-                    SizeF deltaSize = newRect.Size - prevRect.Size;
 
-                    X = _x - (int)(deltaSize.Width / 2) - (int)((e.X - (Width / 2)) * _zoom);
-                    Y = _y - (int)(deltaSize.Height / 2) - (int)((e.Y - (Height / 2)) * _zoom);
-                }
+				int w2 = Width / 2;
+				int h2 = Height / 2;
+
+				if (e.Delta > 0) {
+					X -= _mouseZoomFactor.X;
+					Y -= _mouseZoomFactor.Y;
+				}
                 else {
-                    SizeF deltaSize = prevRect.Size - newRect.Size;
-
-                    X = _x + (int)(deltaSize.Width / 2) - (int)((e.X - (Width / 2)) * _zoom);
-                    Y = _y + (int)(deltaSize.Height / 2) - (int)((e.Y - (Height / 2)) * _zoom);
-                }
+					X += _mouseZoomFactor.X;
+					Y += _mouseZoomFactor.Y;
+				}
             }
-
+            
             Invalidate();
         }
     }
