@@ -40,6 +40,7 @@ namespace ACadSvgStudio {
         private Scintilla _scintillaScales;
         private Scintilla _scintillaBatchEditor;
         private TextBox _batchConsoleLog;
+        private Splitter _batchSplitter;
         private ChromiumWebBrowser _webBrowser;
         private DevToolsContext _devToolsContext;
         private IncrementalSearcher _incrementalSearcher;
@@ -650,15 +651,21 @@ namespace ACadSvgStudio {
 
 			_scintillaBatchEditor.SetKeywords(0, BatchKeywords);
 
-
+            // Splitter
+            _batchSplitter = new Splitter();
+            _batchSplitter.Dock = DockStyle.Bottom;
+            
             // Textbox for Console Log
             _batchConsoleLog = new TextBox();
             _batchConsoleLog.ReadOnly = true;
             _batchConsoleLog.Dock = DockStyle.Bottom;
             _batchConsoleLog.Multiline = true;
+            _batchConsoleLog.ScrollBars = ScrollBars.Vertical;
+            _batchConsoleLog.WordWrap = true;
             _batchConsoleLog.Height = 200;
+            _batchTabPage.Controls.Add(_batchSplitter);
             _batchTabPage.Controls.Add(_batchConsoleLog);
-		}
+        }
 
 
         private void initWebBrowser() {
@@ -1080,8 +1087,8 @@ namespace ACadSvgStudio {
                         }
                     }
 
-                    DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, exportSvgForm.SelectedDefsIds, exportSvgForm.ResolveDefs);
-                    exporter.Export(outputPath);
+                    DefsExporter exporter = new DefsExporter(_scintillaSvgGroupEditor.Text, exportSvgForm.ResolveDefs);
+                    exporter.Export(outputPath, exportSvgForm.SelectedDefsIds);
 
                     if (exportSvgForm.AddExportToCurrentBatch) {
                         Batch batch = BatchController.CurrentBatch;

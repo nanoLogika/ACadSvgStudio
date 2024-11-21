@@ -50,8 +50,8 @@ namespace ACadSvgStudio.BatchProcessing {
         public override void Execute(ConversionContext conversionContext, out string msg) {
             DocumentSvg docSvg = ACadLoader.LoadDwg(InputPath, conversionContext);
             string svgText = docSvg.ToSvg();
-            DefsExporter exporter = new DefsExporter(svgText, DefsGroupIds, ResolveDefs);
-            exporter.Export(OutputPath);
+            DefsExporter exporter = new DefsExporter(svgText, ResolveDefs);
+            exporter.Export(OutputPath, DefsGroupIds);
 
             msg = $"Exporting '{OutputPath}' finished.";
         }
