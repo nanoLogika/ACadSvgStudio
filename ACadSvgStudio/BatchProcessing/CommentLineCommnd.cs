@@ -6,18 +6,26 @@
 #endregion
 
 
+using ACadSvg;
+
 namespace ACadSvgStudio.BatchProcessing {
 
     internal class CommentLineCommand : CommandBase {
 
         public CommentLineCommand(string commandLine) {
-            _commandLine = string.Empty;
+            _commandLine = commandLine;
             _parseError = string.Empty;
         }
 
 
         public override string ToCommandLine() {
             return _commandLine;
+        }
+
+
+        public virtual void Execute(ConversionContext conversionContext, out string msg) {
+            msg = _commandLine;
+            return;
         }
     }
 }

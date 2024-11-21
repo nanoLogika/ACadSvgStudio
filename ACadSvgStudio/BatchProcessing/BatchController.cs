@@ -38,7 +38,7 @@ namespace ACadSvgStudio.BatchProcessing {
 
             Batch batch = new Batch(_currentBatch.Path);
             
-            string[] lines = batchScript.Replace("\r\n", "\n").Split('\n');
+            string[] lines = batchScript.Replace("\r\n", "\n").TrimEnd('\n').Split('\n');
             foreach (string line in lines) {
                 try {
 					batch.AddCommand(line);
