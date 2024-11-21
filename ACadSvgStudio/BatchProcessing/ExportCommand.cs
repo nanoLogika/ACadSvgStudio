@@ -33,12 +33,8 @@ namespace ACadSvgStudio.BatchProcessing {
             _inputPath = inputPath ?? throw new ArgumentNullException(nameof(inputPath));
             _outputPath = outputPath ?? throw new ArgumentNullException(nameof(outputPath));
 
-            if (!string.IsNullOrEmpty(Settings.Default.BatchACadLoadBaseDirectory) && Directory.Exists(Settings.Default.BatchACadLoadBaseDirectory)) {
-                _inputPath = _inputPath.Replace(Settings.Default.BatchACadLoadBaseDirectory, "");
-            }
-            if (!string.IsNullOrEmpty(Settings.Default.BatchSvgExportBaseDirectory) && Directory.Exists(Settings.Default.BatchSvgExportBaseDirectory)) {
-                _outputPath = _outputPath.Replace(Settings.Default.BatchSvgExportBaseDirectory, "");
-            }
+            _inputPath = getRelativePath(_inputPath, Settings.Default.BatchACadLoadBaseDirectory);
+            _outputPath = getRelativePath(_outputPath, Settings.Default.BatchSvgExportBaseDirectory);
 
             _resolveDefs = resolveDefs;
             _removeDevsGroupAttributes = removeDevsGroupAttributes;
@@ -47,9 +43,24 @@ namespace ACadSvgStudio.BatchProcessing {
         }
 
 
+        private string getRelativePath(string fullPath, string basePath) {
+            if (!string.IsNullOrEmpty(basePath) && Directory.Exists(basePath)) {
+                return fullPath.Replace(basePath, "").TrimStart('\\');
+            }
+            else {
+                return fullPath;
+            }
+        }
+
+
         public override void Execute(ConversionContext conversionContext, out string msg) {
             string inputPath = getFullPath(_inputPath, Settings.Default.BatchACadLoadBaseDirectory);
             string outputPath = getFullPath(_outputPath, Settings.Default.BatchSvgExportBaseDirectory);
+
+            string outputDir = Path.GetDirectoryName(outputPath);
+            if (!Directory.Exists(outputDir)) {
+                Directory.CreateDirectory(outputDir);
+            }
 
             DocumentSvg docSvg = ACadLoader.LoadDwg(inputPath, conversionContext);
             string svgText = docSvg.ToSvg();
