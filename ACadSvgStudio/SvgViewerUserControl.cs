@@ -172,8 +172,6 @@ namespace ACadSvgStudio {
             e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
             e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
 
-            e.Graphics.DrawRectangle(new Pen(Color.Red), 0, 0, Width - 1, Height - 1);
-
             if (hasErrors()) {
                 e.Graphics.FillRectangle(new SolidBrush(Color.IndianRed), 0, 0, Width, Height);
                 return;
