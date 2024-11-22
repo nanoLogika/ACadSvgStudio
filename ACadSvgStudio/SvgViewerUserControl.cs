@@ -337,20 +337,12 @@ namespace ACadSvgStudio {
             }
             
             Rectangle newRect = getBoundingBox();
-
+            
             if (prevRect.Width != 0 && prevRect.Height != 0) {
+                Size deltaSize = newRect.Size - prevRect.Size;
 
-				int w2 = Width / 2;
-				int h2 = Height / 2;
-
-				if (e.Delta > 0) {
-					X -= _mouseZoomFactor.X;
-					Y -= _mouseZoomFactor.Y;
-				}
-                else {
-					X += _mouseZoomFactor.X;
-					Y += _mouseZoomFactor.Y;
-				}
+                X -= (deltaSize.Width / 2);
+                Y -= (deltaSize.Height / 2);
             }
             
             Invalidate();
