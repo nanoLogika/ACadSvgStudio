@@ -54,6 +54,7 @@ namespace ACadSvgStudio {
 			addItem("ACadSharp", "C# library to read/write cad files like dxf/dwg.", "https://github.com/DomCR/ACadSharp", "MIT");
 			addItem("Scintilla.NET", "Source Editing Component based on Scintilla 5 series.", "https://github.com/VPKSoft/Scintilla.NET", "MIT");
 			addItem("ScintillaNET_FindReplaceDialog", "Find and replace dialog for the Scintilla.NET.", "https://github.com/VPKSoft/ScintillaNET-FindReplaceDialog", "MIT");
+			addItem("Svg", "SVG.NET is a C# library to read, write and render SVG 1.1 images in applications based on the .NET framework.", "https://github.com/svg-net/SVG", "MS-PL");
 
 			updateAboutItem();
 		}
