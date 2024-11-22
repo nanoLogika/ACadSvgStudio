@@ -56,14 +56,6 @@ namespace ACadSvgStudio {
 			addItem("ACadSharp", "1.5.1-alpha", "C# library to read/write cad files like dxf/dwg.", "https://github.com/DomCR/ACadSharp", "MIT");
 			addItem("Scintilla.NET", "5.3.2.9", "Source Editing Component based on Scintilla 5 series.", "https://github.com/VPKSoft/Scintilla.NET", "MIT");
 			addItem("ScintillaNET_FindReplaceDialog", "1.5.5", "Find and replace dialog for the Scintilla.NET.", "https://github.com/VPKSoft/ScintillaNET-FindReplaceDialog", "MIT");
-			addItem("CefSharp.WinForms.NETCore", "113.1.40", "The CefSharp Chromium-based browser component (WinForms control).", "https://github.com/cefsharp/cefsharp", "...");
-			addItem("CefSharp.Common.NETCore", "113.1.40", "The CefSharp Chromium-based browser component (WinForms control).", "https://github.com/cefsharp/cefsharp", "...");
-			addItem("CefSharp.Dom", "2.0.86", "CefSharp.Dom - A strongly typed DOM API for use with with CefSharp, based on PuppeteerSharp.", "https://github.com/cefsharp/CefSharp.Dom", "MIT");
-			addItem("chromiumembeddedframework.runtime.win-arm64", "113.1.4", "Chromium Embedded Framework (CEF) Release Distribution", "https://github.com/cefsharp/cef-binary", "...");
-			addItem("chromiumembeddedframework.runtime.win-x64", "113.1.4", "Chromium Embedded Framework (CEF) Release Distribution", "https://github.com/cefsharp/cef-binary", "...");
-			addItem("chromiumembeddedframework.runtime.win-x86", "113.1.4", "Chromium Embedded Framework (CEF) Release Distribution", "https://github.com/cefsharp/cef-binary", "...");
-			addItem("chromiumembeddedframework.runtime", "113.1.4", "Chromium Embedded Framework (CEF) Release Distribution", "https://github.com/cefsharp/cef-binary", "...");
-			addItem("svg-pan-zoom", "3.6.1", "JavaScript library that enables panning and zooming of an SVG in an HTML document, with mouse events or custom JavaScript hooks", "https://github.com/bumbu/svg-pan-zoom/tree/master", "MIT");
 
 			updateAboutItem();
 		}
