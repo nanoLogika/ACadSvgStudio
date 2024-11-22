@@ -32,7 +32,12 @@ namespace ACadSvgStudio {
 
 
 			public override string ToString() {
-				return $"{Name} ({Version})";
+				StringBuilder sb = new StringBuilder();
+				sb.Append(Name);
+				if (!string.IsNullOrEmpty(Version)) {
+					sb.Append($" ({Version})");
+				}
+				return sb.ToString();
 			}
 		}
 
