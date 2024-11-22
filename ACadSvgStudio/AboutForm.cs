@@ -31,15 +31,13 @@ namespace ACadSvgStudio {
 			public string URL { get; set; }
 
 
-			public override string ToString()
-			{
+			public override string ToString() {
 				return $"{Name} ({Version})";
 			}
 		}
 
 
-		public AboutForm()
-		{
+		public AboutForm() {
 			InitializeComponent();
 
 			Text = $"About {MainForm.AppName}";
@@ -61,8 +59,7 @@ namespace ACadSvgStudio {
 		}
 
 
-		private void addItem(string name, string description, string url, string license)
-		{
+		private void addItem(string name, string description, string url, string license) {
 			AboutItem aboutItem = new AboutItem();
 			aboutItem.Name = name;
 			aboutItem.Description = description;
@@ -70,13 +67,10 @@ namespace ACadSvgStudio {
 			aboutItem.License = license;
 
 			Assembly[] loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-			foreach (Assembly assembly in loadedAssemblies)
-			{
+			foreach (Assembly assembly in loadedAssemblies) {
 				AssemblyName assemblyName = assembly.GetName();
-				if (assemblyName.Name == name)
-				{
-					if (assemblyName.Version != null)
-					{
+				if (assemblyName.Name == name) {
+					if (assemblyName.Version != null) {
 						aboutItem.Version = assemblyName.Version.ToString();
 					}
 				}
@@ -85,46 +79,37 @@ namespace ACadSvgStudio {
 			listBox.Items.Add(aboutItem);
 		}
 
-		private void listBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
+		private void listBox_SelectedIndexChanged(object sender, EventArgs e) {
 			updateAboutItem();
 		}
 
-		private void companyLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
+		private void companyLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
 			openLink(companyLinkLabel.Text);
 		}
 
-		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
+		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
 			AboutItem aboutItem = (AboutItem)listBox.SelectedItem;
 			openLink(aboutItem.URL);
 		}
 
-		private void projectLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
+		private void projectLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
 			openLink("https://github.com/nanoLogika/ACadSvgStudio");
 		}
 
-		private void okButton_Click(object sender, EventArgs e)
-		{
+		private void okButton_Click(object sender, EventArgs e) {
 			Close();
 		}
 
 
-		private void openLink(string url)
-		{
-			Process.Start(new ProcessStartInfo(url)
-			{
+		private void openLink(string url) {
+			Process.Start(new ProcessStartInfo(url) {
 				UseShellExecute = true
 			});
 		}
 
 
-		private void updateAboutItem()
-		{
-			if (listBox.SelectedIndex == -1)
-			{
+		private void updateAboutItem() {
+			if (listBox.SelectedIndex == -1) {
 				linkLabel.Visible = false;
 				detailsLabel.Visible = false;
 				return;
