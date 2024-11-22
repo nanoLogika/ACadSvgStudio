@@ -170,7 +170,6 @@ namespace ACadSvgStudio {
 
         private void SvgViewerUserControl_Paint(object sender, PaintEventArgs e) {
             e.Graphics.Clear(BackColor);
-            e.Graphics.DrawString("SVG Viewer", this.Font, new SolidBrush(Color.Yellow), 0, 0);
             e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
             e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
 
@@ -192,7 +191,8 @@ namespace ACadSvgStudio {
 
 
 				List<string> lines = new List<string>();
-                lines.Add($"X: {_x}");
+				lines.Add("SVG Viewer");
+				lines.Add($"X: {_x}");
                 lines.Add($"Y: {_y}");
                 lines.Add($"Zoom: {_zoom}");
                 lines.Add($"ViewBox: Min X: {_svgDocument.ViewBox.MinX}, Min Y: {_svgDocument.ViewBox.MinY}, Width: {_svgDocument.ViewBox.Width}, Height: {_svgDocument.ViewBox.Height}");
@@ -212,7 +212,7 @@ namespace ACadSvgStudio {
                         brush = new SolidBrush(Color.Yellow);
                     }
 
-                    e.Graphics.DrawString(line, this.Font, brush, 0, (y + 1) * 20);
+                    e.Graphics.DrawString(line, this.Font, brush, 0, y * 20);
                 }
             }
 
