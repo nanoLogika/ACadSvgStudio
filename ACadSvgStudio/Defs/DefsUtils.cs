@@ -97,12 +97,32 @@ namespace ACadSvgStudio.Defs {
         }
 
 
-        internal static void FindAllDefsGroups(XElement xElement, DefsItem parentDefsItem, List<DefsItem> defsItems, int level = 1) {
-			string name = xElement.Name.ToString().ToLower();
+		private static bool isGroupWithId(XElement xElement, out string id) {
+			id = string.Empty;
 
-			if (name == "g" && xElement.Attribute("id") != null && (level > 1 || (level == 1 && xElement.Attribute("class") != null && xElement.Attribute("class")!.Value == "block-record"))) {
-				string id = xElement.Attribute("id")!.Value;
-				DefsItem defsItem = new DefsItem(id);
+			string name = xElement.Name.ToString().ToLower();
+			if (name == "g" && xElement.Attribute("id") != null) {
+				id = xElement.Attribute("id")!.Value;
+				return true;
+			}
+
+			return false;
+		}
+
+		private static bool isBlockRecord(XElement xElement, out string id) {
+			string name = xElement.Name.ToString().ToLower();
+			if (isGroupWithId(xElement, out id) && xElement.Attribute("class") != null && xElement.Attribute("class")!.Value == "block-record") {
+				id = xElement.Attribute("id")!.Value;
+				return true;
+			}
+
+			return false;
+		}
+
+
+        internal static void FindAllDefsGroups(XElement xElement, DefsItem parentDefsItem, List<DefsItem> defsItems, bool parentBlockRecord = false, int level = 1) {
+			if (isBlockRecord(xElement, out string blockRecordId)) {
+				DefsItem defsItem = new DefsItem(blockRecordId);
 
 				if (parentDefsItem == null) {
 					defsItems.Add(defsItem);
@@ -112,12 +132,26 @@ namespace ACadSvgStudio.Defs {
 				}
 
 				foreach (XElement child in xElement.Elements()) {
-					FindAllDefsGroups(child, defsItem, defsItems, level + 1);
+					FindAllDefsGroups(child, defsItem, defsItems, true, level + 1);
+				}
+			}
+			else if (level > 1 && parentBlockRecord && isGroupWithId(xElement, out string groupId) && xElement.Attribute("class") == null) {
+				DefsItem defsItem = new DefsItem(blockRecordId);
+
+				if (parentDefsItem == null) {
+					defsItems.Add(defsItem);
+				}
+				else {
+					parentDefsItem.Children.Add(defsItem);
+				}
+
+				foreach (XElement child in xElement.Elements()) {
+					FindAllDefsGroups(child, defsItem, defsItems, true, level + 1);
 				}
 			}
 			else {
 				foreach (XElement child in xElement.Elements()) {
-					FindAllDefsGroups(child, parentDefsItem, defsItems, 1);
+					FindAllDefsGroups(child, parentDefsItem, defsItems, false, 1);
 				}
 			}
         }
