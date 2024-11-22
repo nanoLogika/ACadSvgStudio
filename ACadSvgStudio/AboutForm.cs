@@ -8,7 +8,6 @@
 
 using System.Diagnostics;
 using System.Text;
-using static ACadSvgStudio.AboutForm;
 
 namespace ACadSvgStudio {
 
