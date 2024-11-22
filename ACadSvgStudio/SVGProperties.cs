@@ -47,10 +47,41 @@ namespace ACadSvgStudio {
 		public SvgProperties(MainForm mainForm) {
 			_mainForm = mainForm;
 		}
+		#region Svg Viewer
 
-        #region View
+		[Category("Svg Viewer")]
+		[DisplayName("Debug Enabled")]
+		[Description("Show Svg Viewer debug info.")]
+		public bool DebugEnabled
+		{
+			get
+			{
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
+				{
+					return Settings.Default.SvgViewerDebugEnabled;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			set
+			{
+				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
+				{
+					Settings.Default.SvgViewerDebugEnabled = value;
+					Settings.Default.Save();
 
-        [Category("View")]
+					_mainForm.ProposeUpdateHTML();
+					_mainForm.UpdateSvgViewer();
+				}
+			}
+		}
+
+		#endregion
+		#region View
+
+		[Category("View")]
         [DisplayName("Background Color")]
 		[Description("Background color.")]
 		public Color BackgroundColor {
@@ -126,20 +157,10 @@ namespace ACadSvgStudio {
 		[Description("ViewBox minimum x parameter.")]
 		public double ViewBoxMinX {
 			get {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					return Settings.Default.ViewBoxMinX;
-				}
-				else {
-					return 0;
-				}
+				return 0;
 			}
 			set {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					Settings.Default.ViewBoxMinX = value;
-					Settings.Default.Save();
 
-					_mainForm.ProposeUpdateHTML();
-				}
 			}
 		}
 
@@ -149,20 +170,10 @@ namespace ACadSvgStudio {
 		[Description("ViewBox minimum y parameter.\r\nNote: Viewbox MinY and SizeY will be transformed accordingly when'Reverse Y-Direction' is set.")]
 		public double ViewBoxMinY {
 			get {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					return Settings.Default.ViewBoxMinY;
-				}
-				else {
-					return 0;
-				}
+				return 0;
 			}
 			set {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					Settings.Default.ViewBoxMinY = value;
-					Settings.Default.Save();
 
-					_mainForm.ProposeUpdateHTML();
-				}
 			}
 		}
 
@@ -171,20 +182,10 @@ namespace ACadSvgStudio {
 		[Description("ViewBox width parameter.")]
 		public double ViewBoxWidth {
 			get {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					return Settings.Default.ViewBoxWidth;
-				}
-				else {
-					return 512;
-				}
+				return 512;
 			}
 			set {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					Settings.Default.ViewBoxWidth = value;
-					Settings.Default.Save();
-
-					_mainForm.ProposeUpdateHTML();
-				}
+				
 			}
 		}
 
@@ -193,20 +194,10 @@ namespace ACadSvgStudio {
 		[Description("ViewBox height parameter.\r\nNote: Viewbox MinY and SizeY will be transformed accordingly when'Reverse Y-Direction' is set.")]
 		public double ViewBoxHeight {
 			get {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					return Settings.Default.ViewBoxHeight;
-				}
-				else {
-					return 512;
-				}
+				return 512;
 			}
 			set {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					Settings.Default.ViewBoxHeight = value;
-					Settings.Default.Save();
-
-					_mainForm.ProposeUpdateHTML();
-				}
+				
 			}
 		}
 
@@ -215,20 +206,10 @@ namespace ACadSvgStudio {
 		[Description("ViewBox attributes will not be added to the SVG tag when disabled.")]
 		public bool ViewBoxEnabled {
 			get {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					return Settings.Default.ViewBoxEnabled;
-				}
-				else {
-					return true;
-				}
+				return true;
 			}
 			set {
-				if (LicenseManager.UsageMode == LicenseUsageMode.Runtime) {
-					Settings.Default.ViewBoxEnabled = value;
-					Settings.Default.Save();
-
-					_mainForm.ProposeUpdateHTML();
-				}
+				
 			}
 		}
 
@@ -241,16 +222,6 @@ namespace ACadSvgStudio {
 				Width = ViewBoxWidth,
 				Height = ViewBoxHeight
 			};
-        }
-
-
-		public void SetViewbox(ViewboxData data) {
-            Settings.Default.ViewBoxEnabled = data.Enabled;
-            Settings.Default.ViewBoxMinX = data.MinX;
-            Settings.Default.ViewBoxMinY = data.MinY;
-            Settings.Default.ViewBoxWidth = data.Width;
-			Settings.Default.ViewBoxHeight = data.Height;
-            Settings.Default.Save();
         }
 
         #endregion

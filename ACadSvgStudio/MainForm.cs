@@ -11,9 +11,6 @@ using File = System.IO.File;
 
 using ACadSvg;
 
-using CefSharp;
-using CefSharp.WinForms;
-using CefSharp.Dom;
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
 using SvgElements;
@@ -41,14 +38,11 @@ namespace ACadSvgStudio {
         private Scintilla _scintillaBatchEditor;
         private TextBox _batchConsoleLog;
         private Splitter _batchSplitter;
-        private ChromiumWebBrowser _webBrowser;
-        private DevToolsContext _devToolsContext;
         private IncrementalSearcher _incrementalSearcher;
         private FindReplace _findReplace;
         private int _maxLineNumberCharLength;
 
         private bool _centerToFitOnLoad = true;
-        private bool _executingPanScriptFailed;
         private bool _updatingHTMLEnabled = false;
 
         private string? _loadedFilename;
@@ -78,9 +72,9 @@ namespace ACadSvgStudio {
             initScintillaScales();
             initScintillaCss();
             initBatchEditor();
-            initWebBrowser();
+			UpdateSvgViewer();
 
-            initPropertyGrid();
+			initPropertyGrid();
             initFindReplace();
 
             setEditorFont(Settings.Default.EditorFont);
@@ -668,23 +662,6 @@ namespace ACadSvgStudio {
         }
 
 
-        private void initWebBrowser() {
-            _webBrowser = new ChromiumWebBrowser();
-            _webBrowser.Dock = DockStyle.Fill;
-            _splitContainer2.Panel1.Controls.Add(_webBrowser);
-
-            _webBrowser.MenuHandler = new MyContextMenuHandler(this);
-
-
-            _webBrowser.LoadingStateChanged += (s, e) => {
-                if (!e.IsLoading && _centerToFitOnLoad) {
-                    centerToFit();
-                    //_centerToFitOnLoad = false;
-                }
-            };
-        }
-
-
         private void updateLineMargin(object? sender) {
             if (sender == null) {
                 return;
@@ -752,7 +729,7 @@ namespace ACadSvgStudio {
                 _scintillaCss.Text = Settings.Default.CSSPreview;
                 _updatingHTMLEnabled = true;
 
-                CreateHTML();
+                UpdateHTML();
             }
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
@@ -1312,13 +1289,8 @@ namespace ACadSvgStudio {
 
 
         private void eventCenterToFitMenuItem_Click(object sender, EventArgs e) {
-            try {
-                centerToFit();
-            }
-            catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
-        }
+			svgViewerUserControl.CenterToFit();
+		}
 
 
         private void eventCollapseAllMenuItem_Click(object sender, EventArgs e) {
@@ -1408,11 +1380,6 @@ namespace ACadSvgStudio {
             catch (Exception ex) {
                 _statusLabel.Text = ex.Message;
             }
-        }
-
-
-        private void eventShowDeveloperToolsMenuItem_Click(object sender, EventArgs e) {
-            _webBrowser.ShowDevTools();
         }
 
 
@@ -1718,96 +1685,20 @@ namespace ACadSvgStudio {
         }
 
 
-        public void CreateHTML() {
-            string backgroundColor = ColorTranslator.ToHtml(Settings.Default.BackgroundColor);
-            var svg = buildSVG(Settings.Default.ScalesEnabled, Settings.Default.CSSPreviewEnabled, out bool isSvgEmpty, false);
-            string html = HTMLBuilder.Build(svg, backgroundColor);
-            CefSharp.WebBrowserExtensions.LoadHtml(_webBrowser, html);
-            updateBrowserContent(svg, isSvgEmpty, backgroundColor);
-            centerToFit();
-
-            svgViewerUserControl.BackColor = Settings.Default.BackgroundColor;
-            svgViewerUserControl.LoadSvgContent(svg);
-        }
-
-
         public void UpdateHTML() {
-            if (_centerToFitOnLoad || _executingPanScriptFailed) {
-                CreateHTML();
-                _executingPanScriptFailed = false;
-                _centerToFitOnLoad = false;
-                return;
-            }
-
-            string backgroundColor = ColorTranslator.ToHtml(Settings.Default.BackgroundColor);
             var svg = buildSVG(Settings.Default.ScalesEnabled, Settings.Default.CSSPreviewEnabled, out bool isSvgEmpty, false);
 
-            updateBrowserContent(svg, isSvgEmpty, backgroundColor);
-
             svgViewerUserControl.BackColor = Settings.Default.BackgroundColor;
-            svgViewerUserControl.LoadSvgContent(svg);
-        }
+            svgViewerUserControl.LoadSvgContent(svg, _centerToFitOnLoad);
+            _centerToFitOnLoad = false;
 
+		}
 
-        private void updateBrowserContent(string svg, bool isSvgEmpty, string backgroundColor) {
-            _webBrowser.WaitForInitialLoadAsync().Wait();
+		internal void UpdateSvgViewer() {
+			svgViewerUserControl.DebugEnabled = Settings.Default.SvgViewerDebugEnabled;
+		}
 
-            if (_devToolsContext == null) {
-                Task<DevToolsContext> t = _webBrowser.CreateDevToolsContextAsync();
-                t.Wait();
+		#endregion
 
-                _devToolsContext = t.Result;
-            }
-
-            _devToolsContext.QuerySelectorAsync<HtmlBodyElement>("body")
-                .Result.SetAttributeAsync("style", $"background-color:{backgroundColor};")
-                .ContinueWith(t => {
-                    _devToolsContext.QuerySelectorAsync<HtmlDivElement>("#svg-viewer")
-                        .Result.SetInnerHtmlAsync(svg)
-                        .ContinueWith(t => {
-                            runPanZoomScript(isSvgEmpty);
-                        });
-                });
-
-            _executingPanScriptFailed = false;
-        }
-
-
-        private void runPanZoomScript(bool isSvgEmpty) {
-            if (!_webBrowser.CanExecuteJavascriptInMainFrame || isSvgEmpty) {
-                return;
-            }
-
-            _webBrowser.ExecuteScriptAsyncWhenPageLoaded("resetZoomAndPan();");
-        }
-
-        #endregion
-        #region -  WebBrowser functions
-
-        public void centerToFit() {
-            if (!_webBrowser.CanExecuteJavascriptInMainFrame) {
-                return;
-            }
-
-            _webBrowser.ExecuteScriptAsyncWhenPageLoaded("centerToFit();");
-            //  System.Diagnostics.Debug.WriteLine($"Centered to Fit");
-        }
-
-        #endregion
-
-        private void sVGViewerUserControlExperimentalToolStripMenuItem_Click(object sender, EventArgs e) {
-            svgViewerUserControl.Show();
-            _webBrowser.Hide();
-        }
-
-        private void webBrowserToolStripMenuItem_Click(object sender, EventArgs e) {
-            svgViewerUserControl.Hide();
-            _webBrowser.Show();
-        }
-
-        private void MainForm_Load(object sender, EventArgs e) {
-            svgViewerUserControl.Show();
-            _webBrowser.Hide();
-        }
-    }
+	}
 }

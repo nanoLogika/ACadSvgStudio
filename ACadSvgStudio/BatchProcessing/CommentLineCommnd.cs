@@ -23,7 +23,7 @@ namespace ACadSvgStudio.BatchProcessing {
         }
 
 
-        public virtual void Execute(ConversionContext conversionContext, out string msg) {
+        public override void Execute(ConversionContext conversionContext, out string msg) {
             msg = _commandLine;
             return;
         }

@@ -91,10 +91,10 @@
 			// 
 			// detailsLabel
 			// 
-			detailsLabel.AutoSize = true;
+			detailsLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			detailsLabel.Location = new Point(12, 260);
 			detailsLabel.Name = "detailsLabel";
-			detailsLabel.Size = new Size(87, 15);
+			detailsLabel.Size = new Size(560, 63);
 			detailsLabel.TabIndex = 5;
 			detailsLabel.Text = "Product Details";
 			// 
@@ -122,12 +122,11 @@
 			// 
 			// versionLabel
 			// 
-			versionLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			versionLabel.AutoSize = true;
+			versionLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			versionLabel.Location = new Point(426, 9);
 			versionLabel.Name = "versionLabel";
 			versionLabel.RightToLeft = RightToLeft.No;
-			versionLabel.Size = new Size(45, 15);
+			versionLabel.Size = new Size(146, 37);
 			versionLabel.TabIndex = 1;
 			versionLabel.Text = "Version";
 			// 
@@ -135,7 +134,7 @@
 			// 
 			licenseLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			licenseLabel.AutoSize = true;
-			licenseLabel.Location = new Point(426, 31);
+			licenseLabel.Location = new Point(425, 60);
 			licenseLabel.Name = "licenseLabel";
 			licenseLabel.Size = new Size(46, 15);
 			licenseLabel.TabIndex = 1;
@@ -144,7 +143,7 @@
 			// projectLinkLabel
 			// 
 			projectLinkLabel.AutoSize = true;
-			projectLinkLabel.Location = new Point(426, 60);
+			projectLinkLabel.Location = new Point(426, 104);
 			projectLinkLabel.Name = "projectLinkLabel";
 			projectLinkLabel.Size = new Size(102, 15);
 			projectLinkLabel.TabIndex = 6;

@@ -3,19 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="BackgroundColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">White</Value>
-    </Setting>
-    <Setting Name="ViewBoxMinX" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="ViewBoxMinY" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="ViewBoxWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">8000</Value>
-    </Setting>
-    <Setting Name="ViewBoxHeight" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">8000</Value>
+      <Value Profile="(Default)">33, 40, 48</Value>
     </Setting>
     <Setting Name="ScalesSvg" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -27,9 +15,6 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="CSSPreviewEnabled" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="ViewBoxEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="StrokeColor" Type="System.Drawing.Color" Scope="User">
@@ -145,6 +130,9 @@
     </Setting>
     <Setting Name="BatchSvgExportBaseDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SvgViewerDebugEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

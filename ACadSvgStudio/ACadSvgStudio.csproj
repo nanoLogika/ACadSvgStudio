@@ -7,13 +7,11 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
   </PropertyGroup>
 
 
   <ItemGroup>
-    <PackageReference Include="CefSharp.Dom" Version="2.0.86" />
-    <PackageReference Include="CefSharp.WinForms.NETCore" Version="113.1.40" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="Scintilla.NET" Version="5.3.2.9" />
     <PackageReference Include="ScintillaNET_FindReplaceDialog" Version="1.5.5" />
@@ -58,7 +56,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CommandLine\" />
     <Folder Include="Imports\" />
     <Folder Include="Resources\" />
   </ItemGroup>
