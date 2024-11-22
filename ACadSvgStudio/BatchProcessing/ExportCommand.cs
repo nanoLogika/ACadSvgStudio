@@ -16,6 +16,13 @@ namespace ACadSvgStudio.BatchProcessing {
 
     internal class ExportCommand : CommandBase {
 
+        private string _inputPath;
+        private string _outputPath;
+        private string[] _defsGroupIds;
+        private bool _resolveDefs;
+        private bool _removeDevsGroupAttributes;
+
+
         public ExportCommand(string commandLine, string message) {
             _commandLine = commandLine;
             _parseError = message;
@@ -23,37 +30,56 @@ namespace ACadSvgStudio.BatchProcessing {
 
 
         public ExportCommand(string inputPath, string outputPath, bool resolveDefs, bool removeDevsGroupAttributes, string[] defsGroupIds) {
-            InputPath = inputPath ?? throw new ArgumentNullException(nameof(inputPath));
-            OutputPath = outputPath ?? throw new ArgumentNullException(nameof(outputPath));
-            ResolveDefs = resolveDefs;
-            RemoveDevsGroupAttributes = removeDevsGroupAttributes;
-            DefsGroupIds = defsGroupIds ?? throw new ArgumentNullException(nameof(defsGroupIds));
+            _inputPath = inputPath ?? throw new ArgumentNullException(nameof(inputPath));
+            _outputPath = outputPath ?? throw new ArgumentNullException(nameof(outputPath));
+
+            _inputPath = getRelativePath(_inputPath, Settings.Default.BatchACadLoadBaseDirectory);
+            _outputPath = getRelativePath(_outputPath, Settings.Default.BatchSvgExportBaseDirectory);
+
+            _resolveDefs = resolveDefs;
+            _removeDevsGroupAttributes = removeDevsGroupAttributes;
+            _defsGroupIds = defsGroupIds ?? throw new ArgumentNullException(nameof(defsGroupIds));
             _parseError = string.Empty;
         }
 
 
-        public string InputPath { get; set; } = string.Empty;
-
-
-        public string OutputPath { get; set; } = string.Empty;
-
-
-        public string[] DefsGroupIds { get; set; }
-
-
-        public bool ResolveDefs { get; set; }
-
-
-        public bool RemoveDevsGroupAttributes { get; set; }
+        private string getRelativePath(string fullPath, string basePath) {
+            if (!string.IsNullOrEmpty(basePath) && Directory.Exists(basePath)) {
+                return fullPath.Replace(basePath, "").TrimStart('\\');
+            }
+            else {
+                return fullPath;
+            }
+        }
 
 
         public override void Execute(ConversionContext conversionContext, out string msg) {
-            DocumentSvg docSvg = ACadLoader.LoadDwg(InputPath, conversionContext);
-            string svgText = docSvg.ToSvg();
-            DefsExporter exporter = new DefsExporter(svgText, DefsGroupIds, ResolveDefs);
-            exporter.Export(OutputPath);
+            string inputPath = getFullPath(_inputPath, Settings.Default.BatchACadLoadBaseDirectory);
+            string outputPath = getFullPath(_outputPath, Settings.Default.BatchSvgExportBaseDirectory);
 
-            msg = $"Exporting '{OutputPath}' finished.";
+            string outputDir = Path.GetDirectoryName(outputPath);
+            if (!Directory.Exists(outputDir)) {
+                Directory.CreateDirectory(outputDir);
+            }
+
+            DocumentSvg docSvg = ACadLoader.LoadDwg(inputPath, conversionContext);
+            string svgText = docSvg.ToSvg();
+            DefsExporter exporter = new DefsExporter(svgText, _resolveDefs);
+            exporter.Export(outputPath, _defsGroupIds);
+
+            msg = $"Exporting '{_outputPath}' finished.";
+        }
+
+
+        private string getFullPath(string path, string baseDirectory) {
+            string fullPath = path;
+            if (!Path.IsPathFullyQualified(path)) {
+                if (string.IsNullOrEmpty(baseDirectory)) {
+                    throw new InvalidOperationException($"{path} is a ralative path, plrase specify a base path in the batch-processing settings.");
+                }
+                fullPath = Path.Combine(baseDirectory, path);
+            }
+            return fullPath;
         }
 
 
@@ -79,17 +105,17 @@ namespace ACadSvgStudio.BatchProcessing {
         public override string ToCommandLine() {
             if (string.IsNullOrEmpty(_parseError)) {
 
-                string rd = ResolveDefs ? " -r+" : string.Empty;
-                string rga = RemoveDevsGroupAttributes ? " -a+" : string.Empty;
+                string rd = _resolveDefs ? " -r+" : string.Empty;
+                string rga = _removeDevsGroupAttributes ? " -a+" : string.Empty;
 
                 StringBuilder commandLineSb = new StringBuilder("EXPORT");
-                commandLineSb.Append(" -o \"").Append(OutputPath).Append('"');
-                commandLineSb.Append(" -i \"").Append(InputPath).Append('"');
+                commandLineSb.Append(" -o \"").Append(_outputPath).Append('"');
+                commandLineSb.Append(" -i \"").Append(_inputPath).Append('"');
 
                 commandLineSb.Append(rd);
                 commandLineSb.Append(rga);
                 commandLineSb.Append(" -d");
-                foreach (string gId in DefsGroupIds) {
+                foreach (string gId in _defsGroupIds) {
                     commandLineSb.Append(' ').Append(gId);
                 }
 
@@ -102,16 +128,16 @@ namespace ACadSvgStudio.BatchProcessing {
 
 
         public override string ToString() {
-            string rd = ResolveDefs ? " -r+" : string.Empty;
-            string rga = RemoveDevsGroupAttributes ? " -a+" : string.Empty;
+            string rd = _resolveDefs ? " -r+" : string.Empty;
+            string rga = _removeDevsGroupAttributes ? " -a+" : string.Empty;
 
             StringBuilder commandLineSb = new StringBuilder("EXPORT");
-            commandLineSb.Append(" -o ").Append(Path.GetFileNameWithoutExtension(OutputPath));
-            commandLineSb.Append(" -i ").Append(Path.GetFileNameWithoutExtension(InputPath));
+            commandLineSb.Append(" -o ").Append(Path.GetFileNameWithoutExtension(_outputPath));
+            commandLineSb.Append(" -i ").Append(Path.GetFileNameWithoutExtension(_inputPath));
             commandLineSb.Append(rd);
             commandLineSb.Append(rga);
             commandLineSb.Append(" -d");
-            foreach (string gId in DefsGroupIds) {
+            foreach (string gId in _defsGroupIds) {
                 commandLineSb.Append(' ').Append(gId);
             }
 
@@ -127,8 +153,8 @@ namespace ACadSvgStudio.BatchProcessing {
                 return false;
             }
 
-            return otherExportCommand.InputPath == this.InputPath &&
-                otherExportCommand.OutputPath == this.OutputPath;
+            return otherExportCommand._inputPath == _inputPath &&
+                otherExportCommand._outputPath == _outputPath;
         }
     }
 }
