@@ -52,7 +52,7 @@ namespace ACadSvgStudio {
 			addItem("ACadSvg", "C# library to convert AutoCAD drawings from DWG to SVG. AutoCAD files are read using ACadSharp.", "https://github.com/nanoLogika/ACadSvg", "LGPL-3.0");
 			addItem("SvgElements", "C# library providing an object model to create SVG/XML elements and attributes.", "https://github.com/nanoLogika/SvgElements", "LGPL-3.0");
 			addItem("ACadSharp", "C# library to read/write cad files like dxf/dwg.", "https://github.com/DomCR/ACadSharp", "MIT");
-			addItem("CommandLineParser", "The best C# command line parser that brings standardized *nix getopt style, for .NET. Includes F# support", "https://github.com/commandlineparser/commandline", "MIT");
+			addItem("CommandLine", "The best C# command line parser that brings standardized *nix getopt style, for .NET. Includes F# support", "https://github.com/commandlineparser/commandline", "MIT");
 			addItem("Scintilla.NET", "Source Editing Component based on Scintilla 5 series.", "https://github.com/VPKSoft/Scintilla.NET", "MIT");
 			addItem("ScintillaNET_FindReplaceDialog", "Find and replace dialog for the Scintilla.NET.", "https://github.com/VPKSoft/ScintillaNET-FindReplaceDialog", "MIT");
 			addItem("Svg", "SVG.NET is a C# library to read, write and render SVG 1.1 images in applications based on the .NET framework.", "https://github.com/svg-net/SVG", "MS-PL");
