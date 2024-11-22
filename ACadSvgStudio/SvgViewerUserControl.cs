@@ -22,8 +22,6 @@ namespace ACadSvgStudio {
         private SizeF _dimensions;
         private bool _mouseDown = false;
         private Point _mousePos;
-        private Point _mouseZoomFactor = new Point(0, 0);
-        private PointF _mouseZoomFactorPercentage = new PointF(0, 0);
 
 
         public SvgViewerUserControl() {
@@ -202,8 +200,6 @@ namespace ACadSvgStudio {
                 lines.Add($"Size Height: {size.Height}");
                 lines.Add($"User Control Width: {Width}");
                 lines.Add($"User Control Height: {Height}");
-                lines.Add($"Mouse Zoom Factor: {_mouseZoomFactor}");
-                lines.Add($"Mouse Zoom Factor (Percentage): {_mouseZoomFactorPercentage}");
 
                 for (int y = 0; y < lines.Count; y++) {
                     string line = lines[y];
@@ -280,24 +276,6 @@ namespace ACadSvgStudio {
                 X = (_mousePos.X - (e.Location.X)) * -1;
                 Y = (_mousePos.Y - (e.Location.Y)) * -1;
             }
-
-            if (DebugEnabled) {
-                if (e.X >= Width / 2) {
-					_mouseZoomFactor.X = (int)Math.Abs((Width - (Width / 2) - e.X));
-				}
-                else {
-                    _mouseZoomFactor.X = -((Width / 2) - e.X);
-				}
-				_mouseZoomFactorPercentage.X = ((float)_mouseZoomFactor.X / (float)(Width / 2));
-
-				if (e.Y >= Height / 2) {
-					_mouseZoomFactor.Y = (int)Math.Abs((Height - (Height / 2) - e.Y));
-				}
-				else {
-					_mouseZoomFactor.Y = -((Height / 2) - e.Y);
-				}
-				_mouseZoomFactorPercentage.Y = ((float)_mouseZoomFactor.Y / (float)(Height / 2));
-			}
 
             if (invalidate) {
 				Invalidate();
