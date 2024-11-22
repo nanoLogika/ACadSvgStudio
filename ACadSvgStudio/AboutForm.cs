@@ -42,6 +42,9 @@ namespace ACadSvgStudio {
 		}
 
 
+		private Assembly[] _loadedAssemblies;
+
+
 		public AboutForm() {
 			InitializeComponent();
 
@@ -52,6 +55,9 @@ namespace ACadSvgStudio {
 			licenseLabel.Text = "License: LGPL-3.0";
 
 			companyLinkLabel.Text = "https://www.nanologika.de/";
+
+
+			_loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 
 
 			addItem("ACadSvg", "C# library to convert AutoCAD drawings from DWG to SVG. AutoCAD files are read using ACadSharp.", "https://github.com/nanoLogika/ACadSvg", "LGPL-3.0");
@@ -73,8 +79,7 @@ namespace ACadSvgStudio {
 			aboutItem.URL = url;
 			aboutItem.License = license;
 
-			Assembly[] loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-			foreach (Assembly assembly in loadedAssemblies) {
+			foreach (Assembly assembly in _loadedAssemblies) {
 				AssemblyName assemblyName = assembly.GetName();
 				if (assemblyName.Name == name) {
 					if (assemblyName.Version != null) {
