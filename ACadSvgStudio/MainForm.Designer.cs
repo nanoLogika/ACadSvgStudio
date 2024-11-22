@@ -88,10 +88,6 @@
 			_aboutACadSVGStudioMenuItem = new ToolStripMenuItem();
 			_openFileDialog = new OpenFileDialog();
 			_saveFileDialog = new SaveFileDialog();
-			_webBrowserContextMenuStrip = new ContextMenuStrip(components);
-			_centerToFitContextMenuItem = new ToolStripMenuItem();
-			_toolStripSeparator4 = new ToolStripSeparator();
-			_showDeveloperToolsContextMenuItem = new ToolStripMenuItem();
 			_statusStrip = new StatusStrip();
 			_statusLabel = new ToolStripStatusLabel();
 			_textChangedTimer = new System.Windows.Forms.Timer(components);
@@ -117,7 +113,6 @@
 			_propertiesTabPage.SuspendLayout();
 			_defsTabPage.SuspendLayout();
 			_menuStrip.SuspendLayout();
-			_webBrowserContextMenuStrip.SuspendLayout();
 			_statusStrip.SuspendLayout();
 			SuspendLayout();
 			// 
@@ -129,12 +124,12 @@
 			// _editMenuSeparator1
 			// 
 			_editMenuSeparator1.Name = "_editMenuSeparator1";
-			_editMenuSeparator1.Size = new Size(177, 6);
+			_editMenuSeparator1.Size = new Size(119, 6);
 			// 
 			// _viewMenuSeparator1
 			// 
 			_viewMenuSeparator1.Name = "_viewMenuSeparator1";
-			_viewMenuSeparator1.Size = new Size(177, 6);
+			_viewMenuSeparator1.Size = new Size(176, 6);
 			// 
 			// _exportMenuSeparator1
 			// 
@@ -370,54 +365,54 @@
 			// _undoMenuItem
 			// 
 			_undoMenuItem.Name = "_undoMenuItem";
-			_undoMenuItem.Size = new Size(180, 22);
+			_undoMenuItem.Size = new Size(122, 22);
 			_undoMenuItem.Text = "Undo";
 			_undoMenuItem.Click += eventUndo_Click;
 			// 
 			// _redoMenuItem
 			// 
 			_redoMenuItem.Name = "_redoMenuItem";
-			_redoMenuItem.Size = new Size(180, 22);
+			_redoMenuItem.Size = new Size(122, 22);
 			_redoMenuItem.Text = "Redo";
 			_redoMenuItem.Click += eventRedo_Click;
 			// 
 			// _cutMenuItem
 			// 
 			_cutMenuItem.Name = "_cutMenuItem";
-			_cutMenuItem.Size = new Size(180, 22);
+			_cutMenuItem.Size = new Size(122, 22);
 			_cutMenuItem.Text = "Cut";
 			_cutMenuItem.Click += eventCut_Click;
 			// 
 			// _copyMenuItem
 			// 
 			_copyMenuItem.Name = "_copyMenuItem";
-			_copyMenuItem.Size = new Size(180, 22);
+			_copyMenuItem.Size = new Size(122, 22);
 			_copyMenuItem.Text = "Copy";
 			_copyMenuItem.Click += eventCopy_Click;
 			// 
 			// _pasteMenuItem
 			// 
 			_pasteMenuItem.Name = "_pasteMenuItem";
-			_pasteMenuItem.Size = new Size(180, 22);
+			_pasteMenuItem.Size = new Size(122, 22);
 			_pasteMenuItem.Text = "Paste";
 			_pasteMenuItem.Click += eventPaste_Click;
 			// 
 			// _deleteMenuItem
 			// 
 			_deleteMenuItem.Name = "_deleteMenuItem";
-			_deleteMenuItem.Size = new Size(180, 22);
+			_deleteMenuItem.Size = new Size(122, 22);
 			_deleteMenuItem.Text = "Delete";
 			_deleteMenuItem.Click += eventDelete_Click;
 			// 
 			// _editMenuSeparator2
 			// 
 			_editMenuSeparator2.Name = "_editMenuSeparator2";
-			_editMenuSeparator2.Size = new Size(177, 6);
+			_editMenuSeparator2.Size = new Size(119, 6);
 			// 
 			// _selectAllMenuItem
 			// 
 			_selectAllMenuItem.Name = "_selectAllMenuItem";
-			_selectAllMenuItem.Size = new Size(180, 22);
+			_selectAllMenuItem.Size = new Size(122, 22);
 			_selectAllMenuItem.Text = "Select All";
 			_selectAllMenuItem.Click += eventSelectAll_Click;
 			// 
@@ -455,7 +450,7 @@
 			// 
 			_centerToFitMenuItem.Name = "_centerToFitMenuItem";
 			_centerToFitMenuItem.ShortcutKeys = Keys.Control | Keys.E;
-			_centerToFitMenuItem.Size = new Size(180, 22);
+			_centerToFitMenuItem.Size = new Size(179, 22);
 			_centerToFitMenuItem.Text = "Center to Fit";
 			_centerToFitMenuItem.Click += eventCenterToFitMenuItem_Click;
 			// 
@@ -465,26 +460,26 @@
 			_propertyGridToolStripMenuItem.CheckOnClick = true;
 			_propertyGridToolStripMenuItem.CheckState = CheckState.Checked;
 			_propertyGridToolStripMenuItem.Name = "_propertyGridToolStripMenuItem";
-			_propertyGridToolStripMenuItem.Size = new Size(180, 22);
+			_propertyGridToolStripMenuItem.Size = new Size(179, 22);
 			_propertyGridToolStripMenuItem.Text = "Property Grid";
 			_propertyGridToolStripMenuItem.CheckedChanged += eventPropertyGridMenuItem_CheckedChanged;
 			// 
 			// _viewMenuSeparator2
 			// 
 			_viewMenuSeparator2.Name = "_viewMenuSeparator2";
-			_viewMenuSeparator2.Size = new Size(177, 6);
+			_viewMenuSeparator2.Size = new Size(176, 6);
 			// 
 			// _collapseAllMenuItem
 			// 
 			_collapseAllMenuItem.Name = "_collapseAllMenuItem";
-			_collapseAllMenuItem.Size = new Size(180, 22);
+			_collapseAllMenuItem.Size = new Size(179, 22);
 			_collapseAllMenuItem.Text = "Collapse All";
 			_collapseAllMenuItem.Click += eventCollapseAllMenuItem_Click;
 			// 
 			// _expandAllToolStripMenuItem
 			// 
 			_expandAllToolStripMenuItem.Name = "_expandAllToolStripMenuItem";
-			_expandAllToolStripMenuItem.Size = new Size(180, 22);
+			_expandAllToolStripMenuItem.Size = new Size(179, 22);
 			_expandAllToolStripMenuItem.Text = "Expand All";
 			_expandAllToolStripMenuItem.Click += eventExpandAllMenuItem_Click;
 			// 
@@ -498,7 +493,7 @@
 			// _restorePreviousMenuItem
 			// 
 			_restorePreviousMenuItem.Name = "_restorePreviousMenuItem";
-			_restorePreviousMenuItem.Size = new Size(180, 22);
+			_restorePreviousMenuItem.Size = new Size(161, 22);
 			_restorePreviousMenuItem.Text = "Restore Previous";
 			_restorePreviousMenuItem.Click += eventFlipContent_Click;
 			// 
@@ -512,19 +507,19 @@
 			// _removeStylesMenuItem
 			// 
 			_removeStylesMenuItem.Name = "_removeStylesMenuItem";
-			_removeStylesMenuItem.Size = new Size(180, 22);
+			_removeStylesMenuItem.Size = new Size(150, 22);
 			_removeStylesMenuItem.Text = "Remove Styles";
 			_removeStylesMenuItem.Click += eventRemoveStyles_Click;
 			// 
 			// _extrasMenuSeparator1
 			// 
 			_extrasMenuSeparator1.Name = "_extrasMenuSeparator1";
-			_extrasMenuSeparator1.Size = new Size(177, 6);
+			_extrasMenuSeparator1.Size = new Size(147, 6);
 			// 
 			// editorFontToolStripMenuItem
 			// 
 			editorFontToolStripMenuItem.Name = "editorFontToolStripMenuItem";
-			editorFontToolStripMenuItem.Size = new Size(180, 22);
+			editorFontToolStripMenuItem.Size = new Size(150, 22);
 			editorFontToolStripMenuItem.Text = "Editor Font";
 			editorFontToolStripMenuItem.Click += eventEditorFontToolStripMenuItem_Click;
 			// 
@@ -595,31 +590,6 @@
 			_saveFileDialog.Filter = "SVG files|*.svg|SVG group files|*.g.svg";
 			_saveFileDialog.FileOk += eventSaveFileDialog_FileOk;
 			// 
-			// _webBrowserContextMenuStrip
-			// 
-			_webBrowserContextMenuStrip.Items.AddRange(new ToolStripItem[] { _centerToFitContextMenuItem, _toolStripSeparator4, _showDeveloperToolsContextMenuItem });
-			_webBrowserContextMenuStrip.Name = "_webBrowserContextMenuStrip";
-			_webBrowserContextMenuStrip.Size = new Size(190, 54);
-			// 
-			// _centerToFitContextMenuItem
-			// 
-			_centerToFitContextMenuItem.Name = "_centerToFitContextMenuItem";
-			_centerToFitContextMenuItem.ShortcutKeys = Keys.Control | Keys.E;
-			_centerToFitContextMenuItem.Size = new Size(189, 22);
-			_centerToFitContextMenuItem.Text = "Center to Fit";
-			_centerToFitContextMenuItem.Click += eventCenterToFitMenuItem_Click;
-			// 
-			// _toolStripSeparator4
-			// 
-			_toolStripSeparator4.Name = "_toolStripSeparator4";
-			_toolStripSeparator4.Size = new Size(186, 6);
-			// 
-			// _showDeveloperToolsContextMenuItem
-			// 
-			_showDeveloperToolsContextMenuItem.Name = "_showDeveloperToolsContextMenuItem";
-			_showDeveloperToolsContextMenuItem.Size = new Size(189, 22);
-			_showDeveloperToolsContextMenuItem.Text = "Show Developer Tools";
-			// 
 			// _statusStrip
 			// 
 			_statusStrip.Items.AddRange(new ToolStripItem[] { _statusLabel });
@@ -683,7 +653,6 @@
 			_defsTabPage.ResumeLayout(false);
 			_menuStrip.ResumeLayout(false);
 			_menuStrip.PerformLayout();
-			_webBrowserContextMenuStrip.ResumeLayout(false);
 			_statusStrip.ResumeLayout(false);
 			_statusStrip.PerformLayout();
 			ResumeLayout(false);
@@ -721,10 +690,6 @@
 		private SaveFileDialog _saveFileDialog;
 		private ToolStripMenuItem _propertyGridToolStripMenuItem;
 		private ToolStripSeparator _viewMenuSeparator1;
-		private ContextMenuStrip _webBrowserContextMenuStrip;
-		private ToolStripMenuItem _centerToFitContextMenuItem;
-		private ToolStripSeparator _toolStripSeparator4;
-		private ToolStripMenuItem _showDeveloperToolsContextMenuItem;
 		private ToolStripMenuItem _collapseAllMenuItem;
 		private ToolStripSeparator _viewMenuSeparator2;
 		private ToolStripMenuItem _expandAllToolStripMenuItem;
