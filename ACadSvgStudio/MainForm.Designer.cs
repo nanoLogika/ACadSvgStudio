@@ -95,6 +95,7 @@
 			_loadAutoCadFileDialog = new OpenFileDialog();
 			_loadCommandBatchDialog = new OpenFileDialog();
 			_saveCommandBatchAsDialog = new SaveFileDialog();
+			toolStripSeparator1 = new ToolStripSeparator();
 			_fileMenuSeparator2 = new ToolStripSeparator();
 			_editMenuSeparator1 = new ToolStripSeparator();
 			_viewMenuSeparator1 = new ToolStripSeparator();
@@ -303,7 +304,7 @@
 			// 
 			// _fileToolStripMenuItem
 			// 
-			_fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _loadDwgToolStripMenuItem, _openMenuItem, _saveMenuItem, _saveAsMenuItem, _fileMenuSeparator1, _recentlyOpenedFilesToolStripMenuItem, _fileMenuSeparator2, _exitMenuItem });
+			_fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _loadDwgToolStripMenuItem, toolStripSeparator1, _openMenuItem, _saveMenuItem, _saveAsMenuItem, _fileMenuSeparator1, _recentlyOpenedFilesToolStripMenuItem, _fileMenuSeparator2, _exitMenuItem });
 			_fileToolStripMenuItem.Name = "_fileToolStripMenuItem";
 			_fileToolStripMenuItem.Size = new Size(37, 20);
 			_fileToolStripMenuItem.Text = "File";
@@ -627,6 +628,11 @@
 			_saveCommandBatchAsDialog.Filter = "Commman Batch files|*.bax|All files|*.*";
 			_saveCommandBatchAsDialog.Title = "Save Command Batch As";
 			// 
+			// toolStripSeparator1
+			// 
+			toolStripSeparator1.Name = "toolStripSeparator1";
+			toolStripSeparator1.Size = new Size(213, 6);
+			// 
 			// MainForm
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -741,5 +747,6 @@
         private OpenFileDialog _loadCommandBatchDialog;
         private SaveFileDialog _saveCommandBatchAsDialog;
 		private TabPage _batchTabPage;
+		private ToolStripSeparator toolStripSeparator1;
 	}
 }
