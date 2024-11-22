@@ -7,6 +7,7 @@
 
 
 using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 
 namespace ACadSvgStudio {
@@ -50,24 +51,36 @@ namespace ACadSvgStudio {
 			companyLinkLabel.Text = "https://www.nanologika.de/";
 
 
-			addItem("ACadSvg", "0.4.0", "C# library to convert AutoCAD drawings from DWG to SVG. AutoCAD files are read using ACadSharp.", "https://github.com/nanoLogika/ACadSvg", "LGPL-3.0");
-			addItem("SvgElements", "0.3.0", "C# library providing an object model to create SVG/XML elements and attributes.", "https://github.com/nanoLogika/SvgElements", "LGPL-3.0");
-			addItem("ACadSharp", "1.5.1-alpha", "C# library to read/write cad files like dxf/dwg.", "https://github.com/DomCR/ACadSharp", "MIT");
-			addItem("Scintilla.NET", "5.3.2.9", "Source Editing Component based on Scintilla 5 series.", "https://github.com/VPKSoft/Scintilla.NET", "MIT");
-			addItem("ScintillaNET_FindReplaceDialog", "1.5.5", "Find and replace dialog for the Scintilla.NET.", "https://github.com/VPKSoft/ScintillaNET-FindReplaceDialog", "MIT");
+			addItem("ACadSvg", "C# library to convert AutoCAD drawings from DWG to SVG. AutoCAD files are read using ACadSharp.", "https://github.com/nanoLogika/ACadSvg", "LGPL-3.0");
+			addItem("SvgElements", "C# library providing an object model to create SVG/XML elements and attributes.", "https://github.com/nanoLogika/SvgElements", "LGPL-3.0");
+			addItem("ACadSharp", "C# library to read/write cad files like dxf/dwg.", "https://github.com/DomCR/ACadSharp", "MIT");
+			addItem("Scintilla.NET", "Source Editing Component based on Scintilla 5 series.", "https://github.com/VPKSoft/Scintilla.NET", "MIT");
+			addItem("ScintillaNET_FindReplaceDialog", "Find and replace dialog for the Scintilla.NET.", "https://github.com/VPKSoft/ScintillaNET-FindReplaceDialog", "MIT");
 
 			updateAboutItem();
 		}
 
 
-		private void addItem(string name, string version, string description, string url, string license)
+		private void addItem(string name, string description, string url, string license)
 		{
 			AboutItem aboutItem = new AboutItem();
 			aboutItem.Name = name;
-			aboutItem.Version = version;
 			aboutItem.Description = description;
 			aboutItem.URL = url;
 			aboutItem.License = license;
+
+			Assembly[] loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+			foreach (Assembly assembly in loadedAssemblies)
+			{
+				AssemblyName assemblyName = assembly.GetName();
+				if (assemblyName.Name == name)
+				{
+					if (assemblyName.Version != null)
+					{
+						aboutItem.Version = assemblyName.Version.ToString();
+					}
+				}
+			}
 
 			listBox.Items.Add(aboutItem);
 		}
