@@ -1694,8 +1694,7 @@ namespace ACadSvgStudio {
 
 		}
 
-		internal void UpdateSvgViewer()
-		{
+		internal void UpdateSvgViewer() {
 			svgViewerUserControl.DebugEnabled = Settings.Default.SvgViewerDebugEnabled;
 		}
 
