@@ -1093,6 +1093,8 @@ namespace ACadSvgStudio {
             try {
                 int filterIndex = _saveFileDialog.FilterIndex;
                 string filename = _saveFileDialog.FileName;
+                Settings.Default.SvgDirectory = Path.GetDirectoryName(filename);
+                Settings.Default.Save();
 
                 switch (filterIndex) {
                 case 1:
