@@ -292,6 +292,7 @@
 			_defsTreeView.Size = new Size(271, 682);
 			_defsTreeView.TabIndex = 1;
 			_defsTreeView.AfterCheck += eventDefsTreeViewAfterCheck;
+			_defsTreeView.BeforeCheck += eventDefsTreeViewBeforeCheck;
 			// 
 			// _menuStrip
 			// 
