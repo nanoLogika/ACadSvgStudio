@@ -16,6 +16,7 @@ using ScintillaNET_FindReplaceDialog;
 using SvgElements;
 using ACadSvgStudio.Defs;
 using ACadSvgStudio.BatchProcessing;
+using System.Xml;
 
 
 namespace ACadSvgStudio {
@@ -41,6 +42,7 @@ namespace ACadSvgStudio {
         private IncrementalSearcher _incrementalSearcher;
         private FindReplace _findReplace;
         private int _maxLineNumberCharLength;
+        private StatusLabelMessage _statusLabelMessage;
 
         private bool _centerToFitOnLoad = true;
         private bool _updatingHTMLEnabled = false;
@@ -254,7 +256,21 @@ namespace ACadSvgStudio {
 
         #region -  Devs tree view																	-
 
-        private void eventDefsTreeViewAfterCheck(object sender, TreeViewEventArgs e) {
+        private void eventDefsTreeViewBeforeCheck(object sender, TreeViewCancelEventArgs e) {
+            try {
+				XDocument xDocument = XDocument.Parse(_scintillaSvgGroupEditor.Text);
+			}
+            catch (XmlException ex) {
+				e.Cancel = true;
+                _statusLabelMessage.SetMessage(ex.Message, ex.LineNumber);
+			}
+            catch (Exception ex) {
+				e.Cancel = true;
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
+        }
+
+		private void eventDefsTreeViewAfterCheck(object sender, TreeViewEventArgs e) {
             if (_suppressOnChecked) {
                 return;
             }
@@ -267,70 +283,88 @@ namespace ACadSvgStudio {
             }
 
 
-            TreeNode treeNode = e.Node!;
+			TreeNode treeNode = e.Node!;
 
-            XDocument xDocument = XDocument.Parse(_scintillaSvgGroupEditor.Text);
+			try {
+				XDocument xDocument = XDocument.Parse(_scintillaSvgGroupEditor.Text);
 
-            if (treeNode.Checked) {
-                if (treeNode.Tag is UseElement useElement) {
-                    xDocument.Root!.AddFirst(useElement.GetXml());
-                    prevFolderExpanded.Insert(1, 1);
-                }
-                else if (treeNode.Tag is IList<UseElement> useElements) {
-                    foreach (UseElement ue in useElements) {
-                        xDocument.Root!.AddFirst(ue.GetXml());
-                        prevFolderExpanded.Insert(1, 1);
-                    }
-                }
-            }
-            else {
-                List<XElement> useElements = DefsUtils.FindUseElements(treeNode.Name, xDocument.Root!);
-                foreach (XElement useElement in useElements) {
-                    useElement.Remove();
-                    prevFolderExpanded.RemoveAt(1);
-                }
-            }
+				if (treeNode.Checked) {
+					if (treeNode.Tag is UseElement useElement) {
+						xDocument.Root!.AddFirst(useElement.GetXml());
+						prevFolderExpanded.Insert(1, 1);
+					}
+					else if (treeNode.Tag is IList<UseElement> useElements) {
+						foreach (UseElement ue in useElements) {
+							xDocument.Root!.AddFirst(ue.GetXml());
+							prevFolderExpanded.Insert(1, 1);
+						}
+					}
+				}
+				else {
+					List<XElement> useElements = DefsUtils.FindUseElements(treeNode.Name, xDocument.Root!);
+					foreach (XElement useElement in useElements) {
+						useElement.Remove();
+						prevFolderExpanded.RemoveAt(1);
+					}
+				}
 
-            //	TODO This should be optimized
-            //	Update xml display only once!
-            _scintillaSvgGroupEditor.Text = xDocument.ToString();
-
-
-            // Restore collapsed/expanded states
-            for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++) {
-                if (prevFolderExpanded[x] == 1) {
-                    _scintillaSvgGroupEditor.SetFoldExpanded(x, prevFolderExpanded[x]);
-                }
-            }
-            for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++) {
-                if (prevFolderExpanded[x] == 0) {
-                    _scintillaSvgGroupEditor.SetFoldExpanded(x, prevFolderExpanded[x]);
-                }
-            }
+				//	TODO This should be optimized
+				//	Update xml display only once!
+				_scintillaSvgGroupEditor.Text = xDocument.ToString();
 
 
-            TreeNode parent = treeNode.Parent;
-            if (treeNode.Checked) {
-                if (parent != null) {
-                    parent.Checked = false;
-                }
-                foreach (TreeNode childTreeNode in treeNode.Nodes) {
-                    childTreeNode.Checked = false;
-                }
-            }
+				// Restore collapsed/expanded states
+				for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++) {
+					if (prevFolderExpanded[x] == 1) {
+						_scintillaSvgGroupEditor.SetFoldExpanded(x, prevFolderExpanded[x]);
+					}
+				}
+				for (int x = 0; x < _scintillaSvgGroupEditor.Lines.Count; x++) {
+					if (prevFolderExpanded[x] == 0) {
+						_scintillaSvgGroupEditor.SetFoldExpanded(x, prevFolderExpanded[x]);
+					}
+				}
+
+
+				TreeNode parent = treeNode.Parent;
+				if (treeNode.Checked) {
+					if (parent != null) {
+						parent.Checked = false;
+					}
+					foreach (TreeNode childTreeNode in treeNode.Nodes) {
+						childTreeNode.Checked = false;
+					}
+				}
+			}
+			catch (XmlException ex) {
+				_statusLabelMessage.SetMessage(ex.Message, ex.LineNumber);
+			}
+			catch (Exception ex) {
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
+
+        private string getTreeNodeKey(TreeNode node) {
+            TreeNode currentNode = node;
+            string key = currentNode.Name;
+            while (currentNode.Parent != null) {
+                key = $"{currentNode.Parent.Name}/{key}";
+                currentNode = currentNode.Parent;
+            }
+            return key;
+        }
 
         private void collectFlatListOfTreeNodes(TreeNodeCollection nodes, IDictionary<string, TreeNode> flatListOfTreeNodes, bool selectedOnly = false) {
             foreach (TreeNode node in nodes) {
                 if (selectedOnly) {
                     if (node.Checked) {
-                        flatListOfTreeNodes.Add(node.Name, node);
-                    }
+						flatListOfTreeNodes.Add(getTreeNodeKey(node), node);
+					}
                 }
                 else {
-                    flatListOfTreeNodes.Add(node.Name, node);
-                }
+					flatListOfTreeNodes.Add(getTreeNodeKey(node), node);
+				}
 
                 collectFlatListOfTreeNodes(node.Nodes, flatListOfTreeNodes, selectedOnly);
             }
@@ -360,67 +394,77 @@ namespace ACadSvgStudio {
                 return false;
             }
 
-            XElement xElement = XElement.Parse(xmlValue);
+            try {
+				XElement xElement = XElement.Parse(xmlValue);
 
-            List<DefsItem> defsItems = new List<DefsItem>();
-            DefsUtils.FindAllDefs(xElement, null, defsItems);
+				List<DefsItem> defsItems = new List<DefsItem>();
+				DefsUtils.FindAllDefs(xElement, null, defsItems);
 
-            if (defsItems.Count == 0) {
-                return false;
+				if (defsItems.Count == 0) {
+					return false;
+				}
+
+				IDictionary<string, TreeNode> prevTreeNodes = new Dictionary<string, TreeNode>();
+				collectFlatListOfTreeNodes(_defsTreeView.Nodes, prevTreeNodes);
+
+				List<TreeNode> newTreeNodes = new List<TreeNode>();
+
+				foreach (DefsItem defsItem in defsItems) {
+					TreeNode node = createDefsTreeNode(defsItem);
+					newTreeNodes.Add(node);
+				}
+
+				//	Build new tree but restore tags and expanded/collapsed from previous
+				//	all nodes are unchecked.
+				_defsTreeView.Nodes.Clear();
+				foreach (TreeNode node in newTreeNodes) {
+					_defsTreeView.Nodes.Add(node);
+					applyFlatListOfTreeNodes(node, prevTreeNodes);
+				}
+
+				//	Scan list of <use> tags
+				IList<UseElement> usedDefsItems = DefsUtils.FindAllUsedDefs(xElement);
+				IList<string> assignedDefIds = new List<string>();
+				foreach (UseElement useElement in usedDefsItems) {
+					string id = useElement.GroupId.Substring(1);
+
+					TreeNode node = findNode(_defsTreeView.Nodes, id);
+					if (node != null) {
+						if (useElement.X != 0 || useElement.Y != 0) {
+							node.Text = $"{id} ({useElement.X}, {useElement.Y})";
+						}
+						//	Only expand to List of UseElement when Tag was set here before
+						if (assignedDefIds.Contains(id)) {
+							if (node.Tag is UseElement tagUseElement) {
+								node.Tag = new List<UseElement>() { tagUseElement, useElement };
+							}
+							else if (node.Tag is IList<UseElement>) {
+								((List<UseElement>)node.Tag).Add(useElement);
+							}
+							node.Text = $"{id} (multiple pos)";
+						}
+						else {
+							//	This may override a tag from the previous tree vie
+							node.Tag = useElement;
+							assignedDefIds.Add(id);
+						}
+
+						_suppressOnChecked = true;
+						node.Checked = true;
+						_suppressOnChecked = false;
+					}
+				}
+
+                return true;
+			}
+            catch (XmlException ex) {
+                _statusLabelMessage.SetMessage(ex.Message, ex.LineNumber);
             }
+            catch (Exception ex) {
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
 
-            IDictionary<string, TreeNode> prevTreeNodes = new Dictionary<string, TreeNode>();
-            collectFlatListOfTreeNodes(_defsTreeView.Nodes, prevTreeNodes);
-
-            List<TreeNode> newTreeNodes = new List<TreeNode>();
-
-            foreach (DefsItem defsItem in defsItems) {
-                TreeNode node = createDefsTreeNode(defsItem);
-                newTreeNodes.Add(node);
-            }
-
-            //	Build new tree but restore tags and expanded/collapsed from previous
-            //	all nodes are unchecked.
-            _defsTreeView.Nodes.Clear();
-            foreach (TreeNode node in newTreeNodes) {
-                _defsTreeView.Nodes.Add(node);
-                applyFlatListOfTreeNodes(node, prevTreeNodes);
-            }
-
-            //	Scan list of <use> tags
-            IList<UseElement> usedDefsItems = DefsUtils.FindAllUsedDefs(xElement);
-            IList<string> assignedDefIds = new List<string>();
-            foreach (UseElement useElement in usedDefsItems) {
-                string id = useElement.GroupId.Substring(1);
-
-                TreeNode node = findNode(_defsTreeView.Nodes, id);
-                if (node != null) {
-                    if (useElement.X != 0 || useElement.Y != 0) {
-                        node.Text = $"{id} ({useElement.X}, {useElement.Y})";
-                    }
-                    //	Only expand to List of UseElement when Tag was set here before
-                    if (assignedDefIds.Contains(id)) {
-                        if (node.Tag is UseElement tagUseElement) {
-                            node.Tag = new List<UseElement>() { tagUseElement, useElement };
-                        }
-                        else if (node.Tag is IList<UseElement>) {
-                            ((List<UseElement>)node.Tag).Add(useElement);
-                        }
-                        node.Text = $"{id} (multiple pos)";
-                    }
-                    else {
-                        //	This may override a tag from the previous tree vie
-                        node.Tag = useElement;
-                        assignedDefIds.Add(id);
-                    }
-
-                    _suppressOnChecked = true;
-                    node.Checked = true;
-                    _suppressOnChecked = false;
-                }
-            }
-
-            return true;
+            return false;
         }
 
 
@@ -575,6 +619,9 @@ namespace ACadSvgStudio {
             _scintillaSvgGroupEditor.Styles[ScintillaNET.Style.Xml.Comment].ForeColor = Color.Green;
 
             _scintillaSvgGroupEditor.SetKeywords(0, SvgKeywords);
+
+            // Init status label message
+            _statusLabelMessage = new StatusLabelMessage(_scintillaSvgGroupEditor, _statusLabel);
         }
 
 
@@ -732,8 +779,8 @@ namespace ACadSvgStudio {
                 UpdateHTML();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -790,8 +837,8 @@ namespace ACadSvgStudio {
                 }
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -800,8 +847,8 @@ namespace ACadSvgStudio {
                 saveWindowState();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -832,8 +879,8 @@ namespace ACadSvgStudio {
                 }
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
             finally {
                 _textChangedTimer.Stop();
             }
@@ -850,9 +897,9 @@ namespace ACadSvgStudio {
                     _textChangedTimer.Restart();
                 }
             }
-            catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+			catch (Exception ex) {
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -869,8 +916,8 @@ namespace ACadSvgStudio {
                 }
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -887,8 +934,8 @@ namespace ACadSvgStudio {
                 }
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -940,8 +987,8 @@ namespace ACadSvgStudio {
                 }
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -967,8 +1014,8 @@ namespace ACadSvgStudio {
                 UpdateHTML();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
             finally {
                 _updatingHTMLEnabled = true;
             }
@@ -976,7 +1023,7 @@ namespace ACadSvgStudio {
 
 
         private void clearStatusLabel() {
-            _statusLabel.Text = string.Empty;
+            _statusLabelMessage.ClearMessage();
         }
 
         #endregion
@@ -988,7 +1035,7 @@ namespace ACadSvgStudio {
                 _loadAutoCadFileDialog.ShowDialog();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
+                _statusLabelMessage.SetMessage(ex.Message);
             }
         }
 
@@ -999,8 +1046,8 @@ namespace ACadSvgStudio {
                 _openFileDialog.ShowDialog();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1015,8 +1062,8 @@ namespace ACadSvgStudio {
                 eventSaveSvgGroupAsClick(sender, e);
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1033,8 +1080,8 @@ namespace ACadSvgStudio {
                 _saveFileDialog.ShowDialog();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1043,8 +1090,8 @@ namespace ACadSvgStudio {
                 Close();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1061,8 +1108,8 @@ namespace ACadSvgStudio {
                 UpdateHTML();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
             finally {
                 _updatingHTMLEnabled = true;
             }
@@ -1081,8 +1128,8 @@ namespace ACadSvgStudio {
                 UpdateHTML();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
             finally {
                 _updatingHTMLEnabled = true;
             }
@@ -1120,8 +1167,8 @@ namespace ACadSvgStudio {
                 }
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
         #endregion
@@ -1139,8 +1186,8 @@ namespace ACadSvgStudio {
                 _deleteMenuItem.Enabled = hasSelection;
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1150,8 +1197,8 @@ namespace ACadSvgStudio {
                 editor.Undo();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1161,8 +1208,8 @@ namespace ACadSvgStudio {
                 editor.Redo();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1172,8 +1219,8 @@ namespace ACadSvgStudio {
                 editor.Cut();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1183,8 +1230,8 @@ namespace ACadSvgStudio {
                 editor.Copy();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1194,8 +1241,8 @@ namespace ACadSvgStudio {
                 editor.Paste();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1205,8 +1252,8 @@ namespace ACadSvgStudio {
                 //editor.SelectedText = string.Empty;
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1216,8 +1263,8 @@ namespace ACadSvgStudio {
                 editor.SelectAll();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1233,8 +1280,8 @@ namespace ACadSvgStudio {
                 _incrementalSearcher.Visible = true;
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1243,8 +1290,8 @@ namespace ACadSvgStudio {
                 _incrementalSearcher.Visible = false;
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1254,8 +1301,8 @@ namespace ACadSvgStudio {
                 _findReplace.ShowFind();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1265,8 +1312,8 @@ namespace ACadSvgStudio {
                 UpdateHTML();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1285,8 +1332,8 @@ namespace ACadSvgStudio {
                 Settings.Default.Save();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1300,8 +1347,8 @@ namespace ACadSvgStudio {
                 _scintillaSvgGroupEditor.CollapseChildren();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1310,8 +1357,8 @@ namespace ACadSvgStudio {
                 _scintillaSvgGroupEditor.ExpandChildren();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
         #endregion
@@ -1340,8 +1387,8 @@ namespace ACadSvgStudio {
                 _flippedContentChanged = flipContentChanged;
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
         #endregion
@@ -1363,8 +1410,8 @@ namespace ACadSvgStudio {
                 _scintillaSvgGroupEditor.Text = sb.ToString();
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1380,8 +1427,8 @@ namespace ACadSvgStudio {
                 }
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1398,8 +1445,8 @@ namespace ACadSvgStudio {
                 }
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1419,8 +1466,8 @@ namespace ACadSvgStudio {
                 conversionLogForm.Open(_loadedDwgFilename, _conversionLog, _occurringEntities);
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
         #endregion
@@ -1479,8 +1526,8 @@ namespace ACadSvgStudio {
                 }
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1490,20 +1537,20 @@ namespace ACadSvgStudio {
                 Batch currentBatch = BatchController.CurrentBatch;
                 if (currentBatch == null) {
                     string msg = "There is no current batch to be executed.";
-					_statusLabel.Text = msg;
+                    _statusLabelMessage.SetMessage(msg);
                     _batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
                     return;
                 }
                 if (currentBatch.IsEmpty) {
                     string msg = "The current batch does not yet contain any command.";
-                    _statusLabel.Text = msg;
-                    _batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
+					_statusLabelMessage.SetMessage(msg);
+					_batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
                     return;
                 }
                 if (currentBatch.HasErrors) {
                     string msg = "The current batch has parse errors.";
-                    _statusLabel.Text = msg;
-                    _batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
+					_statusLabelMessage.SetMessage(msg);
+					_batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
                     return;
                 }
 
@@ -1513,8 +1560,8 @@ namespace ACadSvgStudio {
 				_batchConsoleLog.AppendText($"{batchMsg}{Environment.NewLine}");
 			}
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1522,7 +1569,7 @@ namespace ACadSvgStudio {
             try {
                 Batch currentBatch = BatchController.CurrentBatch;
                 if (currentBatch == null) {
-                    _statusLabel.Text = "There is no current batch to save.";
+					_statusLabelMessage.SetMessage("There is no current batch to save.");
                     return;
                 }
 
@@ -1532,11 +1579,11 @@ namespace ACadSvgStudio {
                 }
                 currentBatch.Save();
 
-                _statusLabel.Text = $"Batch: {currentBatch.Name} saved.";
+				_statusLabelMessage.SetMessage($"Batch: {currentBatch.Name} saved.");
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1550,10 +1597,10 @@ namespace ACadSvgStudio {
                     switch (ret) {
                     case DialogResult.Yes:
                         currentBatch.Save();
-                        _statusLabel.Text = "Current batch saved.";
+						_statusLabelMessage.SetMessage("Current batch saved.");
                         break;
                     case DialogResult.No:
-                        _statusLabel.Text = "Current batch will be discarded.";
+						_statusLabelMessage.SetMessage("Current batch will be discarded.");
                         break;
                     default:
                         return;
@@ -1565,8 +1612,8 @@ namespace ACadSvgStudio {
                 _loadCommandBatchDialog.ShowDialog();
             }
             catch (Exception ex){
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
@@ -1584,13 +1631,13 @@ namespace ACadSvgStudio {
 				_batchTabPage.Text = $"Batch: {batch.Name}";
 				_scintillaBatchEditor.Text = batch.ToString();
 
-                _statusLabel.Text = $"Batch: {batch.Name} loaded.";
+				_statusLabelMessage.SetMessage($"Batch: {batch.Name} loaded.");
 
                 _tabControl.SelectedTab = _batchTabPage;
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
         #endregion
@@ -1603,8 +1650,8 @@ namespace ACadSvgStudio {
                 }
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
         #endregion
@@ -1644,9 +1691,9 @@ namespace ACadSvgStudio {
                         xElement.SetAttributeValue("transform", $"scale(1, {factor}) translate({_svgProperties.ViewBoxMinX}, {factor * _svgProperties.ViewBoxMinY})");
                         editorText = xElement.ToString();
                     }
-                    catch (Exception e) {
-                        _statusLabel.Text = e.Message;
-                        throw;
+                    catch (Exception ex) {
+						_statusLabelMessage.SetMessage(ex.Message);
+						throw;
                     }
                 }
                 svgElement.AddValue(editorText);
@@ -1682,8 +1729,8 @@ namespace ACadSvgStudio {
                 }
             }
             catch (Exception ex) {
-                _statusLabel.Text = ex.Message;
-            }
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
         }
 
 
