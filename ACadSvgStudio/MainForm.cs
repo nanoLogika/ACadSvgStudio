@@ -336,20 +336,26 @@ namespace ACadSvgStudio {
         }
 
 
+        private string getTreeNodeKey(TreeNode node) {
+            TreeNode currentNode = node;
+            string key = currentNode.Name;
+            while (currentNode.Parent != null) {
+                key = $"{currentNode.Parent.Name}/{key}";
+                currentNode = currentNode.Parent;
+            }
+            return key;
+        }
+
         private void collectFlatListOfTreeNodes(TreeNodeCollection nodes, IDictionary<string, TreeNode> flatListOfTreeNodes, bool selectedOnly = false) {
             foreach (TreeNode node in nodes) {
                 if (selectedOnly) {
                     if (node.Checked) {
-                        if (!flatListOfTreeNodes.ContainsKey(node.Name)) {
-							flatListOfTreeNodes.Add(node.Name, node);
-						}
-                    }
-                }
-                else {
-                    if (!flatListOfTreeNodes.ContainsKey(node.Name)) {
-						flatListOfTreeNodes.Add(node.Name, node);
+						flatListOfTreeNodes.Add(getTreeNodeKey(node), node);
 					}
                 }
+                else {
+					flatListOfTreeNodes.Add(getTreeNodeKey(node), node);
+				}
 
                 collectFlatListOfTreeNodes(node.Nodes, flatListOfTreeNodes, selectedOnly);
             }
