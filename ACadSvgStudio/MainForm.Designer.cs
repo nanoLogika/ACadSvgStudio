@@ -49,6 +49,7 @@
 			_menuStrip = new MenuStrip();
 			_fileToolStripMenuItem = new ToolStripMenuItem();
 			_loadDwgToolStripMenuItem = new ToolStripMenuItem();
+			toolStripSeparator1 = new ToolStripSeparator();
 			_openMenuItem = new ToolStripMenuItem();
 			_saveMenuItem = new ToolStripMenuItem();
 			_saveAsMenuItem = new ToolStripMenuItem();
@@ -95,7 +96,7 @@
 			_loadAutoCadFileDialog = new OpenFileDialog();
 			_loadCommandBatchDialog = new OpenFileDialog();
 			_saveCommandBatchAsDialog = new SaveFileDialog();
-			toolStripSeparator1 = new ToolStripSeparator();
+			_defsEditorTabPage = new TabPage();
 			_fileMenuSeparator2 = new ToolStripSeparator();
 			_editMenuSeparator1 = new ToolStripSeparator();
 			_viewMenuSeparator1 = new ToolStripSeparator();
@@ -167,6 +168,7 @@
 			// _tabControl
 			// 
 			_tabControl.Controls.Add(_mainGroupTabPage);
+			_tabControl.Controls.Add(_defsEditorTabPage);
 			_tabControl.Controls.Add(_scalesTabPage);
 			_tabControl.Controls.Add(_cssTabPage);
 			_tabControl.Controls.Add(_batchTabPage);
@@ -291,8 +293,8 @@
 			_defsTreeView.Name = "_defsTreeView";
 			_defsTreeView.Size = new Size(271, 682);
 			_defsTreeView.TabIndex = 1;
-			_defsTreeView.AfterCheck += eventDefsTreeViewAfterCheck;
 			_defsTreeView.BeforeCheck += eventDefsTreeViewBeforeCheck;
+			_defsTreeView.AfterCheck += eventDefsTreeViewAfterCheck;
 			// 
 			// _menuStrip
 			// 
@@ -317,6 +319,11 @@
 			_loadDwgToolStripMenuItem.Size = new Size(216, 22);
 			_loadDwgToolStripMenuItem.Text = "Load AutoCAD File";
 			_loadDwgToolStripMenuItem.Click += eventLoadAutoCadFile_Click;
+			// 
+			// toolStripSeparator1
+			// 
+			toolStripSeparator1.Name = "toolStripSeparator1";
+			toolStripSeparator1.Size = new Size(213, 6);
 			// 
 			// _openMenuItem
 			// 
@@ -629,10 +636,14 @@
 			_saveCommandBatchAsDialog.Filter = "Commman Batch files|*.bax|All files|*.*";
 			_saveCommandBatchAsDialog.Title = "Save Command Batch As";
 			// 
-			// toolStripSeparator1
+			// _defsEditorTabPage
 			// 
-			toolStripSeparator1.Name = "toolStripSeparator1";
-			toolStripSeparator1.Size = new Size(213, 6);
+			_defsEditorTabPage.Location = new Point(4, 24);
+			_defsEditorTabPage.Name = "_defsEditorTabPage";
+			_defsEditorTabPage.Size = new Size(448, 688);
+			_defsEditorTabPage.TabIndex = 4;
+			_defsEditorTabPage.Text = "Defs";
+			_defsEditorTabPage.UseVisualStyleBackColor = true;
 			// 
 			// MainForm
 			// 
@@ -749,5 +760,6 @@
         private SaveFileDialog _saveCommandBatchAsDialog;
 		private TabPage _batchTabPage;
 		private ToolStripSeparator toolStripSeparator1;
+		private TabPage _defsEditorTabPage;
 	}
 }

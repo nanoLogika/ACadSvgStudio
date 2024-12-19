@@ -34,6 +34,7 @@ namespace ACadSvgStudio {
         private ConversionContext _conversionContext;
 
         private Scintilla _scintillaSvgGroupEditor;
+        private Scintilla _scintillaDefs;
         private Scintilla _scintillaCss;
         private Scintilla _scintillaScales;
         private Scintilla _scintillaBatchEditor;
@@ -71,6 +72,7 @@ namespace ACadSvgStudio {
             this.Text = AppName;
 
             initScintillaSVGGroupEditor();
+            initScintillaDefs();
             initScintillaScales();
             initScintillaCss();
             initBatchEditor();
@@ -625,6 +627,25 @@ namespace ACadSvgStudio {
         }
 
 
+        private void initScintillaDefs() {
+			_scintillaDefs = new ScintillaNET.Scintilla();
+			_scintillaDefs.Dock = DockStyle.Fill;
+			_scintillaDefs.BorderStyle = ScintillaNET.BorderStyle.FixedSingle;
+			_scintillaDefs.TextChanged += eventScintillaScales_TextChanged;
+			updateLineMargin(_scintillaDefs);
+			_defsEditorTabPage.Controls.Add(_scintillaDefs);
+
+			_scintillaDefs.Lexer = ScintillaNET.Lexer.Xml;
+
+			_scintillaDefs.Styles[ScintillaNET.Style.Xml.Tag].ForeColor = Color.Violet;
+			_scintillaDefs.Styles[ScintillaNET.Style.Xml.TagUnknown].ForeColor = Color.Red;
+			_scintillaDefs.Styles[ScintillaNET.Style.Xml.AttributeUnknown].ForeColor = Color.MediumBlue;
+			_scintillaDefs.Styles[ScintillaNET.Style.Xml.Comment].ForeColor = Color.Green;
+
+			_scintillaDefs.SetKeywords(0, SvgKeywords);
+		}
+
+
         private void initScintillaScales() {
             _scintillaScales = new ScintillaNET.Scintilla();
             _scintillaScales.Dock = DockStyle.Fill;
@@ -773,6 +794,7 @@ namespace ACadSvgStudio {
                 }
 
                 _scintillaScales.Text = Settings.Default.ScalesSvg;
+                _scintillaDefs.Text = Settings.Default.DefsSvg;
                 _scintillaCss.Text = Settings.Default.CSSPreview;
                 _updatingHTMLEnabled = true;
 
@@ -903,7 +925,29 @@ namespace ACadSvgStudio {
         }
 
 
-        private void eventScintillaScales_TextChanged(object? sender, EventArgs e) {
+		private void eventScintillaDefs_TextChanged(object? sender, EventArgs e)
+		{
+			try
+			{
+				clearStatusLabel();
+				Settings.Default.DefsSvg = _scintillaDefs.Text;
+				Settings.Default.Save();
+
+				updateLineMargin(sender);
+
+				if (_updatingHTMLEnabled)
+				{
+					_textChangedTimer.Restart();
+				}
+			}
+			catch (Exception ex)
+			{
+				_statusLabelMessage.SetMessage(ex.Message);
+			}
+		}
+
+
+		private void eventScintillaScales_TextChanged(object? sender, EventArgs e) {
             try {
                 clearStatusLabel();
                 Settings.Default.ScalesSvg = _scintillaScales.Text;

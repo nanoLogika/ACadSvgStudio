@@ -516,18 +516,6 @@ namespace ACadSvgStudio {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SvgViewerDebugEnabled {
-            get {
-                return ((bool)(this["SvgViewerDebugEnabled"]));
-            }
-            set {
-                this["SvgViewerDebugEnabled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string BatchACadLoadBaseDirectory {
             get {
@@ -547,6 +535,30 @@ namespace ACadSvgStudio {
             }
             set {
                 this["BatchSvgExportBaseDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SvgViewerDebugEnabled {
+            get {
+                return ((bool)(this["SvgViewerDebugEnabled"]));
+            }
+            set {
+                this["SvgViewerDebugEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DefsSvg {
+            get {
+                return ((string)(this["DefsSvg"]));
+            }
+            set {
+                this["DefsSvg"] = value;
             }
         }
     }
