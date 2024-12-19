@@ -1503,7 +1503,7 @@ namespace ACadSvgStudio {
                     exporter.Export(outputPath, exportSvgForm.SelectedDefsIds);
 
                     if (exportSvgForm.AddExportToCurrentBatch) {
-                        Batch batch = BatchController.CurrentBatch;
+						Batch batch = BatchController.CurrentBatch;
                         if (batch == null) {
                             _loadCommandBatchDialog.InitialDirectory = Settings.Default.CommandBatchDirectory;
                             _loadCommandBatchDialog.FileName = string.Empty;
@@ -1533,8 +1533,8 @@ namespace ACadSvgStudio {
 
         private void eventExecuteExportBatch_Click(object sender, EventArgs e) {
             try {
-                //  TODO select tab
-                Batch currentBatch = BatchController.CurrentBatch;
+				//  TODO select tab
+				Batch currentBatch = BatchController.CurrentBatch;
                 if (currentBatch == null) {
                     string msg = "There is no current batch to be executed.";
                     _statusLabelMessage.SetMessage(msg);
@@ -1567,7 +1567,7 @@ namespace ACadSvgStudio {
 
         private void eventSaveExportBatch_Click(object sender, EventArgs e) {
             try {
-                Batch currentBatch = BatchController.CurrentBatch;
+				Batch currentBatch = BatchController.CurrentBatch;
                 if (currentBatch == null) {
 					_statusLabelMessage.SetMessage("There is no current batch to save.");
                     return;
@@ -1589,7 +1589,7 @@ namespace ACadSvgStudio {
 
         private void eventLoadExportBatch_Click(object sender, EventArgs e) {
             try {
-                Batch currentBatch = BatchController.CurrentBatch;
+				Batch currentBatch = BatchController.CurrentBatch;
                 if (currentBatch != null && currentBatch.HasChanges) {
                     var ret = MessageBox.Show(
                         $"CurrentBatch {currentBatch.Name} has changed has changed, save changes before loading or creating new batch?",
@@ -1627,7 +1627,7 @@ namespace ACadSvgStudio {
                 Settings.Default.CommandBatchDirectory = Path.GetDirectoryName(path);
                 Settings.Default.Save();
 
-                Batch batch = BatchController.LoadOrCreateBatch(path);
+				Batch batch = BatchController.LoadOrCreateBatch(path);
 				_batchTabPage.Text = $"Batch: {batch.Name}";
 				_scintillaBatchEditor.Text = batch.ToString();
 
@@ -1677,10 +1677,8 @@ namespace ACadSvgStudio {
                 svgElement.Width = _svgProperties.ViewBoxWidth.ToString();
                 svgElement.Height = _svgProperties.ViewBoxHeight.ToString();
                 svgElement.WithViewbox(null, null, null, null);
-            }
+			}
 
-            svgElement.AddCss(_scintillaCss.Text, addCss);
-            svgElement.AddValue(_scintillaScales.Text, showScales);
 
             string editorText = _scintillaSvgGroupEditor.Text;
             if (!string.IsNullOrEmpty(editorText)) {
@@ -1701,24 +1699,54 @@ namespace ACadSvgStudio {
 
             isSvgEmpty = string.IsNullOrEmpty(editorText);
 
-            StringBuilder sb = new StringBuilder();
-            if (createFile) {
-                var declaration = new XDeclaration("1.0", null, null);
-                var doctype = new XDocumentType("svg", " -//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd", string.Empty).ToString();
-                sb.AppendLine(declaration.ToString());
-                sb.AppendLine(doctype.ToString());
+
+            XElement svgXElement = svgElement.GetXml();
+
+
+			bool hasDefs = updateDefs(svgXElement.Value);
+			if (!hasDefs)
+			{
+				_defsTreeView.Nodes.Clear();
+			}
+
+
+			XElement styleXElement = null;
+			if (addCss && !string.IsNullOrEmpty(_scintillaCss.Text))
+			{
+				styleXElement = new XElement("style");
+				styleXElement.Add(new XAttribute("type", "text/css"));
+				styleXElement.Value = _scintillaCss.Text;
+                svgXElement.Add(styleXElement);
+			}
+
+			XElement scalesXElement = null;
+			if (showScales && !string.IsNullOrEmpty(_scintillaScales.Text))
+			{
+				scalesXElement = XElement.Parse(_scintillaScales.Text);
+                svgXElement.Add(scalesXElement);
+			}
+
+
+			string result;
+
+			if (createFile)
+			{
+				XDeclaration xDeclaration = new XDeclaration("1.0", null, null);
+				XDocumentType xDocumentType = new XDocumentType("svg", " -//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd", string.Empty);
+
+				XDocument xDocument = new XDocument(xDocumentType);
+                xDocument.Declaration = xDeclaration;
+
+                xDocument.Add(svgXElement);
+
+                result = xDocument.ToString();
+			}
+            else
+            {
+                result = svgElement.ToString();
             }
 
-            XElement svg = svgElement.GetXml();
-            sb.AppendLine(svgElement.ToString().Replace("&gt;", ">").Replace("&lt;", "<"));
-
-            bool hasDefs = updateDefs(svg.Value);
-            if (!hasDefs) {
-                _defsTreeView.Nodes.Clear();
-            }
-
-            string svgText = sb.ToString();
-            return svgText;
+            return result.Replace("&gt;", ">").Replace("&lt;", "<");
         }
 
 
