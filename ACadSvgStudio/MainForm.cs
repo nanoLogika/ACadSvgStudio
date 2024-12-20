@@ -721,7 +721,7 @@ namespace ACadSvgStudio {
 			_scintillaDefs = new ScintillaNET.Scintilla();
 			_scintillaDefs.Dock = DockStyle.Fill;
 			_scintillaDefs.BorderStyle = ScintillaNET.BorderStyle.FixedSingle;
-			_scintillaDefs.TextChanged += eventScintillaScales_TextChanged;
+			_scintillaDefs.TextChanged += eventScintillaDefs_TextChanged;
 			updateLineMargin(_scintillaDefs);
 			_defsEditorTabPage.Controls.Add(_scintillaDefs);
 
