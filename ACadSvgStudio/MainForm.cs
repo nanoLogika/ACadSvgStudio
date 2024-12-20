@@ -2117,6 +2117,13 @@ namespace ACadSvgStudio {
 				svgXElement.Add(scalesXElement);
 			}
 
+			if (!string.IsNullOrEmpty(_scintillaDefs.Text) && svgXElement.HasElements)
+			{
+				string root = $"<defs>{_scintillaDefs.Text}</defs>";
+				XElement defsXElement = XElement.Parse(root);
+				svgXElement.Add(defsXElement);
+			}
+
 
 			string result;
 
@@ -2134,7 +2141,7 @@ namespace ACadSvgStudio {
 			}
 			else
 			{
-				result = svgElement.ToString();
+				result = svgXElement.ToString();
 			}
 
 			return result.Replace("&gt;", ">").Replace("&lt;", "<");
