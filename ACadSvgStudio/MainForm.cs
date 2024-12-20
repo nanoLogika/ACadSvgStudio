@@ -1895,7 +1895,10 @@ namespace ACadSvgStudio {
 		{
 			try
 			{
-				//  TODO select tab
+				saveExportBatch();
+
+				_tabControl.SelectedTab = _batchTabPage;
+				
 				Batch currentBatch = BatchController.CurrentBatch;
 				if (currentBatch == null)
 				{
@@ -1931,7 +1934,7 @@ namespace ACadSvgStudio {
 		}
 
 
-		private void eventSaveExportBatch_Click(object sender, EventArgs e)
+		private void saveExportBatch()
 		{
 			try
 			{
@@ -1955,6 +1958,11 @@ namespace ACadSvgStudio {
 			{
 				_statusLabelMessage.SetMessage(ex.Message);
 			}
+		}
+
+		private void eventSaveExportBatch_Click(object sender, EventArgs e)
+		{
+			saveExportBatch();
 		}
 
 
