@@ -36,6 +36,7 @@
 			_splitContainer1 = new SplitContainer();
 			_tabControl = new TabControl();
 			_mainGroupTabPage = new TabPage();
+			_defsEditorTabPage = new TabPage();
 			_scalesTabPage = new TabPage();
 			_cssTabPage = new TabPage();
 			_batchTabPage = new TabPage();
@@ -49,6 +50,7 @@
 			_menuStrip = new MenuStrip();
 			_fileToolStripMenuItem = new ToolStripMenuItem();
 			_loadDwgToolStripMenuItem = new ToolStripMenuItem();
+			_loadDefsToolStripMenuItem = new ToolStripMenuItem();
 			toolStripSeparator1 = new ToolStripSeparator();
 			_openMenuItem = new ToolStripMenuItem();
 			_saveMenuItem = new ToolStripMenuItem();
@@ -96,7 +98,7 @@
 			_loadAutoCadFileDialog = new OpenFileDialog();
 			_loadCommandBatchDialog = new OpenFileDialog();
 			_saveCommandBatchAsDialog = new SaveFileDialog();
-			_defsEditorTabPage = new TabPage();
+			_openDefsFileDialog = new OpenFileDialog();
 			_fileMenuSeparator2 = new ToolStripSeparator();
 			_editMenuSeparator1 = new ToolStripSeparator();
 			_viewMenuSeparator1 = new ToolStripSeparator();
@@ -188,6 +190,15 @@
 			_mainGroupTabPage.TabIndex = 0;
 			_mainGroupTabPage.Text = "Main Group";
 			_mainGroupTabPage.UseVisualStyleBackColor = true;
+			// 
+			// _defsEditorTabPage
+			// 
+			_defsEditorTabPage.Location = new Point(4, 24);
+			_defsEditorTabPage.Name = "_defsEditorTabPage";
+			_defsEditorTabPage.Size = new Size(448, 688);
+			_defsEditorTabPage.TabIndex = 4;
+			_defsEditorTabPage.Text = "Defs";
+			_defsEditorTabPage.UseVisualStyleBackColor = true;
 			// 
 			// _scalesTabPage
 			// 
@@ -307,7 +318,7 @@
 			// 
 			// _fileToolStripMenuItem
 			// 
-			_fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _loadDwgToolStripMenuItem, toolStripSeparator1, _openMenuItem, _saveMenuItem, _saveAsMenuItem, _fileMenuSeparator1, _recentlyOpenedFilesToolStripMenuItem, _fileMenuSeparator2, _exitMenuItem });
+			_fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { _loadDwgToolStripMenuItem, _loadDefsToolStripMenuItem, toolStripSeparator1, _openMenuItem, _saveMenuItem, _saveAsMenuItem, _fileMenuSeparator1, _recentlyOpenedFilesToolStripMenuItem, _fileMenuSeparator2, _exitMenuItem });
 			_fileToolStripMenuItem.Name = "_fileToolStripMenuItem";
 			_fileToolStripMenuItem.Size = new Size(37, 20);
 			_fileToolStripMenuItem.Text = "File";
@@ -319,6 +330,13 @@
 			_loadDwgToolStripMenuItem.Size = new Size(216, 22);
 			_loadDwgToolStripMenuItem.Text = "Load AutoCAD File";
 			_loadDwgToolStripMenuItem.Click += eventLoadAutoCadFile_Click;
+			// 
+			// _loadDefsToolStripMenuItem
+			// 
+			_loadDefsToolStripMenuItem.Name = "_loadDefsToolStripMenuItem";
+			_loadDefsToolStripMenuItem.Size = new Size(216, 22);
+			_loadDefsToolStripMenuItem.Text = "Load Defs";
+			_loadDefsToolStripMenuItem.Click += eventLoadDefsToolStripMenuItem_Click;
 			// 
 			// toolStripSeparator1
 			// 
@@ -636,14 +654,10 @@
 			_saveCommandBatchAsDialog.Filter = "Commman Batch files|*.bax|All files|*.*";
 			_saveCommandBatchAsDialog.Title = "Save Command Batch As";
 			// 
-			// _defsEditorTabPage
+			// _openDefsFileDialog
 			// 
-			_defsEditorTabPage.Location = new Point(4, 24);
-			_defsEditorTabPage.Name = "_defsEditorTabPage";
-			_defsEditorTabPage.Size = new Size(448, 688);
-			_defsEditorTabPage.TabIndex = 4;
-			_defsEditorTabPage.Text = "Defs";
-			_defsEditorTabPage.UseVisualStyleBackColor = true;
+			_openDefsFileDialog.Filter = "SVG group files|*.g.svg|SVG files|*.svg|All files|*.*";
+			_openDefsFileDialog.FileOk += eventLoadDefsFileDialog_FileOk;
 			// 
 			// MainForm
 			// 
@@ -761,5 +775,7 @@
 		private TabPage _batchTabPage;
 		private ToolStripSeparator toolStripSeparator1;
 		private TabPage _defsEditorTabPage;
+		private ToolStripMenuItem _loadDefsToolStripMenuItem;
+		private OpenFileDialog _openDefsFileDialog;
 	}
 }
