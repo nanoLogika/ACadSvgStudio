@@ -17,6 +17,14 @@ namespace ACadSvgStudio.BatchProcessing {
     internal class ExportCommand : CommandBase {
 
         private string _inputPath;
+        public string InputFile
+        {
+            get
+            {
+                return _inputPath;
+            }
+        }
+
         private string _outputPath;
         private string[] _defsGroupIds;
         private bool _resolveDefs;

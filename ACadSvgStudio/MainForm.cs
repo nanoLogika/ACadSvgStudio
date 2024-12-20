@@ -1914,11 +1914,12 @@ namespace ACadSvgStudio {
 					_batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
 					return;
 				}
-				if (currentBatch.HasErrors)
+				if (currentBatch.HasErrors(out string errors))
 				{
 					string msg = "The current batch has parse errors.";
 					_statusLabelMessage.SetMessage(msg);
 					_batchConsoleLog.AppendText($"{msg}{Environment.NewLine}");
+					_batchConsoleLog.AppendText($"{errors}{Environment.NewLine}");
 					return;
 				}
 
