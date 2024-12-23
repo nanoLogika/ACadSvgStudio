@@ -32,17 +32,6 @@ namespace ACadSvgStudio.BatchProcessing {
         }
 
 
-        public bool HasErrors {
-            get {
-                foreach (CommandBase command in _commands) {
-                    if (command.HasParseError) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-
         public string Name {
             get { return System.IO.Path.GetFileNameWithoutExtension(_path ?? "*unnamed*"); }
         }
@@ -65,7 +54,31 @@ namespace ACadSvgStudio.BatchProcessing {
         }
 
 
-        public void AddCommand(string commandLine) {
+		public bool HasErrors(out string errors)
+		{
+            StringBuilder sb = new StringBuilder();
+
+			foreach (CommandBase command in _commands)
+			{
+				if (command.HasParseError)
+				{
+                    sb.AppendLine($"Parse error: {command.ParseError}");
+				}
+                else if (command is ExportCommand exportCommand)
+                {
+                    if (!File.Exists(exportCommand.InputFile))
+                    {
+                        sb.AppendLine($"File \"{exportCommand.InputFile}\" does not exist");
+                    }
+                }
+			}
+			
+            errors = sb.ToString();
+            return sb.Length > 0;
+		}
+
+
+		public void AddCommand(string commandLine) {
             if (string.IsNullOrWhiteSpace(commandLine)) {
                 AddCommand(new EmptyLineCommand());
                 return;
