@@ -116,6 +116,10 @@ namespace ACadSvgStudio {
 						{
 							treeNode.Checked = true;
 						}
+						else
+						{
+							MessageBox.Show($"Block Record \"{blockRecordName}\" does not exist!", "Block Record Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						}
 					}
 				}
 				else
