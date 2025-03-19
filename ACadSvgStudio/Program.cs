@@ -110,7 +110,7 @@ namespace ACadSvgStudio {
 						}
 
 						// Workaround
-						blockRecordName = "_" + blockRecordName.Replace(" ", "_");
+						blockRecordName = "_" + blockRecordName.Replace("_", "__").Replace(" ", "_");
 
 						if (form.TryGetTreeNode(blockRecordName, out TreeNode treeNode))
 						{
