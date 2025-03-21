@@ -66,6 +66,7 @@ namespace ACadSvgStudio.Defs {
 			}
         }
 
+
         internal static void CollectUsedDefsIds(string id, XElement xElement, HashSet<string> defsIds) {
             string name = xElement.Name.ToString().ToLower();
 
@@ -108,6 +109,7 @@ namespace ACadSvgStudio.Defs {
 
 			return false;
 		}
+
 
 		private static bool isBlockRecord(XElement xElement, out string id) {
 			string name = xElement.Name.ToString().ToLower();
@@ -214,21 +216,33 @@ namespace ACadSvgStudio.Defs {
 			return null;
 		}
 
+
 		internal static XElement? FindGroupById(string id, XElement xElement) {
 			return FindElementById("g", id, xElement);
 		}
+
 
 		internal static XElement? FindPatternById(string id, XElement xElement) {
 			return FindElementById("pattern", id, xElement);
 		}
 
 
-		internal static void RemoveUseElements(XElement xElement, bool searchChildren = false) {
+		internal static void RemoveUseElements(XElement xElement) {
             xElement.Elements("use").Remove();
+        }
 
-			if (searchChildren) {
-				foreach (XElement child in xElement.Elements()) {
-					RemoveUseElements(child);
+
+        internal static void RemoveUseElements(XElement xElement, IEnumerable<XElement> elements) {
+			foreach (XElement useElement in xElement.Elements("use")) {
+				XAttribute? hrefAttribute = useElement.Attribute("href");
+				if (hrefAttribute != null) {
+					string href = hrefAttribute.Value.Substring(1);
+					foreach (var element in elements) {
+						XAttribute? idAttribute = element.Attribute("id");
+						if (idAttribute != null && idAttribute.Value == href) {
+							useElement.Remove();
+						}
+					}
 				}
 			}
         }
