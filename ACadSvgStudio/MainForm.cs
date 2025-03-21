@@ -499,10 +499,15 @@ namespace ACadSvgStudio {
 
 		public bool TryGetTreeNode(string name, out TreeNode treeNode)
 		{
-			treeNode = findNode(_defsTreeView.Nodes, name);
-			if (treeNode != null)
+			treeNode = null;
+
+			foreach (TreeNode node in _defsTreeView.Nodes)
 			{
-				return true;
+				if (node.Name == name)
+				{
+					treeNode = node;
+					return true;
+				}
 			}
 
 			return false;
@@ -1459,9 +1464,10 @@ namespace ACadSvgStudio {
         }
 
 
-        private void eventCenterToFitMenuItem_Click(object sender, EventArgs e) {
-            svgViewerUserControl.CenterToFit();
-        }
+		private void eventCenterToFitMenuItem_Click(object sender, EventArgs e)
+		{
+			CenterToFit();
+		}
 
 
         private void eventCollapseAllMenuItem_Click(object sender, EventArgs e) {
@@ -1920,7 +1926,12 @@ namespace ACadSvgStudio {
             svgViewerUserControl.LoadSvgContent(svg, _centerToFitOnLoad);
             _centerToFitOnLoad = false;
 
-        }
+		}
+
+		internal void CenterToFit()
+		{
+			svgViewerUserControl.CenterToFit();
+		}
 
 
         internal void UpdateSvgViewer() {

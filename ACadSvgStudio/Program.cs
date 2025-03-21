@@ -99,21 +99,52 @@ namespace ACadSvgStudio {
 					{
 						form.UpdateHTML();
 
+						bool isState = blockRecordPath.Contains("!");
+
 						string blockRecordName;
-						if (blockRecordPath.Contains("/"))
+						if (isState)
 						{
-							blockRecordName = blockRecordPath.Substring(blockRecordPath.IndexOf("/") + 1);
+							blockRecordName = blockRecordPath.Substring(0, blockRecordPath.IndexOf("!"));
 						}
 						else
 						{
 							blockRecordName = blockRecordPath;
 						}
 
-						blockRecordName = "_" + blockRecordName.Replace("_", "__").Replace(" ", "_");
+						blockRecordName = blockRecordName.Replace("_", "__").Replace(" ", "_");
 
 						if (form.TryGetTreeNode(blockRecordName, out TreeNode treeNode))
 						{
-							treeNode.Checked = true;
+							if (isState)
+							{
+								string stateName = "_" + blockRecordPath
+									.Substring(blockRecordPath.IndexOf("!") + 1)
+									.Replace("_", "__").Replace(" ", "_");
+
+								bool stateFound = false;
+								foreach (TreeNode node in treeNode.Nodes)
+								{
+									if (node.Name == stateName)
+									{
+										node.Checked = true;
+										stateFound = true;
+										form.UpdateHTML();
+										form.CenterToFit();
+										break;
+									}
+								}
+
+								if (!stateFound)
+								{
+									MessageBox.Show($"State \"{stateName}\" does not exist!", "Block Record State Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+								}
+							}
+							else
+							{
+								treeNode.Checked = true;
+								form.UpdateHTML();
+								form.CenterToFit();
+							}
 						}
 						else
 						{
