@@ -44,21 +44,24 @@ namespace ACadSvgStudio.Defs {
 				XElement? def = DefsUtils.FindGroupById(id, _doc.Root!);
 				if (def != null) {
 					defs.Add(def);
+					continue;
 				}
-				else {
-					def = DefsUtils.FindPatternById(id, _doc.Root!);
-					if (def != null) {
-						defs.Add(def);
-					}
+				def = DefsUtils.FindPatternById(id, _doc.Root!);
+				if (def != null) {
+					defs.Add(def);
+					continue;
 				}
+
+				throw new InvalidOperationException($"Specified block with id={id} not found.");
 			}
 
 			if (defs.HasElements) {
 				if (_resolveDefs) {
 					foreach (XElement defsElement in defs.Elements()) {
+                        IEnumerable<XElement> defsElements = defs.Elements();
+                        DefsUtils.RemoveUseElements(defsElement, defsElements);
 						root.Add(defsElement);
 					}
-
 					DefsUtils.RemoveUseElements(root);
 				}
 				else {

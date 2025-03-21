@@ -14,6 +14,7 @@ namespace ACadSvgStudio.BatchProcessing {
 
         protected string _commandLine;
         protected string _parseError;
+        protected string _message;
 
 
         public abstract string ToCommandLine();
@@ -22,8 +23,13 @@ namespace ACadSvgStudio.BatchProcessing {
         public string CommandLine {
             get { return _commandLine; }
         }
-        
-        
+
+
+        public string Message {
+            get { return _message; }
+        }
+
+
         public string ParseError {
             get { return _parseError; }
         }
@@ -34,8 +40,7 @@ namespace ACadSvgStudio.BatchProcessing {
         }
 
 
-        public virtual void Execute(ConversionContext conversionContext, out string msg) {
-            msg = string.Empty;
+        public virtual void Execute(ConversionContext conversionContext) {
             return;
         }
     }

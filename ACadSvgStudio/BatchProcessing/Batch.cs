@@ -7,6 +7,7 @@
 
 
 using ACadSvg;
+
 using System.Text;
 
 namespace ACadSvgStudio.BatchProcessing {
@@ -16,6 +17,12 @@ namespace ACadSvgStudio.BatchProcessing {
         private string _path;
         private IList<CommandBase> _commands = new List<CommandBase>();
         private bool _hasChanges = false;
+        private string _log;
+
+
+        public string Log {
+            get { return _log; }
+        }
 
 
         public Batch(string path) {
@@ -25,7 +32,7 @@ namespace ACadSvgStudio.BatchProcessing {
         public bool HasChanges {
             get { return _hasChanges; }
         }
-        
+
 
         public bool IsEmpty {
             get { return _commands.Count == 0; }
@@ -54,31 +61,26 @@ namespace ACadSvgStudio.BatchProcessing {
         }
 
 
-		public bool HasErrors(out string errors)
-		{
+        public bool HasErrors(out string errors) {
             StringBuilder sb = new StringBuilder();
 
-			foreach (CommandBase command in _commands)
-			{
-				if (command.HasParseError)
-				{
+            foreach (CommandBase command in _commands) {
+                if (command.HasParseError) {
                     sb.AppendLine($"Parse error: {command.ParseError}");
-				}
-                else if (command is ExportCommand exportCommand)
-                {
-                    if (!File.Exists(exportCommand.InputFile))
-                    {
-                        sb.AppendLine($"File \"{exportCommand.InputFile}\" does not exist");
-                    }
                 }
-			}
-			
+                //else if (command is ExportCommand exportCommand) {
+                //    if (!File.Exists(exportCommand.InputFile)) {
+                //        sb.AppendLine($"File \"{exportCommand.InputFile}\" does not exist");
+                //    }
+                //}
+            }
+
             errors = sb.ToString();
             return sb.Length > 0;
-		}
+        }
 
 
-		public void AddCommand(string commandLine) {
+        public void AddCommand(string commandLine) {
             if (string.IsNullOrWhiteSpace(commandLine)) {
                 AddCommand(new EmptyLineCommand());
                 return;
@@ -122,13 +124,13 @@ namespace ACadSvgStudio.BatchProcessing {
         }
 
 
-        public void Execute(ConversionContext conversionContext, out string msg) {
+        public void Execute(ConversionContext conversionContext) {
             StringBuilder sb = new StringBuilder();
             foreach (CommandBase command in _commands) {
-                command.Execute(conversionContext, out string cmdMsg);
-                sb.AppendLine(cmdMsg);
+                command.Execute(conversionContext);
+                sb.AppendLine(command.Message);
             }
-            msg = sb.ToString();
+            _log = sb.ToString();
         }
 
 
@@ -163,13 +165,13 @@ namespace ACadSvgStudio.BatchProcessing {
         }
 
 
-		public override string ToString() {
+        public override string ToString() {
             StringBuilder sb = new StringBuilder();
-			foreach (CommandBase command in _commands) {
-				sb.AppendLine(command.ToCommandLine());
-			}
+            foreach (CommandBase command in _commands) {
+                sb.AppendLine(command.ToCommandLine());
+            }
             return sb.ToString();
-		}
+        }
 
 
         public IList<int> GetErrorLines() {
