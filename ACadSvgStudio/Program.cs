@@ -99,6 +99,15 @@ namespace ACadSvgStudio {
 					{
 						form.UpdateHTML();
 
+						bool isState = blockRecordPath.Contains("!");
+						string stateName = null;
+						if (isState)
+						{
+							stateName = blockRecordPath.Substring(blockRecordPath.IndexOf("!") + 1);
+							stateName = "_" + stateName.Replace("_", "__").Replace(" ", "_");
+							blockRecordPath = blockRecordPath.Substring(0, blockRecordPath.IndexOf("!"));
+						}
+
 						string blockRecordName;
 						if (blockRecordPath.Contains("/"))
 						{
@@ -113,7 +122,28 @@ namespace ACadSvgStudio {
 
 						if (form.TryGetTreeNode(blockRecordName, out TreeNode treeNode))
 						{
-							treeNode.Checked = true;
+							if (isState)
+							{
+								bool stateFound = false;
+								foreach (TreeNode node in treeNode.Nodes)
+								{
+									if (node.Name == stateName)
+									{
+										treeNode.Checked = true;
+										stateFound = true;
+										break;
+									}
+								}
+
+								if (!stateFound)
+								{
+									MessageBox.Show($"State \"{stateName}\" does not exist!", "Block Record State Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+								}
+							}
+							else
+							{
+								treeNode.Checked = true;
+							}
 						}
 						else
 						{

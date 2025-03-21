@@ -546,10 +546,15 @@ namespace ACadSvgStudio {
 
 		public bool TryGetTreeNode(string name, out TreeNode treeNode)
 		{
-			treeNode = findNode(_defsTreeView.Nodes, name);
-			if (treeNode != null)
+			treeNode = null;
+
+			foreach (TreeNode node in _defsTreeView.Nodes)
 			{
-				return true;
+				if (node.Name == name)
+				{
+					treeNode = node;
+					return true;
+				}
 			}
 
 			return false;
