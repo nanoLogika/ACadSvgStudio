@@ -100,18 +100,11 @@ namespace ACadSvgStudio {
 						form.UpdateHTML();
 
 						bool isState = blockRecordPath.Contains("!");
-						string stateName = null;
-						if (isState)
-						{
-							stateName = blockRecordPath.Substring(blockRecordPath.IndexOf("!") + 1);
-							stateName = "_" + stateName.Replace("_", "__").Replace(" ", "_");
-							blockRecordPath = blockRecordPath.Substring(0, blockRecordPath.IndexOf("!"));
-						}
 
 						string blockRecordName;
-						if (blockRecordPath.Contains("/"))
+						if (isState)
 						{
-							blockRecordName = blockRecordPath.Substring(blockRecordPath.IndexOf("/") + 1);
+							blockRecordName = blockRecordPath.Substring(0, blockRecordPath.IndexOf("!"));
 						}
 						else
 						{
@@ -124,6 +117,10 @@ namespace ACadSvgStudio {
 						{
 							if (isState)
 							{
+								string stateName = "_" + blockRecordPath
+									.Substring(blockRecordPath.IndexOf("!") + 1)
+									.Replace("_", "__").Replace(" ", "_");
+
 								bool stateFound = false;
 								foreach (TreeNode node in treeNode.Nodes)
 								{
