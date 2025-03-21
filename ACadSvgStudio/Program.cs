@@ -129,7 +129,7 @@ namespace ACadSvgStudio {
 								{
 									if (node.Name == stateName)
 									{
-										treeNode.Checked = true;
+										node.Checked = true;
 										stateFound = true;
 										break;
 									}
