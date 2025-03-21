@@ -11,6 +11,34 @@ namespace ACadSvgStudio {
 
     public partial class ExportSVGForm : Form {
 
+        private SortedSet<string> _defsIds;
+
+
+        public ExportSVGForm() {
+            InitializeComponent();
+        }
+
+        public ExportSVGForm(HashSet<string> defsIds, string subBlockPrefix) : this() {
+            _directoryTextBox.Text = Settings.Default.SvgDirectory;
+
+            getDefaultFilename(defsIds, subBlockPrefix);
+
+            _defsIds = new SortedSet<string>();
+            foreach (string id in defsIds) {
+                _defsIds.Add(id);
+            }
+
+            foreach (string defsId in _defsIds) {
+                DefsListViewItem defsListViewItem = new DefsListViewItem(defsId);
+                _defsCheckedListBox.Items.Add(defsListViewItem);
+            }
+
+            for (int x = 0; x < _defsCheckedListBox.Items.Count; x++) {
+                _defsCheckedListBox.SetItemChecked(x, true);
+            }
+        }
+
+
         public string SelectedPath {
             get {
                 return Path.Combine(_directoryTextBox.Text, _filenameTextBox.Text);
@@ -46,34 +74,6 @@ namespace ACadSvgStudio {
         public bool OpenAfterExport { get; private set; }
 
 
-        private SortedSet<string> _defsIds;
-
-
-        public ExportSVGForm() {
-            InitializeComponent();
-        }
-
-
-        public ExportSVGForm(HashSet<string> defsIds) : this() {
-            _directoryTextBox.Text = Settings.Default.SvgDirectory;
-
-            _defsIds = new SortedSet<string>();
-            foreach (string id in defsIds) {
-                _defsIds.Add(id);
-                if (!id.StartsWith("_")) {
-                    _filenameTextBox.Text = id + ".g.svg";
-                }
-            }
-
-            foreach (string defsId in _defsIds) {
-                DefsListViewItem defsListViewItem = new DefsListViewItem(defsId);
-                _defsCheckedListBox.Items.Add(defsListViewItem);
-            }
-
-            for (int x = 0; x < _defsCheckedListBox.Items.Count; x++) {
-                _defsCheckedListBox.SetItemChecked(x, true);
-            }
-        }
 
 
         private void ExportSVGForm_Load(object sender, EventArgs e) {
@@ -128,5 +128,18 @@ namespace ACadSvgStudio {
             _exportAndOpenButton.Enabled = enabled;
         }
 
+
+        private void getDefaultFilename(HashSet<string> defsIds, string subBlockPrefix) {
+            foreach (string id in defsIds) {
+                if (!id.StartsWith("__")) {
+                    string idPure = id;
+                    if (id.StartsWith(subBlockPrefix)) {
+                        idPure = id.Substring(subBlockPrefix.Length);
+                    }
+                    _filenameTextBox.Text = idPure + ".g.svg";
+                    break;
+                }
+            }
+        }
     }
 }

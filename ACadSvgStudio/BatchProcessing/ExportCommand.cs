@@ -61,7 +61,7 @@ namespace ACadSvgStudio.BatchProcessing {
         }
 
 
-        public override void Execute(ConversionContext conversionContext, out string msg) {
+        public override void Execute(ConversionContext conversionContext) {
             string inputPath = getFullPath(_inputPath, Settings.Default.BatchACadLoadBaseDirectory);
             string outputPath = getFullPath(_outputPath, Settings.Default.BatchSvgExportBaseDirectory);
 
@@ -72,10 +72,16 @@ namespace ACadSvgStudio.BatchProcessing {
 
             DocumentSvg docSvg = ACadLoader.LoadDwg(inputPath, conversionContext);
             string svgText = docSvg.ToSvg();
-            DefsExporter exporter = new DefsExporter(svgText, _resolveDefs);
-            exporter.Export(outputPath, _defsGroupIds);
 
-            msg = $"Exporting '{_outputPath}' finished.";
+            try {
+                DefsExporter exporter = new DefsExporter(svgText, _resolveDefs);
+                exporter.Export(outputPath, _defsGroupIds);
+
+                _message = $"Exporting '{_outputPath}' finished.";
+            }
+            catch (InvalidOperationException ex) {
+                _message = $"Exporting '{_outputPath}' failed. {ex.Message}";
+            }
         }
 
 
