@@ -131,6 +131,8 @@ namespace ACadSvgStudio {
 									{
 										node.Checked = true;
 										stateFound = true;
+										form.UpdateHTML();
+										form.CenterToFit();
 										break;
 									}
 								}
@@ -143,6 +145,8 @@ namespace ACadSvgStudio {
 							else
 							{
 								treeNode.Checked = true;
+								form.UpdateHTML();
+								form.CenterToFit();
 							}
 						}
 						else

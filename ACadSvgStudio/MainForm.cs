@@ -1678,7 +1678,7 @@ namespace ACadSvgStudio {
 
 		private void eventCenterToFitMenuItem_Click(object sender, EventArgs e)
 		{
-			svgViewerUserControl.CenterToFit();
+			CenterToFit();
 		}
 
 
@@ -2198,6 +2198,11 @@ namespace ACadSvgStudio {
 			svgViewerUserControl.LoadSvgContent(svg, _centerToFitOnLoad);
 			_centerToFitOnLoad = false;
 
+		}
+
+		internal void CenterToFit()
+		{
+			svgViewerUserControl.CenterToFit();
 		}
 
 		internal void UpdateSvgViewer()
