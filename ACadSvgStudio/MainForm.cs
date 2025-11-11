@@ -555,7 +555,10 @@ namespace ACadSvgStudio {
 
             DocumentSvg docSvg = ACadLoader.LoadDwg(filename, _conversionContext);
             string svgText = docSvg.ToSvg();
-            string scalesSvgText = docSvg.GetModelSpaceRectangle().ToString();
+            var modelSpaceRectangle = docSvg.GetModelSpaceRectangle();
+            string scalesSvgText = modelSpaceRectangle == null ?
+                "Model-space rectangle not set" :
+                modelSpaceRectangle.ToString();
 
             updateConversionInfo(filename, "Converted DWG", svgText, scalesSvgText);
 
