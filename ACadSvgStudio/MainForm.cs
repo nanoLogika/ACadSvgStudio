@@ -5,18 +5,23 @@
 //  See LICENSE file in the project root for full license information.
 #endregion
 
+using System.Globalization;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
-using File = System.IO.File;
 
 using ACadSvg;
 
-using ScintillaNET;
-using ScintillaNET_FindReplaceDialog;
-using SvgElements;
-using ACadSvgStudio.Defs;
 using ACadSvgStudio.BatchProcessing;
-using System.Xml;
+using ACadSvgStudio.Defs;
+
+using ScintillaNET;
+
+using ScintillaNET_FindReplaceDialog;
+
+using SvgElements;
+
+using File = System.IO.File;
 
 
 namespace ACadSvgStudio {
@@ -24,7 +29,7 @@ namespace ACadSvgStudio {
     public partial class MainForm : Form {
 
         public const string AppName = "ACad SVG Studio";
-        private const string SvgKeywords = "circle defs ellipse g path pattern rect text tspan";
+        private const string SvgKeywords = "circle defs ellipse g path line pattern rect text tspan";
         private const string BatchKeywords = "export -i --input -o --output -d --defs-groups -r --resolve-defs";
 
         private RecentlyOpenedFilesManager recentlyOpenedFilesManager;
@@ -44,6 +49,8 @@ namespace ACadSvgStudio {
         private FindReplace _findReplace;
         private int _maxLineNumberCharLength;
         private StatusLabelMessage _statusLabelMessage;
+
+        private string _scintillaSvgGroupEditorVariables = string.Empty;
 
         private bool _centerToFitOnLoad = true;
         private bool _updatingHTMLEnabled = false;
@@ -632,6 +639,8 @@ namespace ACadSvgStudio {
             svgViewerUserControl.DragEnter += (s, e) => eventEditorDragEnter(s, e);
             svgViewerUserControl.DragDrop += (s, e) => eventEditorDragDrop(s, e);
 
+            _scintillaSvgGroupEditor.CharAdded += eventScintillaSvgGroupEditorCharAdded;
+
 
             // Recipe for XML
             _scintillaSvgGroupEditor.Lexer = ScintillaNET.Lexer.Xml;
@@ -679,6 +688,24 @@ namespace ACadSvgStudio {
 
             // Init status label message
             _statusLabelMessage = new StatusLabelMessage(_scintillaSvgGroupEditor, _statusLabel);
+        }
+
+
+        private void eventScintillaSvgGroupEditorCharAdded(object? sender, CharAddedEventArgs e) {
+            // Find the word start
+            var currentPos = _scintillaSvgGroupEditor.CurrentPosition;
+            var wordStartPos = _scintillaSvgGroupEditor.WordStartPosition(currentPos, true);
+
+            // Display the autocompletion list
+            var lenEntered = currentPos - wordStartPos;
+            if (lenEntered > 0) {
+                if (!_scintillaSvgGroupEditor.AutoCActive) {
+                    _scintillaSvgGroupEditor.AutoCShow(lenEntered, _scintillaSvgGroupEditorVariables);
+                }
+            }
+
+
+            //_scintillaSvgGroupEditor.IndicatorClearRange(0, _scintillaSvgGroupEditor.TextLength);
         }
 
 
@@ -1808,28 +1835,32 @@ namespace ACadSvgStudio {
         #region -  SVG and HTML
 
         private string buildSVG(bool showScales, bool addCss, out bool isSvgEmpty, bool createFile = false) {
-            isSvgEmpty = true;
-
-            if (_conversionContext == null) {
-                _conversionContext = new ConversionContext();
-            }
-
-            _conversionContext.UpdateSettings(
-                _svgProperties.GetConversionOptions(),
-                _svgProperties.GetViewbox(),
-                _svgProperties.GetGlobalAttributeData());
+            updateConversionContextForSvg();
 
             SvgElement svgElement = DocumentSvg.CreateSVG(_conversionContext);
 
             if (createFile) {
-                svgElement.Style = "background-color:black;";
+                Color backGroundColor = _svgProperties.BackgroundColor;
+                var colorString = $"rgba({backGroundColor.R}, {backGroundColor.G}, {backGroundColor.B}, {backGroundColor.A / 255.0})";
+                svgElement.Style = "background-color:{colorString};";
                 svgElement.Width = _svgProperties.ViewBoxWidth.ToString();
                 svgElement.Height = _svgProperties.ViewBoxHeight.ToString();
                 svgElement.WithViewbox(null, null, null, null);
             }
 
             string editorText = _scintillaSvgGroupEditor.Text;
-            if (!string.IsNullOrEmpty(editorText)) {
+            isSvgEmpty = string.IsNullOrEmpty(editorText);
+
+            if (!isSvgEmpty) {
+                try {
+                    XElement xElement = XElement.Parse(editorText);
+                    editorText = processCodeAttribute(editorText, xElement.Attribute("ng-init"));
+                }
+                catch (Exception ex) {
+                    _statusLabelMessage.SetMessage(ex.Message);
+                    throw;
+                }
+
                 if (createFile) {
                     try {
                         XElement xElement = XElement.Parse(editorText);
@@ -1842,10 +1873,10 @@ namespace ACadSvgStudio {
                         throw;
                     }
                 }
+
                 svgElement.AddValue(editorText);
             }
 
-            isSvgEmpty = string.IsNullOrEmpty(editorText);
 
             XElement svgXElement = svgElement.GetXml();
 
@@ -1890,6 +1921,45 @@ namespace ACadSvgStudio {
             }
 
             return result.Replace("&gt;", ">").Replace("&lt;", "<");
+        }
+
+        private void updateConversionContextForSvg() {
+            if (_conversionContext == null) {
+                _conversionContext = new ConversionContext();
+            }
+
+            _conversionContext.UpdateSettings(
+                _svgProperties.GetConversionOptions(),
+                _svgProperties.GetViewbox(),
+                _svgProperties.GetGlobalAttributeData());
+        }
+
+        private string processCodeAttribute(string editorText, XAttribute? ngInitAttr) {
+            if (ngInitAttr != null) {
+                string code = ngInitAttr.Value.Trim();
+                if (!string.IsNullOrEmpty(code)) {
+                    var replacements = VariableEvaluator.Evaluator.Evaluate(code);
+                    _scintillaSvgGroupEditorVariables = ToBlankSeparatedList(replacements.Keys);
+                    foreach (var replacement in replacements) {
+                        string rep = replacement.Value.ToString(CultureInfo.InvariantCulture);
+                        editorText = editorText.Replace("{{" + replacement.Key + "}}", rep);
+                    }
+                }
+            }
+
+            return editorText;
+        }
+
+
+        private string ToBlankSeparatedList(Dictionary<string, double>.KeyCollection keys) {
+            StringBuilder sb = new StringBuilder();
+            foreach (string key in keys) {
+                if (sb.Length > 0) {
+                    sb.Append(" ");
+                }
+                sb.Append(key);
+            }
+            return sb.ToString();
         }
 
 

@@ -78,9 +78,7 @@
     <Reference Include="ACadSharp">
       <HintPath>Imports\ACadSharp.dll</HintPath>
     </Reference>
-    <Reference Include="ACadSvg">
-      <HintPath>Imports\ACadSvg.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\ACadSvg\ACadSvg\ACadSvg.csproj" />
     <Reference Include="SvgElements">
       <HintPath>Imports\SvgElements.dll</HintPath>
     </Reference>
