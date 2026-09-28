@@ -1,0 +1,2632 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ACadSvg</name>
+    </assembly>
+    <members>
+        <member name="T:ACadSvg.ACadLoader">
+            <summary>
+            This loader provides methods to read AutoCAD files and convert
+            AutoCAD <see cref="!:Entities"/> and related objects
+            to a <see cref="T:ACadSvg.DocumentSvg"/>
+            object. The DocumentSvg returns a XML/SVG structure.
+            </summary>
+            <remarks>
+            Currently only DWG files can be red.
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.ACadLoader.LoadDwg(System.String,ACadSvg.ConversionContext)">
+            <summary>
+            Loads a DWG file from the specified path and converts it to a SVG/XML structure.
+            SVG is represented by a <see cref="T:ACadSvg.DocumentSvg"/> object.
+            </summary>
+            <param name="path">The path of the DWG file to be read.</param>
+            <param name="ctx">The conversion context providing conversion options.
+            It also received the conversion log.</param>
+            <returns>A <see cref="T:ACadSvg.DocumentSvg" /> representing the read document converted to SVG/XML.</returns>
+        </member>
+        <member name="M:ACadSvg.ACadLoader.LoadDxf(System.String,ACadSvg.ConversionContext)">
+            <summary>
+            Loads a DXF file from the specified path and converts it to a SVG/XML structure.
+            SVG is represented by a <see cref="T:ACadSvg.DocumentSvg"/> object.
+            </summary>
+            <param name="path">The path of the DWG file to be read.</param>
+            <param name="ctx">The conversion context providing conversion options.
+            It also received the conversion log.</param>
+            <returns>A <see cref="T:ACadSvg.DocumentSvg" /> representing the read dicument converted to SVG/XML.</returns>
+        </member>
+        <member name="T:ACadSvg.AngularDimensionSvg">
+            <summary>
+            Base class for classes representing SVG elements converted from AutoCAD angular-dimension
+            entities. Methods of this class provide basic methods to create the arc dimension line and
+            the <i>text</i> element for the mesurement text.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.AngularDimensionSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of this <see cref="T:ACadSvg.AngularDimensionSvg"/>.
+            </summary>
+            <param name="entity">The angular-dimension to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.AngularDimensionSvg.CreateDimensionLineArc(CSMath.XY,System.Double,System.Double,System.Double)">
+            <summary>
+            Creates a <i>path</i> SVG element containing an arc and adds it to the <i>group</i>
+            element of this <see cref="T:ACadSvg.AngularDimensionSvg"/>.
+            </summary>
+            <param name="center">The center of the arc.</param>
+            <param name="r">The radus of the arc.</param>
+            <param name="startAngle">The angle of the begin of the arc.</param>
+            <param name="endAngle">The angle of the end of the arc.</param>
+        </member>
+        <member name="M:ACadSvg.AngularDimensionSvg.GetArrorwsDirection(System.Double,System.Double,System.Double,System.Boolean,System.Boolean,System.Double@,CSMath.XY@,CSMath.XY@)">
+            <summary>
+            
+            </summary>
+            <param name="r"></param>
+            <param name="firstAngle"></param>
+            <param name="secondAngle"></param>
+            <param name="firstArrowOutside"></param>
+            <param name="secondArrowOutside"></param>
+            <param name="alpha"></param>
+            <param name="firstArrowDirection"></param>
+            <param name="secondArrowDirection"></param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:ACadSvg.AngularDimensionSvg.CreateMeasurementText(System.Double)" -->
+        <member name="T:ACadSvg.ArcSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Arc"/> entity.
+            The <see cref="T:ACadSharp.Entities.Arc"/> entity is converted into a <i>path</i> element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.ArcSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.ArcSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Arc"/> entity.
+            </summary>
+            <param name="arc">The <see cref="T:ACadSharp.Entities.Arc"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.ArcSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.AttributeDefinitionSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.AttributeDefinition"/> entity.
+            Conversion of this entity is not yet supported.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.AttributeDefinitionSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.AttributeDefinitionSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.AttributeDefinition"/> entity.
+            </summary>
+            <param name="attributeDefinition">The <see cref="T:ACadSharp.Entities.AttributeDefinition"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.AttributeDefinitionSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="M:ACadSvg.AttributeDefinitionSvg.ToSvg">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.BlockRecordsSvg">
+            <summary>
+            Represents the list of all <see cref="T:ACadSvg.BlockRecordSvg"/> objects converted
+            from the <see cref="T:ACadSharp.Tables.BlockRecord"/> objects found in the DWG document header.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.BlockRecordsSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.BlockRecordSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Tables.BlockRecord"/> table entry.
+            The <see cref="T:ACadSharp.Tables.BlockRecord"/> is converted into a <i>g</i> element. A <see cref="T:ACadSharp.Tables.BlockRecord"/>
+            may be associated wit a <see cref="T:ACadSharp.Objects.Evaluations.BlockVisibilityParameter"/> object that defines subsets
+            of entities that are converted to subordinate <i>g</i> elements.
+            </summary>
+            <remarks><para>
+            The implementation of ths class is not complete:
+            </para>
+            <list type="bullet"> <item>
+            The conversion is executed in the constructor, the ToSvgElement() method is missing.
+            </item><item>
+            Currently a fixed pattern for the <see cref="P:ACadSvg.BlockRecordSvg.Skip"/> condtion is used:
+            Block records are skipped, when the name starts with "*".
+            </item></list>
+            </remarks>
+        </member>
+        <member name="P:ACadSvg.BlockRecordSvg.Skip">
+            <summary>
+            Gets a value indicating whether this <see cref="T:ACadSharp.Tables.BlockRecord"/> is to be skipped
+            and excluded from the conversion. The conversion ist to be skipped when the
+            block name matches a pattern, defined in the conversion options
+            (<see cref="T:ACadSvg.ConversionContext"/>).
+            </summary>
+        </member>
+        <member name="T:ACadSvg.CircleSvg">
+            <summary>
+            Represents an SVG <i>circle</i> converted from an ACad <see cref="T:ACadSharp.Entities.Circle"/> entity.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.CircleSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.CircleSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Circle"/> entity.
+            /// </summary>
+            <param name="circle">The <see cref="T:ACadSharp.Entities.Circle"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.CircleSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.ConversionContext">
+            <summary>
+            The conversion context contains various informations provided by the calling
+            application. The <see cref="P:ACadSvg.ConversionContext.ConversionOptions"/> determine various details of
+            the conversion process. The <see cref="P:ACadSvg.ConversionContext.ConversionInfo"/> receives the
+            conversion log and the summary of occurring entities. 
+            <see cref="P:ACadSvg.ConversionContext.ViewboxData"/> and <see cref="P:ACadSvg.ConversionContext.GlobalAttributeData"/> provide setting
+            required for building the SVG element for the display in an application and for
+            the output as SVG file.
+            The internal <see cref="P:ACadSvg.ConversionContext.BlocksInDefs"/> property contains the list of converted
+            <see cref="T:ACadSharp.Tables.BlockRecord"/> objects that is filled during the conversion.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionContext.BlocksInDefs">
+            <summary>
+            Gets a <see cref="T:ACadSvg.BlockRecordsSvg"/> object containing a list of
+            <see cref="T:ACadSvg.BlockRecordSvg"/> objects representing the <see cref="T:ACadSharp.Tables.BlockRecord"/>
+            objects found in the AutoCAD document and <see cref="T:ACadSvg.PatternSvg"/> objects
+            used by <see cref="T:ACadSvg.HatchSvg"/> objects. This list is filled during the
+            conversion.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionContext.ConversionInfo">
+            <summary>
+            Gets a <see cref="T:ACadSvg.ConversionInfo"/> object receifing the conversion
+            log and the summary of occurring entities.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionContext.ConversionOptions">
+            <summary>
+            Gets or sets a <see cref="T:ACadSvg.ConversionOptions"/> object providing
+            various options for the conversion process.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionContext.ViewboxData">
+            <summary>
+            Gets or sets a <see cref="T:ACadSvg.ViewboxData"/> object providung data for an
+            optional <i>viewbox</i> attribute for the <i>svg</i> element.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionContext.GlobalAttributeData">
+            <summary>
+            Gets or sets a <see cref="T:ACadSvg.GlobalAttributeData"/> object providing various
+            setings to create attributes for the main group and the <i>svg</i> element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.ConversionContext.UpdateSettings(ACadSvg.ConversionOptions,ACadSvg.ViewboxData,ACadSvg.GlobalAttributeData)">
+            <summary>
+            Updates the <see cref="T:ACadSvg.ConversionOptions"/>, <see cref="T:ACadSvg.ViewboxData"/>,
+            and <see cref="T:ACadSvg.GlobalAttributeData"/> of this <see cref="T:ACadSvg.ConversionContext"/>.
+            </summary>
+            <param name="conversionOptions"></param>
+            <param name="viewboxData"></param>
+            <param name="globalAttributeData"></param>
+        </member>
+        <member name="T:ACadSvg.ConversionInfo">
+            <summary>
+            Collects statistical and logging information during a conversion
+            process.
+            </summary>
+        </member>
+        <member name="T:ACadSvg.ConversionInfo.ConversionStatus">
+            <summary>
+            Specifies possible status of Entity conversion.
+            </summary>
+        </member>
+        <member name="F:ACadSvg.ConversionInfo.ConversionStatus.Successful">
+            <summary>
+            The conversion was successfully processed.
+            </summary>
+        </member>
+        <member name="F:ACadSvg.ConversionInfo.ConversionStatus.Failed">
+            <summary>
+            The conversion failed due to an exception.
+            </summary>
+        </member>
+        <member name="F:ACadSvg.ConversionInfo.ConversionStatus.Skipped">
+            <summary>
+            The conversion of an entity has been skipped due to the value
+            of the <see cref="T:ACadSvg.EntitySvg"/>.<see cref="P:ACadSvg.EntitySvg.Skip"/>
+            property. Ths may be due to a condition evaluated by the
+            entity and the Skip settings of the application.
+            </summary>
+        </member>
+        <member name="F:ACadSvg.ConversionInfo.ConversionStatus.NotSupported">
+            <summary>
+            The conversion of an entity could not be processed because
+            the entity is not supported by ACadSharp.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionInfo.TotalEntities">
+            <summary>
+            Gets the number of entities that have been tried to be converted.
+            This counter is inceremented by calls of the <see cref="M:ACadSvg.ConversionInfo.RegisterConversion(ACadSharp.Entities.Entity,ACadSvg.ConversionInfo.ConversionStatus)"/>
+            method.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionInfo.SuccessfulEntityConversions">
+            <summary>
+            Gets the number of entities that have been successfully converted.
+            This counter is inceremented by calls of the <see cref="M:ACadSvg.ConversionInfo.RegisterConversion(ACadSharp.Entities.Entity,ACadSvg.ConversionInfo.ConversionStatus)"/>
+            method with status=<see cref="F:ACadSvg.ConversionInfo.ConversionStatus.Successful"/>.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionInfo.OccurringEntities">
+            <summary>
+            Receives the list of entity types and status occurring in the conversion.
+            This list is filled with every call of the <see cref="M:ACadSvg.ConversionInfo.RegisterConversion(ACadSharp.Entities.Entity,ACadSvg.ConversionInfo.ConversionStatus)"/>
+            method.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.ConversionInfo.GetOccurringEntitiesLog">
+            <summary>
+            Gets the logged of <see cref="P:ACadSvg.ConversionInfo.OccurringEntities"/> as string.
+            </summary>
+            <returns>
+            A multiline string containing the log logged occurring entities.
+            </returns>
+        </member>
+        <member name="M:ACadSvg.ConversionInfo.GetLog">
+            <summary>
+            Returns the log from the last conversion.
+            </summary>
+            <returns>A multiline string containing the log entries.</returns>
+        </member>
+        <member name="M:ACadSvg.ConversionInfo.Log(System.String)">
+            <summary>
+            Adds an entry with the specified message to the log. The log cen be
+            retrieved with the <see cref="M:ACadSvg.ConversionInfo.GetLog"/> method.
+            </summary>
+            <param name="message">The message to be added to the log.</param>
+        </member>
+        <member name="T:ACadSvg.ConversionOptions">
+            <summary>
+            Provides providing various options for the conversion process.
+            </summary>
+        </member>
+        <member name="T:ACadSvg.ConversionOptions.FilterMode">
+            <summary>
+            Defines values for the <see cref="P:ACadSvg.ConversionOptions.GroupFilterMode"/> property indicating
+            whether the filter expresion for blocks is to be applied as an exlude filter,
+            an include filter, or the filter is off.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.ReverseY">
+            <summary>
+            Get or sets a value indicating that the y-direction is to be reversed, i.e.
+            y-coordinates grow from bottom to top.
+            </summary>
+            <remarks>
+            In the SVG coordinate system y grows from top to bottom.
+            This option allows to reverse the y-coodinates so that y grows from bottom
+            to top and AutoCAD coordinates can be used as they are delivered.
+            </remarks>
+            <value>
+            <b>true</b>, when the y-direction is to be reversed; otherwise, <b>false</b>.
+            </value>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.ExportHandleAsID">
+            <summary>
+            Gets or sets a value indicating that an <i>id</i> attribute is to be created 
+            for every converted AutoCAD Entity from the entity handle (Hex).
+            </summary>
+            <value>
+            <b>true</b>, when a<i>id</i> attributes are to be created; otherwise, <b>false</b>.
+            </value>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.ExportLayerAsClass">
+            <summary>
+            Gets or sets a value indicating that a <i>class</i>-attribute is to created
+            for every converted AutoCAD Entity from the name of the entity's layer.
+            </summary>
+            <value>
+            <b>true</b>, when <i>class</i>-attributes are to created; otherwise, <b>false</b>.
+            </value>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.ExportObjectTypeAsClass">
+            <summary>
+            Gets or sets a value indicating that a <i>class</i>>-attribute is to be created
+            for every converted AutoCAD Entity from the object type.
+            </summary>
+            <value>
+            <b>true</b>, when <i>class</i>>-attributes are to be created; otherwise, <b>false</b>.
+            </value>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.DefaultLineWeight">
+            <summary>
+            Gets or sets the default line weight in hundreths of mm.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.LineweightScaleFactor">
+            <summary>
+            Gets or sets the lineweight scale factor.
+            </summary>
+            <value>
+            The lineweight factor or zero if the lineweight values shall be useded as
+            read from AutoCAD.
+            </value>
+            <remarks>
+            The lineweight value specified in mm in WCS is to be multiplied with a scale
+            factor to create reasonable stroke-width attributes in SVG.
+            </remarks>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.CreateScaleFromModelSpaceExtent">
+            <summary>
+            Gets or sets a value indicating whether a rectangle element representing the
+            model-space extent is to be created and stored in the Scales editor.
+            </summary>
+            <value>
+            <b>true</b> if a rectangle element is to be created; otherwise, <b>false</b>.
+            </value>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.CreateViewboxFromModelSpaceExtent">
+            <summary>
+            Gets or sets a value indicating whether the viewbox limits shall be set
+            according to the model-space extent.
+            </summary>
+            <value>
+            <b>true</b> if the viewbox limits shall be set; otherwise, <b>false</b>.
+            </value>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.GroupFilterRegex">
+            <summary>
+            Gets or sets a regular expression that is to be used to filter the Blocks read
+            from the AutoCAD file by their name. 
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.GroupFilterMode">
+            <summary>
+            Gets or sets a value indicating whether the filter expresion for blocks is to be
+            applied as exlude filter, as include filter, or the filter is off.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.ConcentrateInserts">
+            <summary>
+            Gets or sets a value indicating whether Insert entities converted to &lt;use ...&gt;
+            elements are collected and placed at the the main group. Inserts foung in blocks
+            are not affected.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.CreateExtraGroupForFreeElements">
+            <summary>
+            Gets or sets a value indicating whether an extra group for free elements, i.e.
+            elements that are not part of a block, is created.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.BlockVisibilityParametersPrefix">
+            <summary>
+            Gets or sets the prefix for dynamic-block subblock IDs. 
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ConversionOptions.CreateDebugElements">
+            <summary>
+            Gets or sets a value indicating whether SVG elements are to be included
+            that reperesent coordinates or definition points, e.g., in leaders or dimensions.
+            </summary>
+        </member>
+        <member name="T:ACadSvg.DimensionAlignedSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.DimensionAligned"/> entity.
+            The <see cref="T:ACadSharp.Entities.DimensionAligned"/> entity is a complex element including dimension lines,
+            extension lines, arrowheads, and a text element for the measurement.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionAlignedSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.DimensionAngular2LineSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSvg.DimensionAngular2LineSvg"/> entity.
+            The <see cref="T:ACadSvg.DimensionAngular2LineSvg"/> entity is converted into a complex element including
+            several <i>path</i> elements for the dimension-line arc, extension lines, filled <i>path</i>
+            elements for the standard arrowheads, and finally a <i>text</i> element for the mesurement.
+            </summary>
+        </member>
+        <member name="T:ACadSvg.DimensionAngular3PtSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.DimensionAngular3Pt"/> entity.
+            The <see cref="T:ACadSharp.Entities.DimensionAngular3Pt"/> entity is converted into a complex element including
+            several <i>path</i> elements for the dimension-line arc, extension lines, filled <i>path</i>
+            elements for the standard arrowheads, and finally a <i>text</i> element for the mesurement.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionAngular3PtSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.DimensionAngular3PtSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.DimensionAngular3Pt"/> entity.
+            </summary>
+            <param name="ang3PtDim">The <see cref="T:ACadSharp.Entities.DimensionAngular3Pt"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.DimensionAngular3PtSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.DimensionLinearSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.DimensionLinear"/> entity.
+            The <see cref="T:ACadSharp.Entities.DimensionLinear"/> entity is a complex element including several <i>path</i>
+            elements for the dimension lines, extension lines, filled <i>path</i> elements for the
+            standard arrowheads, and finally a <i>text</i> element for the mesurement text.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionLinearSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.DimensionLinearSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.DimensionLinear"/> entity.
+            </summary>
+            <param name="linDim">The <see cref="T:ACadSharp.Entities.DimensionLinear"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="T:ACadSvg.DimensionSvg">
+            <summary>
+            The base class for classes representing SVG elements converted from a AutoCAD dimension
+            entities.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionSvg.CreateGroupElement">
+            <summary>
+            Creates an SVG <i>group</i> element that is to contain the liene and text elements of
+            a dimension entity.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionSvg.GetTextRot(System.Double)">
+            <summary>
+            Evaluates the rotation of the dimension text, that is to be aligned with the
+            direction of the dimension line. Vertical (90°) text must be readable from the
+            right side. Text with an angle larger than 90° ...
+            </summary>
+            <param name="dimDirRot"></param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:ACadSvg.DimensionSvg.CreateMeasurementText(System.Double)" -->
+        <member name="M:ACadSvg.DimensionSvg.GetToleranceOption">
+            <summary>
+            Gets a value indicating whether the measurement contains the measurement only
+            or with a symmetric tolerance ± or stacked +/- tolerance specification, or
+            a stacked limits specification.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter">
+            <summary>
+            The base class for angular formatters used by angular dimension entities.
+            The text created contains a value part with or without tolerance, but no
+            alternate-unit value. Various formatters according to the specified
+            <see cref="!:DimensionProperties.AngularUnitFormat"/> can be created with the
+            <see cref="M:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter.CreateMeasurementFormatter(ACadSharp.Types.Units.AngularUnitFormat,ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.Double)"/> method.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of an angular measurement formatter.
+            </summary>
+            <param name="dimension">The<see cref="T:ACadSharp.Entities.Dimension"/> object the dimension text is to be created for.</param>
+            <param name="dimProps">A <see cref="T:ACadSvg.Extensions.DimensionProperties"/> object providing all
+            dimension-style properties specufied in the <see cref="T:ACadSharp.Tables.DimensionStyle"/> object
+            associated with the dimension object possibly overriden by the dimension object's
+            extended data.</param>
+            <param name="defaultPostFix">A string specifying a default prefix and/or postfix
+            used for both the primary and the alternate value if no prefix/postfix is specified
+            by the dimension-style properties.</param>
+            <remarks>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter.CreateMeasurementFormatter(ACadSharp.Types.Units.AngularUnitFormat,ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.Double)">
+            <summary>
+            Creates a new instance of an angular measurement formatter as specified by the
+            <paramref name="format"/> parameter. 
+            </summary>
+            <param name="dimension">The<see cref="T:ACadSharp.Entities.Dimension"/> object the dimension text is to be created for.</param>
+            <param name="dimProps">A <see cref="T:ACadSvg.Extensions.DimensionProperties"/> object providing all
+            dimension-style properties specufied in the <see cref="T:ACadSharp.Tables.DimensionStyle"/> object
+            associated with the dimension object possibly overriden by the dimension object's
+            extended data.</param>
+            <returns>
+            An angular measurement formatter as specified by the <paramref name="format"/>
+            parameter. The returned formatter can be a <see cref="T:ACadSvg.DimensionTextFormatter.DecimalDegreesMeasurementFormatter"/>,
+            <see cref="T:ACadSvg.DimensionTextFormatter.RadiansMeasurementFormatter"/>, <see cref="T:ACadSvg.DimensionTextFormatter.GradiansMeasurementFormatter"/>,
+            <see cref="T:ACadSvg.DimensionTextFormatter.SurveyorUnitsMeasurementFormatter"/>, or <see cref="T:ACadSvg.DimensionTextFormatter.DegreesMinutesSecondsMeasurementFormatter"/>.
+            </returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter.GetDisplayValue(System.Double)">
+            <summary>
+            When implemented in a derived class scales the angle value in radians from AutoCAD
+            to the specific angular unit.
+            </summary>
+            <param name="value">The angle value in radians as specified by AutoCAD.</param>
+            <returns>The scaled value.</returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter.FormatMeasurement">
+            <inheritdoc />
+            <remarks>
+            The measurement value
+            <!-- No matching elements were found for the following include tag --><include file="_comments.xml" path="docTokens/docToken[@name=&quot;angularAcaledTo&quot;]" />
+            <docToken name="angularFormattedAs">
+    and formatted to the specific angular format (<see cref="!:FormatValue" />)
+  </docToken>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.AngularDimensionDecimalPlaces" /> and
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.AngularZeroHandling" />.
+            <docToken name="primaryPostFix">
+    Prefix and/or suffix (<see cref="P:ACadSvg.Extensions.DimensionProperties.PostFix" />) or,
+    if not specified, the default PostFix is added.
+  </docToken>.
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter.FormatMeasurementToleranceSymmetric">
+            <inheritdoc />
+            <remarks>
+            The <see cref="P:ACadSvg.Extensions.DimensionProperties.PlusTolerance" /> value
+            <docToken name="angularScaledTo">
+    from AutoCAD in radians is scaled to the specific angular unit (<see cref="M:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter.GetDisplayValue(System.Double)" />)
+  </docToken>
+            <docToken name="angularFormattedAs">
+    and formatted to the specific angular format (<see cref="!:FormatValue" />)
+  </docToken>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceDecimalPlaces" /> and
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceZeroHandling" />.
+            <docToken name="primaryPostFix">
+    Prefix and/or suffix (<see cref="P:ACadSvg.Extensions.DimensionProperties.PostFix" />) or,
+    if not specified, the default PostFix is added.
+  </docToken>.
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter.FormatMeasurementTolerancePlusMinus">
+            <inheritdoc />
+            <remarks>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.PlusTolerance" />, <see cref="P:ACadSvg.Extensions.DimensionProperties.MinusTolerance" /> values 
+            <docToken name="angularScaledToPlural">
+    from AutoCAD in radians are scaled to the specific angular unit (<see cref="M:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter.GetDisplayValue(System.Double)" />)
+  </docToken>
+            <docToken name="angularFormattedAs">
+    and formatted to the specific angular format (<see cref="!:FormatValue" />)
+  </docToken>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceDecimalPlaces" /> and
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceZeroHandling" />.
+            <docToken name="primaryPostFix">
+    Prefix and/or suffix (<see cref="P:ACadSvg.Extensions.DimensionProperties.PostFix" />) or,
+    if not specified, the default PostFix is added.
+  </docToken>
+            to both.
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter.FormatMeasurementLimits">
+            <inheritdoc />
+            <remarks>
+            The limits
+            (Measurement + <see cref="P:ACadSvg.Extensions.DimensionProperties.PlusTolerance" /> and
+            Measumreent - <see cref="P:ACadSvg.Extensions.DimensionProperties.MinusTolerance" />)
+            <docToken name="angularScaledToPlural">
+    from AutoCAD in radians are scaled to the specific angular unit (<see cref="M:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter.GetDisplayValue(System.Double)" />)
+  </docToken>
+            <docToken name="angularFormattedAs">
+    and formatted to the specific angular format (<see cref="!:FormatValue" />)
+  </docToken>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceDecimalPlaces" /> and
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceZeroHandling" />.
+            <docToken name="primaryPostFix">
+    Prefix and/or suffix (<see cref="P:ACadSvg.Extensions.DimensionProperties.PostFix" />) or,
+    if not specified, the default PostFix is added.
+  </docToken>
+            to both.
+            </remarks>
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.ArchitecturalMeasurementFormatter">
+            <summary>
+            Represents an architectural-measurement formatter for linear dimensions. The measuement
+            value specified in inches is to be formatted as feets, integer-inches value, and a
+            fraction.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.ArchitecturalMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.DimensionTextFormatter.ArchitecturalMeasurementFormatter"/>.
+            </summary>
+            <inheritdoc />
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.ArchitecturalMeasurementFormatter.FormatValue(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            Formats the specified value (in inches) as feets and inches, and the fractional
+            part of the inches as fraction
+            (see <see cref="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatInchesToFeetInchesFractional(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)" />.
+            </summary>
+            <param name="precision">
+      Indicates the precision of the converted value. This
+      parameter specifies the denominator of the fraction (1: 1/2, 2: 1/4, 3: 1/8, etc.).
+    </param>
+            <returns>
+            The formatted value with feet, integer inches, and fraction.
+            </returns>
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.DecimalDegreesMeasurementFormatter">
+            <summary>
+            Represents a formatter for angular dimensions. The angle value is formatted as
+            decimal degrees.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.DecimalDegreesMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.DimensionTextFormatter.DecimalDegreesMeasurementFormatter"/>.
+            </summary>
+            <inheritdoc />
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.DecimalDegreesMeasurementFormatter.GetDisplayValue(System.Double)">
+            <summary>
+            Scales the specified angle value from AutoCAD to degrees.
+            </summary>
+            <param name="value">The angle value in radians as specified by AutoCAD.</param>
+            <returns>The angle in degrees.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:ACadSvg.DimensionTextFormatter.DecimalDegreesMeasurementFormatter.FormatValue(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)" -->
+        <member name="T:ACadSvg.DimensionTextFormatter.DecimalMeasurementFormatter">
+            <summary>
+            Represents a formatter for linear measurements. The value is formatted as
+            a decimal number.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.DecimalMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of a <see cref="T:ACadSvg.DimensionTextFormatter.DecimalMeasurementFormatter"/>.
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.DecimalMeasurementFormatter.FormatValue(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            Formats the specified value as decimal number
+            (see <see cref="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatDecimal(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)"/>).
+            </summary>
+            <returns>
+            The formatted value as decimal number.
+            </returns>
+            <inheritdoc/>
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.DegreesMinutesSecondsMeasurementFormatter">
+            <summary>
+            Represents a formatter for angular dimensions. The angle value is formatted as
+            degrees, minutes and seconds.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.DegreesMinutesSecondsMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.DimensionTextFormatter.DegreesMinutesSecondsMeasurementFormatter"/>.
+            </summary>
+            <inheritdoc />
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.DegreesMinutesSecondsMeasurementFormatter.GetDisplayValue(System.Double)">
+            <summary>
+            Scales the specified angle value from AutoCAD to degrees.
+            </summary>
+            <param name="value">The angle value in radians as specified by AutoCAD.</param>
+            <returns>The angle in degrees.</returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.DegreesMinutesSecondsMeasurementFormatter.FormatValue(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            Formats an angular value specified in degrees as degrees, minutes an seconds.
+            </summary>
+            <param name="value">An angular value in degrees.</param>
+            <param name="decimalPlaces">controls whether minutes and seconds are displayed
+            at all an how many fractional digits are dieplayed at the seconds part:
+            <para>
+            0: Only the degrees part is visible.
+            </para>
+            <para>
+            1, 2: degrees and rounded minutes.
+            </para>
+            <para>
+            3, 4: degrees, minutes, and rounded seconds.
+            </para>
+            <para>
+            >4: degrees, minutes, and seconds with (decimalPlaces - 4) fractional digits.
+            </para>
+            </param>
+            <returns>
+            The formatted value with feet degrees, munutes and seconds.
+            </returns>
+            <inheritdoc/>
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.EngineeringMeasurementFormatter">
+            <summary>
+            Represents a measurement formatter for linear dimensions. The value in inches is
+            formatted as feet and inches as decimal number.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.EngineeringMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.DimensionTextFormatter.EngineeringMeasurementFormatter"/>
+            </summary>
+            <inheritdoc />
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.EngineeringMeasurementFormatter.FormatValue(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            Formats the specified value (in inches) as feet and inches as decimal number
+            (see <see cref="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatInchesToFeetInchesFractional(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)"/>.
+            </summary>
+            <returns>
+            The formatted value with feet and inches as decimal number.
+            </returns>
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.FractionalMeasurementFormatter">
+            <summary>
+            Represents a formatter for linear measurements. The value is formatted as
+            as integer part and fraction.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.FractionalMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of a <see cref="T:ACadSvg.DimensionTextFormatter.FractionalMeasurementFormatter"/>.
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.FractionalMeasurementFormatter.FormatValue(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            Formats the value as integer part and fraction.
+            (see <see cref="!:FormatFractional" />).
+            </summary>
+            <param name="precision">
+      Indicates the precision of the converted value. This
+      parameter specifies the denominator of the fraction (1: 1/2, 2: 1/4, 3: 1/8, etc.).
+    </param>
+            <returns>
+            The formatted value with integer part and fraction.
+            </returns>
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.GradiansMeasurementFormatter">
+            <summary>
+            Represents a formatter for angular dimensions. The angle value is formatted as
+            decimal gradians (The full circle is assumed to be 400g).
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.GradiansMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.DimensionTextFormatter.GradiansMeasurementFormatter"/>.
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.GradiansMeasurementFormatter.GetDisplayValue(System.Double)">
+            <summary>
+            Scales the specified angle value from AutoCAD to gradians.
+            </summary>
+            <param name="value">The angle value in radians as specified by AutoCAD.</param>
+            <returns>The angle in gradians.</returns>
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter">
+            <summary>
+            The base class for linear formatters used by linear dimension entities.
+            The text created contains a value part with or without tolerance and optionally an
+            alternate-unit value with or without tolerance. Various formatters according to the
+            specified <see cref="P:ACadSvg.Extensions.DimensionProperties.LinearUnitFormat"/> can be created with the
+            for linear dimension <see cref="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.CreateMeasurementFormatter(ACadSharp.Types.Units.LinearUnitFormat,ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)"/> method.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of an linear measurement formatter.
+            </summary>
+            <param name="dimension">The<see cref="T:ACadSharp.Entities.Dimension"/> object the dimension text is to be created for.</param>
+            <param name="dimProps">A <see cref="T:ACadSvg.Extensions.DimensionProperties"/> object providing all
+            dimension-style properties specified in the <see cref="T:ACadSharp.Tables.DimensionStyle"/> object
+            associated with the dimension object possibly overriden by the dimension object's
+            extended data.</param>
+            <param name="defaultPostFix">A string specifying a default prefix and/or postfix
+            used for both the primary and the alternate value if no prefix/postfix is specified
+            by the dimension-style properties.</param>
+            <remarks>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.CreateMeasurementFormatter(ACadSharp.Types.Units.LinearUnitFormat,ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Creates a new instance of an linear measurement formatter as specified by the
+            <paramref name="format"/> parameter. 
+            </summary>
+            <param name="dimension">The<see cref="T:ACadSharp.Entities.Dimension"/> object the dimension text is to be created for.</param>
+            <param name="dimProps">A <see cref="T:ACadSvg.Extensions.DimensionProperties"/> object providing all
+            dimension-style properties specufied in the <see cref="T:ACadSharp.Tables.DimensionStyle"/> object
+            associated with the dimension object possibly overriden by the dimension object's
+            extended data.</param>
+            <param name="defaultPostFix">A string specifying a default prefix and/or postfix
+            used for both the primary and the alternate value if no prefix/postfix is specified
+            by the dimension-style properties.</param>
+            <returns>
+            An angular measurement formatter as specified by the <paramref name="format"/>
+            parameter. The returned formatter can be a <see cref="T:ACadSvg.DimensionTextFormatter.DecimalMeasurementFormatter"/>,
+            <see cref="T:ACadSvg.DimensionTextFormatter.EngineeringMeasurementFormatter"/>, <see cref="T:ACadSvg.DimensionTextFormatter.ScientificMeasurementFormatter"/>,
+            <see cref="T:ACadSvg.DimensionTextFormatter.FractionalMeasurementFormatter"/>, <see cref="T:ACadSvg.DimensionTextFormatter.ArchitecturalMeasurementFormatter"/>,
+            or <see cref="T:ACadSvg.DimensionTextFormatter.WindowsDesktopMeasurementFormatter"/>.
+            </returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.FormatMeasurement">
+            <inheritdoc />
+            <remarks>
+            Measuement
+            <docToken name="linearScaledAndRoundedTo">
+    is scaled with the <see cref="P:ACadSvg.Extensions.DimensionProperties.LinearScaleFactor" />
+    and rounded using <see cref="P:ACadSvg.Extensions.DimensionProperties.Rounding" />
+  </docToken>
+            <docToken name="linearFormattedAs">
+    and formatted to the specific linear format (<see cref="!:FormatValue" />) using
+  </docToken>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.DecimalPlaces" />
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ZeroHandling" />.
+            <docToken name="primaryPostFix">
+    Prefix and/or suffix (<see cref="P:ACadSvg.Extensions.DimensionProperties.PostFix" />) or,
+    if not specified, the default PostFix is added.
+  </docToken>
+            </remarks>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.FormatAlternate" -->
+        <member name="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.FormatMeasurementToleranceSymmetric">
+            <inheritdoc />
+            <remarks>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.PlusTolerance" />
+            <docToken name="linearScaledAndRoundedTo">
+    is scaled with the <see cref="P:ACadSvg.Extensions.DimensionProperties.LinearScaleFactor" />
+    and rounded using <see cref="P:ACadSvg.Extensions.DimensionProperties.Rounding" />
+  </docToken>
+            <docToken name="linearFormattedAs">
+    and formatted to the specific linear format (<see cref="!:FormatValue" />) using
+  </docToken>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceDecimalPlaces" />
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceZeroHandling" />.
+            <docToken name="primaryPostFix">
+    Prefix and/or suffix (<see cref="P:ACadSvg.Extensions.DimensionProperties.PostFix" />) or,
+    if not specified, the default PostFix is added.
+  </docToken>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.FormatAlternateToleranceSymmetric">
+            <summary>
+            Formats the alternate-unit tolerance value assuming that the <see cref="!:DimensionProperties.PlusTolreance" />
+            and the <see cref="!:DimensionProperties.MinusTolreance" /> are equal. The formatted tolerance
+            value is prefixed with "±" and should follow the alternate-unit measurement value.
+            </summary>
+            <returns>A string containing the formatted alternate-unit tolerance value.</returns>
+            <remarks>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.PlusTolerance" />
+            <docToken name="linearAlternateScaledAndRoundedTo">
+    scaled with the <see cref="P:ACadSvg.Extensions.DimensionProperties.LinearScaleFactor" /> is scaled
+    to alternate units with <see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitScaleFactor" />.
+    The scaled value is rounded using <see cref="P:ACadSvg.Extensions.DimensionProperties.Rounding" />
+  </docToken>
+            <docToken name="linearFormattedAs">
+    and formatted to the specific linear format (<see cref="!:FormatValue" />) using
+  </docToken>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitToleranceDecimalPlaces" />
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitToleranceZeroHandling" />.
+            <docToken name="alternatePostFix">
+    Prefix and/or suffix (<see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateDimensioningSuffix" />) or,
+    if not specified, the default PostFix is added.
+  </docToken>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.FormatMeasurementTolerancePlusMinus">
+            <inheritdoc />
+            <remarks>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.MinusTolerance" />, <see cref="P:ACadSvg.Extensions.DimensionProperties.PlusTolerance" />
+            <docToken name="linearScaledAndRoundedToPlural">
+    are scaled with the <see cref="P:ACadSvg.Extensions.DimensionProperties.LinearScaleFactor" />
+    and rounded using <see cref="P:ACadSvg.Extensions.DimensionProperties.Rounding" />
+  </docToken>
+            <docToken name="linearFormattedAs">
+    and formatted to the specific linear format (<see cref="!:FormatValue" />) using
+  </docToken>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceDecimalPlaces" />
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceZeroHandling" />.
+            <docToken name="primaryPostFix">
+    Prefix and/or suffix (<see cref="P:ACadSvg.Extensions.DimensionProperties.PostFix" />) or,
+    if not specified, the default PostFix is added.
+  </docToken>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.FormatAlternateTolerancePlusMinus">
+            <summary>
+            Formats the alternate-unit tolerance value assuming that the
+            <see cref="!:DimensionProperties.PlusTolreance" /> and the <see cref="!:DimensionProperties.MinusTolreance" />
+            are not equal. The values are stacked, coded with AutoCAD-MTEXT markup-commands.
+            The <see cref="!:DimensionProperties.PlusTolreance" /> is placed above, prefixed with a "+" sign,
+            the <see cref="!:DimensionProperties.MinusTolreance" /> is placed below, prefixed with a "-" sign.
+            The formatted stacked alternate tolerance values should immediately follow the alternate value.
+            The text size of the stacked values is controlled by the
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceScaleFactor" /> property.
+            </summary>
+            <returns>A string containing the formatted stacked alternate-unit tolerance values.</returns>
+            <remarks>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.MinusTolerance" />, <see cref="P:ACadSvg.Extensions.DimensionProperties.PlusTolerance" />
+            <docToken name="linearAlternateScaledAndRoundedToPlural">
+    scaled with the <see cref="P:ACadSvg.Extensions.DimensionProperties.LinearScaleFactor" /> are scaled
+    to alternate units with <see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitScaleFactor" />.
+    The scaled values are rounded using <see cref="P:ACadSvg.Extensions.DimensionProperties.Rounding" />
+  </docToken>
+            <docToken name="linearFormattedAs">
+    and formatted to the specific linear format (<see cref="!:FormatValue" />) using
+  </docToken>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitToleranceDecimalPlaces" />
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitToleranceZeroHandling" />.
+            <docToken name="alternatePostFix">
+    Prefix and/or suffix (<see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateDimensioningSuffix" />) or,
+    if not specified, the default PostFix is added.
+  </docToken>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.FormatMeasurementLimits">
+            <inheritdoc />
+            <remarks>
+            The limits
+            (Measurement - <see cref="P:ACadSvg.Extensions.DimensionProperties.MinusTolerance" /> and
+            Measurement + <see cref="P:ACadSvg.Extensions.DimensionProperties.PlusTolerance" />)
+            <docToken name="linearScaledAndRoundedToPlural">
+    are scaled with the <see cref="P:ACadSvg.Extensions.DimensionProperties.LinearScaleFactor" />
+    and rounded using <see cref="P:ACadSvg.Extensions.DimensionProperties.Rounding" />
+  </docToken>
+            <docToken name="linearFormattedAs">
+    and formatted to the specific linear format (<see cref="!:FormatValue" />) using
+  </docToken>
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.DecimalPlaces" />
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ZeroHandling" />.
+            <docToken name="primaryPostFix">
+    Prefix and/or suffix (<see cref="P:ACadSvg.Extensions.DimensionProperties.PostFix" />) or,
+    if not specified, the default PostFix is added.
+  </docToken>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.FormatAlternateLimits">
+            <summary>
+            The alternate-unit tolerance is to be shown as a maximum and minimum value stacked, coded with AutoCAD-MTEXT
+            markup-commands. The maximum value (alternate-unit measurement + <see cref="!:DimensionProperties.PlusTolreance" />)
+            is placed above the minimum value (alternate-unit measurement - <see cref="!:DimensionProperties.MinusTolreance" />)
+            is placed below.
+            The text size of the stacked values is controlled by the
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceScaleFactor" /> property.
+            </summary>
+            <returns>A string containing the formatted stacked alternate-unit limits values.</returns>
+            <remarks>
+            The limits
+            Measurement - <see cref="P:ACadSvg.Extensions.DimensionProperties.MinusTolerance" />,
+            measurement + <see cref="P:ACadSvg.Extensions.DimensionProperties.PlusTolerance" />
+            <docToken name="linearAlternateScaledAndRoundedToPlural">
+    scaled with the <see cref="P:ACadSvg.Extensions.DimensionProperties.LinearScaleFactor" /> are scaled
+    to alternate units with <see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitScaleFactor" />.
+    The scaled values are rounded using <see cref="P:ACadSvg.Extensions.DimensionProperties.Rounding" />
+  </docToken>
+            <docToken name="linearFormattedAs">
+    and formatted to the specific linear format (<see cref="!:FormatValue" />) using
+  </docToken>
+            <see cref="!:DimensionProperties.AlternateUniteDecimalPlaces" /> and
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitZeroHandling" />.
+            <docToken name="alternatePostFix">
+    Prefix and/or suffix (<see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateDimensioningSuffix" />) or,
+    if not specified, the default PostFix is added.
+  </docToken>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.GetAlternateTextWithPostFix(System.String)">
+            <summary>
+            Adds a prefix and/or a suffix specified by the <see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateDimensioningSuffix"/>
+            property to the <paramref name="text"/>. If the <see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateDimensioningSuffix"/>
+            is empty the default PostFix is used.
+            </summary>
+            <param name="text">A string the prefix and/or suffix is to be added to.</param>
+            <param name="defaultPostFix">Default prefix/suffix, to be used if the
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateDimensioningSuffix"/> is empty.</param>
+            <returns>The <paramref name="text"/> with the prefix and/or suffix added.</returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.GetValueScaledAndRounded(System.Double)">
+            <summary>
+            Scales the specified measurement or tolerance value with the
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.LinearScaleFactor"/>
+            </summary>
+            <param name="value">The value to be scaled.</param>
+            <returns>The scaled value.</returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter.GetAlternateValueScaledAndRounded(System.Double)">
+            <summary>
+            Scales the specified measurement or tolerance value with the
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.LinearScaleFactor"/>.
+            To obtain the value in alternate units it is multiplied with the
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitScaleFactor"/>.
+            </summary>
+            <param name="value">The value to be scaled.</param>
+            <returns>The scaled value.</returns>
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase">
+            <summary>
+            Base class for measurement formatters. Measurement formatters are used to create
+            the parts of the measurement text such as measurement value with or without
+            tolerance and optionally an alternate scaled measurement value with or without
+            tolerance. Various formatters can be applied according to the specified format
+            for linear dimension (see <see cref="T:ACadSvg.DimensionTextFormatter.LinearMeasurementFormatter"/>)
+            and angular dimensions (see <see cref="T:ACadSvg.DimensionTextFormatter.AngularMeasurementFormatter"/>)
+            respectively.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of a measurement formatter.
+            </summary>
+            <param name="dimension">The <see cref="T:ACadSharp.Entities.Dimension"/> object the dimension text is to be created for.</param>
+            <param name="dimProps">A <see cref="T:ACadSvg.Extensions.DimensionProperties"/> object providing all
+            dimension-style properties specufied in the <see cref="T:ACadSharp.Tables.DimensionStyle"/> object
+            associated with the dimension object possibly overriden by the dimension object's
+            extended data.</param>
+            <param name="defaultPostFix">A string specifying a default prefix and/or postfix
+            used for both the primary and the alternate value if no prefix/postfix is specified
+            by the dimension-style properties.</param>
+            
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatValue(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            If implemented by a derived class converts the specified value into a string
+            in a specific format.
+            </summary>
+            <param name="value">The value to be converted.</param>
+            <param name="decimalplaces">A value indicating the precision of the converted value.</param>
+            <param name="zeroHandling">A value indicating how the leading and trailing zeroes are to be handled.</param>
+            <returns>The converted value in the specific format.</returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatMeasurement">
+            <summary>
+            Formats the (primary) measurement value. The formatted numerical value is prefixed and/or
+            suffixed as specified by the <see cref="P:ACadSvg.Extensions.DimensionProperties.PostFix"/> style property.
+            If no PostFix style property is specified the default Postfix specified for this formatter
+            is used.
+            </summary>
+            <returns>A string containing formatted measurement value.</returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatMeasurementToleranceSymmetric">
+            <summary>
+            Formats the tolerance value assuming that the <see cref="!:DimensionProperties.PlusTolreance"/>
+            and the <see cref="!:DimensionProperties.MinusTolreance"/> are equal. The formatted tolerance
+            value is prefixed with "±" and should follow the primary measurement value.
+            </summary>
+            <returns>A string containing the formatted tolerance value.</returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatMeasurementTolerancePlusMinus">
+            <summary>
+            Formats the a tolerance value assuming that the <see cref="!:DimensionProperties.PlusTolreance"/>
+            and the <see cref="!:DimensionProperties.MinusTolreance"/> are not equal. The values are stacked,
+            coded with AutoCAD-MTEXT markup-commands.
+            The <see cref="!:DimensionProperties.PlusTolreance"/> is placed above, prefixed with a "+" sign,
+            the <see cref="!:DimensionProperties.MinusTolreance"/> is placed below, prefixed with a "-" sign.
+            The formatted stacked tolerance values should immediately follow the primary measurement value.
+            </summary>
+            <returns>A string containing the formatted stacked tolerance values.</returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatMeasurementLimits">
+            <summary>
+            The tolerance is to be shown as a maximum and minimum value stacked coded with AutoCAD-MTEXT
+            markup-commands. The maximum value (measurement + <see cref="!:DimensionProperties.PlusTolreance"/>)
+            is placed above the minimum value (measurement - <see cref="!:DimensionProperties.MinusTolreance"/>)
+            is placed below.
+            The text size of the stacked values is controlled by the
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceScaleFactor"/> property.
+            </summary>
+            <param name="textSize"></param>
+            <returns>A string containing the formatted stacked limits values.</returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.GetTextWithPostFix(System.String)">
+            <summary>
+            Adds a prefix and/or a suffix specified by the <see cref="P:ACadSvg.Extensions.DimensionProperties.PostFix"/>
+            property to the <paramref name="text"/>. If the <see cref="P:ACadSvg.Extensions.DimensionProperties.PostFix"/>
+            is empty the default PostFix is used.
+            </summary>
+            <param name="text">A string the prefix and/or suffix is to be added to.</param>
+            <param name="defaultPostFix">Default prefix/suffix, to be used if the
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.PostFix"/> is empty.</param>
+            <returns>The <paramref name="text"/> with the prefix and/or suffix added.</returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.RoundByUnit(System.Double,System.Double)">
+            <summary>
+            Rounds the specified value to the specified unit.
+            </summary>
+            <param name="value">The value to be rounded.</param>
+            <param name="roundingUnit"></param>
+            <returns>The rounded value.</returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatDecimal(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            Formats the specified <paramref name="value" /> as decimal number using decimal separator specified
+            by <see cref="P:ACadSvg.Extensions.DimensionProperties.DecimalSeparator" /> and the specified <paramref name="decimalPlaces" />
+            and <paramref name="zeroHandling" />.
+            </summary>
+            <param name="value">The value to be converted.</param>
+            <param name="decimalplaces">A value indicating the precision of the converted value.</param>
+            <param name="zeroHandling">A value indicating how the leading and trailing zeroes are to be handled.</param>
+            <returns>
+            The formatted value as decimal number.
+            </returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatExponential(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            Formats the specified <paramref name="value" /> as decimal number as exponential expression
+            using decimal separator specified by <see cref="P:ACadSvg.Extensions.DimensionProperties.DecimalSeparator" />,
+            the specified <paramref name="decimalPlaces" /> and <paramref name="zeroHandling" />.
+            </summary>
+            <param name="value">The value to be converted.</param>
+            <param name="decimalplaces">A value indicating the precision of the converted value.</param>
+            <param name="zeroHandling">A value indicating how the leading and trailing zeroes are to be handled.</param>
+            <returns>
+            The formatted value as decimal number as exponential expression.
+            </returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatFractional(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            Formats the specified value as integer part and fraction. 
+            </summary>
+            <param name="value">The value to be converted.</param>
+            <param name="precision">
+      Indicates the precision of the converted value. This
+      parameter specifies the denominator of the fraction (1: 1/2, 2: 1/4, 3: 1/8, etc.).
+    </param>
+            <param name="zeroHandling">A value indicating how the leading and trailing zeroes are to be handled.</param>
+            <returns>
+            The formatted value with integer part and fraction.
+            </returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatInchesToFeetInchesFractional(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            Formats the specified value (in inches) as feets and inches, and the fractional
+            part of the inches as fraction.
+            </summary> 
+            <param name="value">The value to be converted.</param>
+            <param name="precision">
+      Indicates the precision of the converted value. This
+      parameter specifies the denominator of the fraction (1: 1/2, 2: 1/4, 3: 1/8, etc.).
+    </param>
+            <param name="zeroHandling">A value indicating how the leading and trailing zeroes are to be handled.</param>
+            <returns>
+            The formatted value with feet, integer inches, and fraction.
+            </returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatInchesToFeetInchesDecimal(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            Formats the specified value (in inches) as feet and inches as decimal number.
+            </summary>
+            <param name="value">The value to be converted.</param>
+            <param name="decimalplaces">A value indicating the precision of the converted value.</param>
+            <param name="zeroHandling">A value indicating how the leading and trailing zeroes are to be handled.</param>
+            <returns>
+            The formatted value with feet and inches as decimal number.
+            </returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatToleranceStacked(System.String,System.String)">
+            <summary>
+            Creates a string containing stacked values <paramref name="plus"/> and <paramref name="minus"/>
+            coded with AutoCAD/MTEXT markup commands. Depending on the
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.ToleranceScaleFactor"/> the text size is set.
+            </summary>
+            <param name="minus">String to be placed at bottom.</param>
+            <param name="plus">String to be placed at top.</param>
+            <returns>
+            A string containing the stacked-expression of <paramref name="plus"/> and <paramref name="minus"/>.
+            </returns>
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.RadiansMeasurementFormatter">
+            <summary>
+            Represents a formatter for angular dimensions. The angle value is formatted as
+            decimal radians.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.RadiansMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.DimensionTextFormatter.RadiansMeasurementFormatter"/>.
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.RadiansMeasurementFormatter.GetDisplayValue(System.Double)">
+            <summary>
+            Returns the specified angle value from AutoCAD in radians without scaling.
+            </summary>
+            <param name="value">The angle value in radians as specified by AutoCAD.</param>
+            <returns>The angle in gradians.</returns>
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.ScientificMeasurementFormatter">
+            <summary>
+            Represents a formatter for linear measurements. The value is formatted as
+            a decimal number as exponential expression.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.ScientificMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.DimensionTextFormatter.ScientificMeasurementFormatter"/>.
+            </summary>
+            <inheritdoc />
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.ScientificMeasurementFormatter.FormatValue(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            Formats the value as a decimal number as exponential expression
+            (see <see cref="M:ACadSvg.DimensionTextFormatter.MeasurementFormatterBase.FormatExponential(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)"/>.
+            </summary>
+            <inheritdoc />
+            <returns>
+            The formatted value as decimal number as exponetial expression.
+            </returns>
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.SurveyorUnitsMeasurementFormatter">
+            <summary>
+            Represents a formatter for angular dimensions. The angle value is formatted in
+            surveyors units.
+            </summary>
+            <remarks>
+            <b>This formatter is not yet implemented.</b>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.SurveyorUnitsMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of a <see cref="T:ACadSvg.DimensionTextFormatter.SurveyorUnitsMeasurementFormatter"/>.
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.SurveyorUnitsMeasurementFormatter.GetDisplayValue(System.Double)">
+            <summary>
+            Scales the specified angle value from AutoCAD to degrees.
+            </summary>
+            <param name="value">The angle value in radians as specified by AutoCAD.</param>
+            <returns>The angle in degrees.</returns>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.SurveyorUnitsMeasurementFormatter.FormatValue(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            This method is not yet implemented.
+            </summary>
+            <inheritdoc/>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="T:ACadSvg.DimensionTextFormatter.WindowsDesktopMeasurementFormatter">
+            <summary>
+            Represents a formatter for linear measurements.
+            </summary>
+            <remarks>
+            <b>This formatter is not yet implemented.</b>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.WindowsDesktopMeasurementFormatter.#ctor(ACadSharp.Entities.Dimension,ACadSvg.Extensions.DimensionProperties,System.String,System.Double)">
+            <summary>
+            Initializes a new instance of a <see cref="T:ACadSvg.DimensionTextFormatter.WindowsDesktopMeasurementFormatter"/>.
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="M:ACadSvg.DimensionTextFormatter.WindowsDesktopMeasurementFormatter.FormatValue(System.Double,System.Int16,ACadSharp.Tables.ZeroHandling)">
+            <summary>
+            This method is not yet implemented.
+            </summary>
+            <inheritdoc/>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="T:ACadSvg.DocumentSvg">
+            <summary>
+            Represents SVG elements from an complete AutoCAD document, i.e. the
+            list of <see cref="T:ACadSvg.BlockRecordSvg"/> objects representing <see cref="T:ACadSharp.Tables.BlockRecord"/>
+            objects, and a list of <see cref="T:ACadSvg.EntitySvg" /> objects representing AutoCAD
+            entities that are not member of a <see cref="T:ACadSharp.Tables.BlockRecord"/>.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DocumentSvg.#ctor(ACadSharp.CadDocument,ACadSvg.ConversionContext)">
+            <summary>
+            Creates a new instance of a <see cref="T:ACadSvg.DocumentSvg"/> object by converting
+            the <see cref="T:ACadSharp.CadDocument" /> specified as <paramref name="doc"/>.
+            </summary>
+            <param name="doc">The <see cref="T:ACadSharp.CadDocument" /> to be converted.</param>
+            <param name="ctx">The <see cref="T:ACadSvg.ConversionContext"/> specifys conversion
+            options and receives the conversion log.</param>
+        </member>
+        <member name="M:ACadSvg.DocumentSvg.MainGroupToSvgElement">
+            <summary>
+            Creates a main group containing all converted entities that are not bound
+            in block records converted into an SVG <i>g</i> element.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ACadSvg.DocumentSvg.DefsToSvgElement">
+            <summary>
+            Returns an SVG element containing the list of block records converted into
+            <i>defs</i> element.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ACadSvg.DocumentSvg.ToSvgElement">
+            <summary>
+            Creates a main group containing all converted entities that are not bound
+            in block records and the <i>defs</i> element and create SVG elements.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ACadSvg.DocumentSvg.GetModelSpaceRectangle">
+            <summary>
+            Returns a <see cref="T:SvgElements.SvgElementBase"/> representing an SVG <i>rect</i> element
+            with the limits of the model-space extent read from the document header.
+            If the ReverseY conversion option is set the <i>rect</i> element is enclosed
+            by a <see cref="T:SvgElements.GroupElement"/> representing SVG <i>g</i> element with a
+            <i>transform=scale(1, -1)</i> attribute.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.DocumentSvg.CreateSVG(ACadSvg.ConversionContext)">
+            <summary>
+            Creates a <see cref="T:SvgElements.SvgElement"/> object and sets values for the attributes
+            <i>viewbox</i>, <i>stroke</i>, <i>strike-width</i>, and <i>fill</i>.
+            </summary>
+            <param name="ctx">The conversion context provides several options and the values for the attributes to create.</param>
+            <returns>The ctreated <see cref="T:SvgElements.SvgElement"/>.</returns>
+        </member>
+        <member name="T:ACadSvg.EllipseSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Ellipse"/> entity.
+            The <see cref="T:ACadSharp.Entities.Ellipse"/> entity is converted into a <i>ellipse</i> element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.EllipseSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.EllipseSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Ellipse"/> entity.
+            </summary>
+            <param name="ellipse">The <see cref="T:ACadSharp.Entities.Ellipse"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.EllipseSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.EntitySvg">
+            <summary>
+            The base class for classes representing converted ACad entities.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.EntitySvg.ID">
+            <summary>
+            Gets or sets a value for the <i>id</i> attribute
+            </summary>
+        </member>
+        <member name="P:ACadSvg.EntitySvg.Class">
+            <summary>
+            Gets or sets a value for the <i>class</i> attribute
+            </summary>
+        </member>
+        <member name="P:ACadSvg.EntitySvg.Skip">
+            <summary>
+            Gets a value indicating whether this entity is to be skipped
+            and excluded from the conversion. The standard value is <b>false</b>.
+            A derived class may implement a contion to exclude the entity from
+            conversion.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.EntitySvg.Comment">
+            <summary>
+            Gets or sets a comment text that is to be created as comment element
+            before this element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.EntitySvg.ConvertEntitiesToSvg(System.Collections.Generic.IList{ACadSharp.Entities.Entity},ACadSvg.ConversionContext)">
+            <summary>
+            Converts  list of ACad entities to SVG elements.
+            </summary>
+            <param name="entities"></param>
+            <param name="ctx"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ACadSvg.EntitySvg.ToSvgElement">
+            <summary>
+            Converts an ACad <see cref="T:ACadSharp.Entities.Entity"/> into a SVG-element object.
+            This may be be a primitive such as <i>path</i> or <i>circle</i>.
+            Complex entities convert into a SVG group (<i>g</i>) containing
+            primitives.
+            </summary>
+            <returns>A <see cref="T:SvgElements.SvgElementBase"/>.</returns>
+        </member>
+        <member name="M:ACadSvg.EntitySvg.ToSvg">
+            <summary>
+            Retuns the SVG element converted from the respective ACad Entity
+            as string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ACadSvg.EntitySvg.Cd(System.Double)">
+            <summary>
+            Formats a double value with a decimal dot as needed in numerical attribute
+            of a SVG element.
+            </summary>
+            <param name="val"></param>
+            <returns>A string containing the formatted double value.</returns>
+        </member>
+        <member name="M:ACadSvg.EntitySvg.SetStandardIdAndClassIf(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Set the <see cref="!:Entity.Handle"/> value of the <see cref="T:ACadSharp.Entities.Entity"/> as
+            value for the <i>id</i> attribute when the Use-handle-as-id" option is set.
+            Set the name of the <see cref="P:ACadSharp.Entities.Entity.Layer"/> as value for the <i>class</i>
+            attribute.
+            </summary>
+            <param name="entity"></param>
+            <param name="ctx"></param>
+        </member>
+        <member name="M:ACadSvg.EntitySvg.CreateEntitySvg(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>SVG-converter Factory: creates a entity-specific object implementing
+            the conversion of a AutoCAD <see cref="T:ACadSharp.Entities.Entity" /> into SVG text.
+            The created object type is determined by the <see cref="P:ACadSharp.CadObject.ObjectType"/>
+            property.
+            </summary>
+            <param name="entity">The AutoCAD-DWG entity to be converterd.</param>
+            <param name="ctx">The conversion context provides several options and data required for the conversion.</param>
+            <returns>An entity-specific converter object or null if the entity to be
+            converted is not supported.</returns>
+            
+        </member>
+        <member name="T:ACadSvg.Extensions.DimensionProperties">
+            <summary>
+            Exposes all proprties required for the rendering of <see cref="T:ACadSharp.Entities.Dimension"/> and
+            derived entity's and <see cref="T:ACadSharp.Entities.Leader"/> entity's. Property values are either
+            provided by the associated <see cref="T:ACadSharp.Tables.DimensionStyle"/> object or may be overriden
+            by extended data of the entity. The <see cref="P:ACadSharp.Tables.DimensionStyle.ScaleFactor"/> is
+            handled internally.
+            </summary>
+            <remarks>
+            <para>
+            The <see cref="P:ACadSharp.Tables.DimensionStyle.ScaleFactor"/> property is retrieved from the
+            <see cref="T:ACadSharp.Tables.DimensionStyle"/> and my be overridden by extended data of the entity.
+            The value is used to scale the property values that have to be scaled.
+            </para><para>
+            The <see cref="T:ACadSharp.Tables.DimensionStyle"/> object provides a set of properties controlling
+            the dimension text. 
+            </para>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.Extensions.DimensionProperties.#ctor(ACadSharp.Entities.Entity,ACadSharp.Tables.DimensionStyle)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.Extensions.DimensionProperties"/> class.
+            </summary>
+            <param name="entity"></param>
+            <param name="style"></param>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ScaleFactor">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.ScaleFactor"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.DimensionLineColor">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.DimensionLineColor"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ExtensionLineColor">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.ExtensionLineColor"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.DimensionLineWeight">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.DimensionLineWeight"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ExtensionLineWeight">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.ExtensionLineWeight"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ExtensionLineExtension">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.ExtensionLineExtension"/> property or the
+            overriden value from the entity's extended data. The value returned is already
+            multiplied with the <see cref="P:ACadSvg.Extensions.DimensionProperties.ScaleFactor"/> value.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ExtensionLineOffset">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.ExtensionLineOffset"/> property or the
+            overriden value from the entity's extended data. The value returned is already
+            multiplied with the <see cref="P:ACadSvg.Extensions.DimensionProperties.ScaleFactor"/> value.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.DimensionLineExtension">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.DimensionLineExtension"/> property or the
+            overriden value from the entity's extended data. The value returned is already
+            multiplied with the <see cref="P:ACadSvg.Extensions.DimensionProperties.ScaleFactor"/> value.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.DimensionLineGap">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.DimensionLineGap"/> property or the
+            overriden value from the entity's extended data. The value returned is already
+            multiplied with the <see cref="P:ACadSvg.Extensions.DimensionProperties.ScaleFactor"/> value.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.SuppressFirstDimensionLine">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.SuppressFirstDimensionLine"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.SuppressSecondDimensionLine">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.SuppressSecondDimensionLine"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.SuppressFirstExtensionLine">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.SuppressFirstExtensionLine"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.SuppressSecondExtensionLine">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.SuppressSecondExtensionLine"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.LeaderArrow">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.LeaderArrow"/> property or the
+            overriden value from the entity's extended data. Note, that the entities of the
+            <see cref="T:ACadSharp.Tables.BlockRecord"/> have to be scaled by the <see cref="P:ACadSvg.Extensions.DimensionProperties.ArrowSize"/>
+            properties that includes the <see cref="P:ACadSvg.Extensions.DimensionProperties.ScaleFactor"/>.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ArrowBlock">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.ArrowBlock"/> property or the
+            overriden value from the entity's extended data. Note, that the entities of the
+            <see cref="T:ACadSharp.Tables.BlockRecord"/> have to be scaled by the <see cref="P:ACadSvg.Extensions.DimensionProperties.ArrowSize"/>
+            properties that includes the <see cref="P:ACadSvg.Extensions.DimensionProperties.ScaleFactor"/>.
+            
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ArrowHeadBlock1">
+            <summary>
+            Gets the value of the <see cref="!:DimensionStyle.ArrowHeadBlock1"/> property or the
+            overriden value from the entity's extended data. Note, that the entities of the
+            <see cref="T:ACadSharp.Tables.BlockRecord"/> have to be scaled by the <see cref="P:ACadSvg.Extensions.DimensionProperties.ArrowSize"/>
+            properties that includes the <see cref="P:ACadSvg.Extensions.DimensionProperties.ScaleFactor"/>.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ArrowHeadBlock2">
+            <summary>
+            Gets the value of the <see cref="!:DimensionStyle.ArrowHeadBlock2"/> property or the
+            overriden value from the entity's extended data. Note, that the entities of the
+            <see cref="T:ACadSharp.Tables.BlockRecord"/> have to be scaled by the <see cref="P:ACadSvg.Extensions.DimensionProperties.ArrowSize"/>
+            properties that includes the <see cref="P:ACadSvg.Extensions.DimensionProperties.ScaleFactor"/>.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ArrowSize">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.ArrowSize"/> property or the
+            overriden value from the entity's extended data. The value returned is already
+            multiplied with the <see cref="P:ACadSvg.Extensions.DimensionProperties.ScaleFactor"/> value.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.TextStyle">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.Style"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.TextColor">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.TextColor"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.TextHeight">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.TextHeight"/> property or the
+            overriden value from the entity's extended data. The value returned is already
+            multiplied with the <see cref="P:ACadSvg.Extensions.DimensionProperties.ScaleFactor"/> value.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.TextMovement">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.TextMovement"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.TextHorizontalAlignment">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.TextHorizontalAlignment"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.TextVerticalAlignment">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.TextVerticalAlignment"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.TextVerticalPosition">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.TextVerticalPosition"/> property or the
+            overriden value from the entity's extended data. The value returned is already
+            multiplied with the <see cref="P:ACadSvg.Extensions.DimensionProperties.ScaleFactor"/> value.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.LinearScaleFactor">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.LinearScaleFactor"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.DecimalSeparator">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.DecimalSeparator"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.DecimalPlaces">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.DecimalPlaces"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.LinearUnitFormat">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.LinearUnitFormat"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.Rounding">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.Rounding"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ZeroHandling">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.ZeroHandling"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.PostFix">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.PostFix"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.GenerateTolerances">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.GenerateTolerances"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.LimitsGeneration">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.LimitsGeneration"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ToleranceAlignment">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.ToleranceAlignment"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ToleranceZeroHandling">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.ToleranceZeroHandling"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ToleranceDecimalPlaces">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.ToleranceDecimalPlaces"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.PlusTolerance">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.PlusTolerance"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.MinusTolerance">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.MinusTolerance"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.ToleranceScaleFactor">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.ToleranceScaleFactor"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitDimensioning">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.AlternateUnitDimensioning"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitScaleFactor">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.AlternateUnitScaleFactor"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.AlternateDimensioningSuffix">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.AlternateDimensioningSuffix"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitDecimalPlaces">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.AlternateUnitDecimalPlaces"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitFormat">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.AlternateUnitFormat"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitRounding">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.AlternateUnitRounding"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitZeroHandling">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.AlternateUnitZeroHandling"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitToleranceDecimalPlaces">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.AlternateUnitToleranceDecimalPlaces"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.AlternateUnitToleranceZeroHandling">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Tables.DimensionStyle.AlternateUnitToleranceZeroHandling"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.AngularUnit">
+            <summary>
+            Gets the value of the <see cref="!:DimensionStyle.AngularDimensionDecimalPlaces"/> property or the
+            overriden value from the entity's extended data.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.DimensionProperties.AngularDimensionDecimalPlaces">
+            <summary>
+            Gets the value of the <see cref="!:DimensionStyle.AngularDimensionDecimalPlaces"/> property or the
+            overriden value from the entity's extended data. If the value is less than zero the value of the
+            <see cref="P:ACadSvg.Extensions.DimensionProperties.DecimalPlaces"/> property is returned.
+            </summary>
+        </member>
+        <member name="T:ACadSvg.Extensions.EntityProperties">
+            <summary>
+            Base class for property classes. Propery classes provide entity properties
+            having a standard value defined by the associated style object but may be
+            overridden either by explicit properties of the entity object or by the
+            entity's extended data.
+            </summary>
+            <remarks>
+            <para>
+            This class provides methods to read entity's extended data. Extended data have to be
+            interpreted as follows:
+            </para>
+            <para>
+            Extended data is a <see cref="T:ACadSharp.XData.ExtendedDataDictionary"/>. Entries of type <see cref="T:ACadSharp.XData.ExtendedData"/>
+            refer to an <see cref="T:ACadSharp.Tables.AppId"/>. An <see cref="T:ACadSharp.XData.ExtendedData"/> entry contains a list
+            of <see cref="T:ACadSharp.XData.ExtendedDataRecord"/> records. The first record contains the name
+            of a "type", e.g., <i>DSTYLE</i> indicating that the values of the <see cref="T:ACadSharp.XData.ExtendedData"/>
+            provide property values to override values of the <see cref="T:ACadSharp.Tables.DimensionStyle"/> object.
+            </para>
+            <para>
+            An <see cref="T:ACadSharp.XData.ExtendedDataRecord"/> contains a <see cref="P:ACadSharp.XData.ExtendedDataRecord.Code"/>
+            and a <see cref="!:ExtendedDataRecord.Value"/>. The Code indicates the type of the value.
+            The record provides no information about the meaning of the value. We assume that the
+            preceding record contains a <i>group code</i> defining the meaning of the value of
+            this record. The <i>group code</i> matches the <i>group code</i> of the property to
+            be overridden.
+            </para><para>
+            Example:
+            </para><para>
+            When in AutoCAD for a LEADER a custom arrowsize is set, the value appears in an
+            <see cref="T:ACadSharp.XData.ExtendedData"/> entry associated with the <see cref="T:ACadSharp.Tables.AppId"/> key having the
+            name <i>ACAD</i>. If an entry with the "type" record containing <i>DSTYLE</i> is found
+            and a record with the <i>group code</i> <b>41</b> appears the following record contains
+            the arrow-size value.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.Extensions.EntityProperties.GetExtendedDataValue``1(ACadSharp.Entities.Entity,System.String,System.String,System.Int16,``0)">
+            <summary>
+            Tries to read a record from an <see cref="T:ACadSharp.XData.ExtendedData"/> entry with the specified
+            <see cref="T:ACadSharp.Tables.AppId"/> (<paramref name="appIdName"/>) and <paramref name="entryName"/>,
+            then tries to find a record containing the group code specified by the <paramref name="field"/>
+            parameter. If the specified record was found the value of the next record is returned.
+            </summary>
+            <param name="entity"></param>
+            <param name="appIdName"></param>
+            <param name="entryName"></param>
+            <param name="field"></param>
+            <param name="defaultValue"></param>
+            <returns>
+            The value from the specified record, when it was found; otherwise, the specified default value.
+            </returns>
+        </member>
+        <member name="M:ACadSvg.Extensions.EntityProperties.GetExtendedDataBlockReference(ACadSharp.Entities.Entity,System.String,System.String,System.Int16,ACadSharp.Tables.BlockRecord)">
+            <summary>
+            Tries to read a record from an <see cref="T:ACadSharp.XData.ExtendedData"/> entry with the specified
+            <see cref="T:ACadSharp.Tables.AppId"/> (<paramref name="appIdName"/>) and <paramref name="entryName"/>,
+            then tries to find a record containing the group code specified by the <paramref name="field"/>
+            parameter. If the specified record was found the value of the next record is a handle.
+            The the respective <see cref="T:ACadSharp.CadObject"/> is looked up and returned.
+            </summary>
+            <param name="entity"></param>
+            <param name="appIdName"></param>
+            <param name="entryName"></param>
+            <param name="field"></param>
+            <param name="defaultValue"></param>
+            <returns>
+            The <see cref="T:ACadSharp.Tables.BlockRecord"/> from the specified record, when it was found; otherwise,
+            the specified default value. The default value may be null.
+            </returns>
+        </member>
+        <member name="M:ACadSvg.Extensions.EntityProperties.GetExtendedDataColor(ACadSharp.Entities.Entity,System.String,System.String,System.Int16,ACadSharp.Color)">
+            <summary>
+            Tries to read a record from an <see cref="T:ACadSharp.XData.ExtendedData"/> entry with the specified
+            <see cref="T:ACadSharp.Tables.AppId"/> <paramref name="appIdName"/> and the entry names passed in the
+            <paramref name="entryName"/> parameter optionally suffixed with "_TC" The "_TC" suffix
+            indicates the true-color value are provided. The suffixed entry, if present, is read
+            first. 
+            Then tries to find a record containing the group code specified by the <paramref name="field"/>
+            parameter. If the specified record was found the value of the next record is returned.
+            </summary>
+            <param name="entity"></param>
+            <param name="appIdName"></param>
+            <param name="entryName"></param>
+            <param name="field"></param>
+            <param name="defaultValue"></param>
+            <returns>
+            The <see cref="T:ACadSharp.Color"/> from the specified record, when it was found; otherwise,
+            the specified default value.
+            </returns>
+        </member>
+        <member name="M:ACadSvg.Extensions.EntityProperties.getExtendedDataRecord(ACadSharp.Entities.Entity,System.String,System.String,System.Int16)">
+            <summary>
+            Gets a record from an <see cref="T:ACadSharp.XData.ExtendedData"/> entry with the specified
+            <see cref="T:ACadSharp.Tables.AppId"/> name and 
+            </summary>
+        </member>
+        <member name="T:ACadSvg.Extensions.MultiLeaderProperties">
+            <summary>
+            Exposes all proprties required for the rendering of <see cref="T:ACadSharp.Entities.MultiLeader"/>
+            entity's.
+            Property values are either provided by the associated <see cref="T:ACadSharp.Objects.MultiLeaderStyle"/>
+            object or may be overriden by properties of the <see cref="T:ACadSharp.Entities.MultiLeader"/> and/or
+            the <see cref="!:MultiLeaderAnnotContext"/>. The overriding of property values is
+            controlled by the flags specified in the <see cref="P:ACadSharp.Entities.MultiLeader.PropertyOverrideFlags"/>
+            property.
+            
+            TODO The <see cref="P:ACadSharp.Entities.MultiLeader.ScaleFactor"/> is handled internally.
+            </summary>
+            <remarks>
+            <para>
+            The <see cref="P:ACadSharp.Entities.MultiLeader.ScaleFactor"/> property is retrieved from the
+            <see cref="T:ACadSharp.Tables.DimensionStyle"/> and my be overridden by extended data of the entity.
+            The value is used to scale the property values that have to be scaled.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.Extensions.MultiLeaderProperties.#ctor(ACadSharp.Entities.MultiLeader)">
+            <summary>
+            Initialzes a new instance of the <see cref="T:ACadSvg.Extensions.MultiLeaderProperties"/> class.
+            </summary>
+            <param name="multiLeader"></param>
+        </member>
+        <member name="P:ACadSvg.Extensions.MultiLeaderProperties.PathType">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Objects.MultiLeaderStyle.PathType"/> property or the
+            the value of the <see cref="P:ACadSharp.Entities.MultiLeader.PathType"/> path type if overriding is
+            specified by the <see cref="F:ACadSharp.Entities.MultiLeaderPropertyOverrideFlags.PathType"/> flag.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.MultiLeaderProperties.LineColor">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Objects.MultiLeaderStyle.LineColor"/> property or the
+            the value of the <see cref="P:ACadSharp.Entities.MultiLeader.PathType"/> path type if overriding is
+            specified by the <see cref="F:ACadSharp.Entities.MultiLeaderPropertyOverrideFlags.PathType"/> flag.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.MultiLeaderProperties.LeaderLineType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Extensions.MultiLeaderProperties.LandingDistance">
+            <summary>
+            Gets the value of the <see cref="P:ACadSharp.Objects.MultiLeaderStyle.LandingDistance"/> property or the
+            the value of the <see cref="P:ACadSharp.Entities.MultiLeader.LandingDistance"/> property if overriding is
+            specified by the <see cref="F:ACadSharp.Entities.MultiLeaderPropertyOverrideFlags.LandingDistance"/> flag.
+            </summary>
+            <remarks><para>
+            There is only one field for the landing distance in the multileader property grid.
+            The value entered arrives in <see cref="P:ACadSharp.Entities.MultiLeader.LandingDistance"/> property and the
+            <see cref="P:ACadSharp.Objects.MultiLeaderObjectContextData.LeaderRoot.LandingDistance"/> property.
+            If two leader roots exist both receive the same value. I seems 
+            <see cref="F:ACadSharp.Entities.MultiLeaderPropertyOverrideFlags.LandingDistance"/> flag is never set.
+            </para><para>
+            This property should not be used. The <see cref="P:ACadSharp.Objects.MultiLeaderObjectContextData.LeaderRoot.LandingDistance"/> should be
+            used instead.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:ACadSvg.Extensions.MultiLeaderProperties.TextAttachmentPoint">
+            <summary>
+            Overridable? does style exist.
+            </summary>        
+        </member>
+        <member name="T:ACadSvg.GroupSvg">
+            <summary>
+            The base class for classes representing converted ACad entities
+            containing other entities.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.GroupSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.HatchSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Hatch"/> entity.
+            The <see cref="T:ACadSharp.Entities.Hatch"/> entity is converted into one complex <i>path</i> element
+            for the shape. The contour of the shape is invisible. The pattern to fill the
+            shape is referenced by the <i>fill</i> attribute linking to a <i>pattern</i>
+            member in the <i>defs</i> section.
+            </summary>
+            <remarks><para>
+            The pattern to fill the shape either has been created before and is found in
+            the the <see cref="P:ACadSvg.ConversionContext.BlocksInDefs"/> list in the
+            <see cref="T:ACadSvg.ConversionContext"/> or has to be created during the intializtion
+            of this object and stored in the <see cref="P:ACadSvg.ConversionContext.BlocksInDefs"/> list.
+            </para></remarks>
+        </member>
+        <member name="M:ACadSvg.HatchSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.CircleSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Hatch"/> entity.
+            </summary>
+            <param name="hatch">The <see cref="T:ACadSharp.Entities.Hatch"/> entity to be converted.</param>
+            <param name="ctx">The conversion context; the <see cref="P:ACadSvg.ConversionContext.BlocksInDefs"/>
+            in the <see cref="T:ACadSvg.ConversionContext"/> also contains patterns to be used
+            to fill the hatch shape.
+            </param>
+        </member>
+        <member name="M:ACadSvg.HatchSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.InsertSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Insert"/> entity.
+            The <see cref="T:ACadSharp.Entities.Insert"/> is converted into a <i>use</i> element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.InsertSvg.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.InsertSvg"/> class
+            without reference to a <see cref="T:ACadSharp.Entities.Insert"/> entity. This is used
+            to create a <i>use</i> element for an arbitrary SVG group.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.InsertSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.InsertSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Insert"/> entity.
+            </summary>
+            <param name="insert">The <see cref="T:ACadSharp.Entities.Circle"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.InsertSvg.Dummy(System.String)">
+            <summary>
+            Creates an <see cref="T:ACadSvg.InsertSvg"/> object representing a <i>use</i> element
+             for an arbitrary SVG group with the specified ID.
+            </summary>
+            <param name="id">The ID of the group to be referenced, normally a block name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:ACadSvg.InsertSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.LeaderSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Leader"/> entity.
+            The <see cref="T:ACadSharp.Entities.Leader"/> entity is converted into a complex element including
+            a <i>path</i> element for the leader line and another <i>path</i> element for
+            the arrowhead.
+            </summary>
+            <remarks><para>
+            The converter for the <see cref="T:ACadSharp.Entities.Leader"/> entity is not yet fully implemented.
+            Currently only the leader line but no arrowhead is created.
+            </para></remarks>
+        </member>
+        <member name="M:ACadSvg.LeaderSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.LeaderSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Leader"/> entity.
+            </summary>
+            <param name="leader">The <see cref="T:ACadSharp.Entities.Leader"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.LeaderSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.LineSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Line"/> entity.
+            The <see cref="T:ACadSharp.Entities.Line"/> entity is converted into a <i>path</i> element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.LineSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.LineSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Line"/> entity.
+            </summary>
+            <param name="line">The <see cref="T:ACadSharp.Entities.Line"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.LineSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.LwPolylineSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.LwPolyline"/> entity.
+            The <see cref="T:ACadSharp.Entities.LwPolyline"/> entity is converted into a <i>path</i> element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.LwPolylineSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.LwPolylineSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.LwPolyline"/> entity.
+            </summary>
+            <param name="polyline">The <see cref="T:ACadSharp.Entities.LwPolyline"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.LwPolylineSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.MTextSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.MText"/> entity.
+            The <see cref="T:ACadSharp.Entities.MText"/> is converted into a <i>text</i> element, containing
+            one or more <i>tspan</i> elements.
+            </summary>
+            <remarks><para>
+            The <see cref="T:ACadSharp.Entities.MText"/> entity stores multiline text in a single string property.
+            Paragraphs, formatting an styling is coded using a proprietary markup format.
+            (See, e.g. https://ezdxf.readthedocs.io/en/stable/dxfinternals/entities/mtext.html).
+            </para><para>
+            The text is parsed end converted in a series od <i>tspan</i> with attributes
+            to reflect the coded formatting and styles as good as possible.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.MTextSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.MTextSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.MText"/> entity.
+            </summary>
+            <param name="mText">The <see cref="T:ACadSharp.Entities.MText"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.MTextSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.MultiLeaderSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.MultiLeader"/> entity.
+            The <see cref="T:ACadSharp.Entities.MultiLeader"/> entity is converted into a complex element including
+            several <i>path</i> elements for the for the leader line and optionlly a dog-leg.
+            A standard arrowhead can be constituted by a filled path element. Other standrd
+            arrowheads or custom arrowheds can be contituted by the entities from a
+            <see cref="T:ACadSharp.Tables.BlockRecord"/> evolving into a <i>use</i> element.
+            The informational content of the <see cref="T:ACadSharp.Entities.MultiLeader"/> can either be a multiline
+            text contituted by a <i>text</i> element with one or more <i>tspn</i> elements or
+            custom content from a <see cref="T:ACadSharp.Tables.BlockRecord"/> evolving into a <i>use</i> element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.MultiLeaderSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.MultiLeaderSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.MultiLeader"/> entity.
+            </summary>
+            <param name="multiLeader">The <see cref="T:ACadSharp.Entities.MultiLeader"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.MultiLeaderSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.PatternSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Tables.BlockRecord"/> table entry
+            that is used as a pattern to fill a shape of a <see cref="T:ACadSharp.Entities.Hatch"/> entity.
+            The <see cref="T:ACadSharp.Tables.BlockRecord"/> associated with the <see cref="T:ACadSharp.Entities.Hatch"/> entity is
+            converted into a <i>pattern</i> element.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.PatternSvg.Valid">
+            <summary>
+            Gets a value indicating whether the pattern has been created successfully.
+            </summary>
+            <value>
+            <b>true</b>, when the pattern has been created successfully; otherwise, <b>false</b>.
+            </value>
+        </member>
+        <member name="M:ACadSvg.PatternSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.PointSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Point"/> entity.
+            The <see cref="T:ACadSharp.Entities.Point"/> entity is converted into a <i>circle</i> element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.PointSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.PointSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Point"/> entity.
+            </summary>
+            <param name="point">The <see cref="T:ACadSharp.Entities.Circle"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.PointSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.Polyline2DSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Polyline2D"/> entity.
+            The <see cref="T:ACadSharp.Entities.Polyline2D"/> entity is converted into a <i>path</i> element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.Polyline2DSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.Polyline2DSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Polyline2D"/> entity.
+            </summary>
+            <param name="polyline">The <see cref="T:ACadSharp.Entities.Polyline2D"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.Polyline2DSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.Polyline3DSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Polyline3D"/> entity.
+            The <see cref="T:ACadSharp.Entities.Polyline3D"/> entity is converted into a <i>path</i> element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.Polyline3DSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.Polyline3DSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Polyline3D"/> entity.
+            </summary>
+            <param name="polyline">The <see cref="T:ACadSharp.Entities.Polyline3D"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.Polyline3DSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.RaySvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Ray"/> entity.
+            The <see cref="T:ACadSharp.Entities.Ray"/> entity is converted into a <i>path</i> element with
+            a line from the specified start point to "infinity" in the specified
+            direction.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.RaySvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.RaySvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Ray"/> entity.
+            </summary>
+            <param name="ray">The <see cref="T:ACadSharp.Entities.Ray"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.RaySvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.Resources">
+            <summary>
+              Eine stark typisierte Ressourcenklasse zum Suchen von lokalisierten Zeichenfolgen usw.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Resources.ResourceManager">
+            <summary>
+              Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Resources.Culture">
+            <summary>
+              Überschreibt die CurrentUICulture-Eigenschaft des aktuellen Threads für alle
+              Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.Resources.concrete_pattern">
+             <summary>
+               Sucht eine lokalisierte Zeichenfolge, die &lt;defs&gt;
+              &lt;style&gt;
+                .cls-1
+                {
+                  stroke-width:2px;
+                }
+                .cls-1, .cls-2
+                {
+                  stroke-miterlimit:10;
+                }
+                .cls-2
+                {
+                  fill:none;
+                }
+              &lt;/style&gt;
+            &lt;/defs&gt;
+            &lt;g id=&quot;Hatches&quot;&gt;
+              &lt;polygon class=&quot;cls-2&quot; points=&quot;51.74 36.04 49.3 44.46 57.17 39.03 51.74 36.04&quot;&gt;&lt;/polygon&gt;
+              &lt;polygon class=&quot;cls-2&quot; points=&quot;98.43 72.96 103.31 62.64 106.03 71.06 98.43 72.96&quot;&gt;&lt;/polygon&gt;
+              &lt;polygon class=&quot;cls-2&quot; points=&quot;165.74 24.91 162.49 31.16 167.64 35.77 165.74 24.91&quot;&gt;&lt;/polygon&gt;
+              &lt;polygo [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+             </summary>
+        </member>
+        <member name="T:ACadSvg.SolidSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Solid"/> entity.
+            The <see cref="T:ACadSharp.Entities.Solid"/> entity is converted into a closed <i>path</i> element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.SolidSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.SolidSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Solid"/> entity.
+            
+            </summary>
+            <param name="solid">The <see cref="T:ACadSharp.Entities.Solid"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.SolidSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.SplineSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Spline"/> entity.
+            The <see cref="T:ACadSharp.Entities.Spline"/> entity is converted into a <i>path</i> element.
+            The <i>path</i> element aproximates the spline curve by a polygon. This should
+            be improved soon.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.SplineSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.SplineSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Spline"/> entity.
+            </summary>
+            <param name="spline">The <see cref="T:ACadSharp.Entities.Spline"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.SplineSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.SplineUtils.CubicSpline">
+            <summary>
+            Cubic spline interpolation.
+            Call Fit (or use the corrector constructor) to compute spline coefficients, then Eval to evaluate the spline at other X coordinates.
+            </summary>
+            <remarks>
+            <para>
+            This is implemented based on the wikipedia article:
+            http://en.wikipedia.org/wiki/Spline_interpolation
+            I'm not sure I have the right to include a copy of the article so the equation numbers referenced in 
+            comments will end up being wrong at some point.
+            </para>
+            <para>
+            This is not optimized, and is not MT safe.
+            This can extrapolate off the ends of the splines.
+            You must provide points in X sort order.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.CubicSpline.#ctor">
+            <summary>
+            Default ctor.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.CubicSpline.#ctor(System.Double[],System.Double[],System.Double,System.Double,System.Boolean)">
+            <summary>
+            Construct and call Fit.
+            </summary>
+            <param name="x">Input. X coordinates to fit.</param>
+            <param name="y">Input. Y coordinates to fit.</param>
+            <param name="startSlope">Optional slope constraint for the first point. Single.NaN means no constraint.</param>
+            <param name="endSlope">Optional slope constraint for the final point. Single.NaN means no constraint.</param>
+            <param name="debug">Turn on console output. Default is false.</param>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.CubicSpline.CheckAlreadyFitted">
+            <summary>
+            Throws if Fit has not been called.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.CubicSpline.GetNextXIndex(System.Double)">
+            <summary>
+            Find where in xOrig the specified x falls, by simultaneous traverse.
+            This allows xs to be less than x[0] and/or greater than x[n-1]. So allows extrapolation.
+            This keeps state, so requires that x be sorted and xs called in ascending order, and is not multi-thread safe.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.CubicSpline.EvalSpline(System.Double,System.Int32,System.Boolean)">
+            <summary>
+            Evaluate the specified x value using the specified spline.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="j">Which spline to use.</param>
+            <param name="debug">Turn on console output. Default is false.</param>
+            <returns>The y value.</returns>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.CubicSpline.FitAndEval(System.Double[],System.Double[],System.Double[],System.Double,System.Double,System.Boolean)">
+            <summary>
+            Fit x,y and then eval at points xs and return the corresponding y's.
+            This does the "natural spline" style for ends.
+            This can extrapolate off the ends of the splines.
+            You must provide points in X sort order.
+            </summary>
+            <param name="x">Input. X coordinates to fit.</param>
+            <param name="y">Input. Y coordinates to fit.</param>
+            <param name="xs">Input. X coordinates to evaluate the fitted curve at.</param>
+            <param name="startSlope">Optional slope constraint for the first point. Single.NaN means no constraint.</param>
+            <param name="endSlope">Optional slope constraint for the final point. Single.NaN means no constraint.</param>
+            <param name="debug">Turn on console output. Default is false.</param>
+            <returns>The computed y values for each xs.</returns>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.CubicSpline.Fit(System.Double[],System.Double[],System.Double,System.Double,System.Boolean)">
+            <summary>
+            Compute spline coefficients for the specified x,y points.
+            This does the "natural spline" style for ends.
+            This can extrapolate off the ends of the splines.
+            You must provide points in X sort order.
+            </summary>
+            <param name="x">Input. X coordinates to fit.</param>
+            <param name="y">Input. Y coordinates to fit.</param>
+            <param name="startSlope">Optional slope constraint for the first point. Single.NaN means no constraint.</param>
+            <param name="endSlope">Optional slope constraint for the final point. Single.NaN means no constraint.</param>
+            <param name="debug">Turn on console output. Default is false.</param>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.CubicSpline.Eval(System.Double[],System.Boolean)">
+            <summary>
+            Evaluate the spline at the specified x coordinates.
+            This can extrapolate off the ends of the splines.
+            You must provide X's in ascending order.
+            The spline must already be computed before calling this, meaning you must have already called Fit() or FitAndEval().
+            </summary>
+            <param name="x">Input. X coordinates to evaluate the fitted curve at.</param>
+            <param name="debug">Turn on console output. Default is false.</param>
+            <returns>The computed y values for each x.</returns>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.CubicSpline.EvalSlope(System.Double[],System.Boolean)">
+            <summary>
+            Evaluate (compute) the slope of the spline at the specified x coordinates.
+            This can extrapolate off the ends of the splines.
+            You must provide X's in ascending order.
+            The spline must already be computed before calling this, meaning you must have already called Fit() or FitAndEval().
+            </summary>
+            <param name="x">Input. X coordinates to evaluate the fitted curve at.</param>
+            <param name="debug">Turn on console output. Default is false.</param>
+            <returns>The computed y values for each x.</returns>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.CubicSpline.Compute(System.Double[],System.Double[],System.Double[],System.Double,System.Double,System.Boolean)">
+            <summary>
+            Static all-in-one method to fit the splines and evaluate at X coordinates.
+            </summary>
+            <param name="x">Input. X coordinates to fit.</param>
+            <param name="y">Input. Y coordinates to fit.</param>
+            <param name="xs">Input. X coordinates to evaluate the fitted curve at.</param>
+            <param name="startSlope">Optional slope constraint for the first point. Single.NaN means no constraint.</param>
+            <param name="endSlope">Optional slope constraint for the final point. Single.NaN means no constraint.</param>
+            <param name="debug">Turn on console output. Default is false.</param>
+            <returns>The computed y values for each xs.</returns>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.CubicSpline.FitParametric(System.Double[],System.Double[],System.Int32,System.Double[]@,System.Double[]@,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Fit the input x,y points using the parametric approach, so that y does not have to be an explicit
+            function of x, meaning there does not need to be a single value of y for each x.
+            </summary>
+            <param name="x">Input x coordinates.</param>
+            <param name="y">Input y coordinates.</param>
+            <param name="nOutputPoints">How many output points to create.</param>
+            <param name="xs">Output (interpolated) x values.</param>
+            <param name="ys">Output (interpolated) y values.</param>
+            <param name="firstDx">Optionally specifies the first point's slope in combination with firstDy. Together they
+            are a vector describing the direction of the parametric spline of the starting point. The vector does
+            not need to be normalized. If either is NaN then neither is used.</param>
+            <param name="firstDy">See description of dx0.</param>
+            <param name="lastDx">Optionally specifies the last point's slope in combination with lastDy. Together they
+            are a vector describing the direction of the parametric spline of the last point. The vector does
+            not need to be normalized. If either is NaN then neither is used.</param>
+            <param name="lastDy">See description of dxN.</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:ACadSvg.SplineUtils.NURBS.eveluateNipOfu(System.Int32,System.Int32,System.Double[],System.Double)" -->
+        <member name="M:ACadSvg.SplineUtils.SplineUtils.InterpolateXY(CSMath.XY[],System.Int32)">
+            <summary>
+            Generate a smooth (interpolated) curve that follows the path of the
+            given XY points.
+            </summary>
+        </member>
+        <member name="T:ACadSvg.SplineUtils.TriDiagonalMatrixF">
+            <summary>
+            A tri-diagonal matrix has non-zero entries only on the main diagonal, the diagonal above the main (super), and the
+            diagonal below the main (sub).
+            </summary>
+            <remarks>
+            <para>
+            This is based on the wikipedia article: http://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm
+            </para>
+            <para>
+            The entries in the matrix on a particular row are A[i], B[i], and C[i] where i is the row index.
+            B is the main diagonal, and so for an NxN matrix B is length N and all elements are used.
+            So for row 0, the first two values are B[0] and C[0].
+            And for row N-1, the last two values are A[N-1] and B[N-1].
+            That means that A[0] is not actually on the matrix and is therefore never used, and same with C[N-1].
+            </para>
+            </remarks>
+        </member>
+        <member name="F:ACadSvg.SplineUtils.TriDiagonalMatrixF.A">
+            <summary>
+            The values for the sub-diagonal. A[0] is never used.
+            </summary>
+        </member>
+        <member name="F:ACadSvg.SplineUtils.TriDiagonalMatrixF.B">
+            <summary>
+            The values for the main diagonal.
+            </summary>
+        </member>
+        <member name="F:ACadSvg.SplineUtils.TriDiagonalMatrixF.C">
+            <summary>
+            The values for the super-diagonal. C[C.Length-1] is never used.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.SplineUtils.TriDiagonalMatrixF.N">
+            <summary>
+            The width and height of this matrix.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.SplineUtils.TriDiagonalMatrixF.Item(System.Int32,System.Int32)">
+            <summary>
+            Indexer. Setter throws an exception if you try to set any not on the super, main, or sub diagonals.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.TriDiagonalMatrixF.#ctor(System.Int32)">
+            <summary>
+            Construct an NxN matrix.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.TriDiagonalMatrixF.ToDisplayString(System.String,System.String)">
+            <summary>
+            Produce a string representation of the contents of this matrix.
+            </summary>
+            <param name="fmt">Optional. For String.Format. Must include the colon. Examples are ':0.000' and ',5:0.00' </param>
+            <param name="prefix">Optional. Per-line indentation prefix.</param>
+        </member>
+        <member name="M:ACadSvg.SplineUtils.TriDiagonalMatrixF.Solve(System.Double[])">
+            <summary>
+            Solve the system of equations this*x=d given the specified d.
+            </summary>
+            <remarks>
+            Uses the Thomas algorithm described in the wikipedia article: http://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm
+            Not optimized. Not destructive.
+            </remarks>
+            <param name="d">Right side of the equation.</param>
+        </member>
+        <member name="T:ACadSvg.TextEntitySvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.TextEntity"/>.
+            The <see cref="T:ACadSharp.Entities.TextEntity"/> is converted into a <i>text</i> element, somtime
+            containing one <i>tspan</i> element.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.TextEntitySvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.TextEntitySvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.TextEntity"/>.
+            </summary>
+            <param name="text">The <see cref="T:ACadSharp.Entities.TextEntity"/> to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.TextEntitySvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="M:ACadSvg.VectorUtils.Rotate90(CSMath.XY)">
+            <summary>
+            Returns this <see cref="T:CSMath.XY"/> rotated by 90° counterclockwise.
+            </summary>
+            <param name="xy"></param>
+            <returns>A <see cref="T:CSMath.XY"/> rotated by 90° from this XY.</returns>
+        </member>
+        <member name="M:ACadSvg.VectorUtils.Rotate(CSMath.XY,System.Double)">
+            <summary>
+            Returns this <see cref="T:CSMath.XY"/> rotated by <paramref name="angle"/> counterclockwise.
+            </summary>
+            <param name="xy"></param>
+            <returns>A <see cref="T:CSMath.XY"/> rotated by <paramref name="angle"/> from this XY.</returns>
+        </member>
+        <member name="T:ACadSvg.ViewboxData">
+            <summary>
+            Provides a xmin, y-min, width and height for an optional <i>viewbox</i> attribute
+            to be added to the <i>svg</i> element. 
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ViewboxData.Enabled">
+            <summary>
+            Gets or sets a value indicates that a <i>viewbox</i> attribute is to added to the
+            <i>svg</i> element.
+            </summary>
+            <value><b>true</b>, when an <i>viewbox</i> attribute is to be added; otherwise, <b>false</b>.</value>
+        </member>
+        <member name="P:ACadSvg.ViewboxData.MinX">
+            <summary>
+            Gets or sets the min-x value for the <i>viewbox</i> attribute.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ViewboxData.MinY">
+            <summary>
+            Gets or sets the min-y value for the <i>viewbox</i> attribute.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ViewboxData.Width">
+            <summary>
+            Gets or sets the width value for the <i>viewbox</i> attribute.
+            </summary>
+        </member>
+        <member name="P:ACadSvg.ViewboxData.Height">
+            <summary>
+            Gets or sets the height value for the <i>viewbox</i> attribute.
+            </summary>
+        </member>
+        <member name="T:ACadSvg.WipeoutSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.Wipeout"/> entity.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.WipeoutSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.WipeoutSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.Wipeout"/> entity.
+            </summary>
+            <param name="wipeout">The <see cref="T:ACadSharp.Entities.Wipeout"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.WipeoutSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+        <member name="T:ACadSvg.XLineSvg">
+            <summary>
+            Represents an SVG element converted from an ACad <see cref="T:ACadSharp.Entities.XLine"/> entity.
+            The <see cref="T:ACadSharp.Entities.XLine"/> entity is converted into a <i>path</i> element with
+            a line from the negative "infinity" to positive "infinity" in the specified
+            direction.
+            </summary>
+        </member>
+        <member name="M:ACadSvg.XLineSvg.#ctor(ACadSharp.Entities.Entity,ACadSvg.ConversionContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ACadSvg.XLineSvg"/> class
+            for the specified <see cref="T:ACadSharp.Entities.XLine"/> entity.
+            </summary>
+            <param name="xLine">The <see cref="T:ACadSharp.Entities.XLine"/> entity to be converted.</param>
+            <param name="ctx">This parameter is not used in this class.</param>
+        </member>
+        <member name="M:ACadSvg.XLineSvg.ToSvgElement">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
